@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tablero del DM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+  <h1 id="tituloDashboard">Tablero del DM</h1>
+
+  <div class="tabs">
+    <button class="tab-button active" onclick="mostrarTab('tab1', event)">🎵 Ambientación musical</button>
+    <button class="tab-button" onclick="mostrarTab('tab2', event)">🧙 Iniciativa / NPCs</button>
+    <button class="tab-button" onclick="mostrarTab('tab3', event)">📜 Creaturas / Eventos</button>
+  </div>
+
+  <div class="tab-content active" id="tab1">
+    <div class="tab1-layout">
+      <aside class="music-sidebar">
+        <div class="player-controls">
+            <button><i class="fas fa-backward"></i></button>
+            <button><i class="fas fa-play"></i></button>
+            <button><i class="fas fa-forward"></i></button>
+          </div>
+          
+          <input type="range" min="0" max="100" value="50" class="player-volume">
+          
+          <div class="player-info">
+            <i class="fas fa-music"></i> <span>Sin canción</span>
+          </div>
+          
+          <div class="player-extra">
+            <button onclick="abrirLista()">
+              <i class="fas fa-folder-open"></i> Lista
+            </button>
+          </div>
+      </aside>
+  
+      <div id="panelLista" class="panel-lista">
+        <h3>🎶 Lista de canciones</h3>
+      
+        <div class="modal-row">
+          <label for="filtroCategoria">Filtrar:</label>
+          <select id="filtroCategoria"></select>
+        </div>
+      
+        <div class="modal-row">
+          <label for="busquedaNombre">Buscar:</label>
+          <input type="text" id="busquedaNombre" placeholder="Escribe un nombre...">
+        </div>
+      
+        <ul id="listaCanciones"></ul>
+      
+        <hr>
+      
+        <div class="modal-row">
+          <input type="text" id="nuevaCategoria" placeholder="Nueva categoría">
+          <button onclick="agregarCategoria()">➕</button>
+        </div>
+      
+        <div class="modal-row">
+          <button onclick="subirCancion()">📤</button>
+          <select id="categoriaActual"></select>
+          <button onclick="guardarCancion()">💾</button>
+        </div>
+      
+        <button class="cerrar-modal" onclick="cerrarLista()">Cerrar</button>
+      </div>
+    </div>
+  
+    <!-- Modal -->
+    <div class="modal" id="modalLista">
+      <div class="modal-content">
+        <h3>🎶 Lista de canciones</h3>
+  
+        <div class="modal-row">
+          <label>Filtrar por categoría:</label>
+          <select id="filtroCategoria"></select>
+        </div>
+  
+        <div class="modal-row">
+          <label>Buscar por nombre:</label>
+          <input type="text" id="busquedaNombre" placeholder="Escribe un nombre...">
+        </div>
+  
+        <ul id="listaCanciones"></ul>
+  
+        <hr>
+  
+        <div class="modal-row">
+          <label>Nueva categoría:</label>
+          <input type="text" id="nuevaCategoria">
+          <button onclick="agregarCategoria()">➕ Agregar</button>
+        </div>
+  
+        <div class="modal-row">
+          <label>Categoría de esta canción:</label>
+          <button onclick="subirCancion()">📤</button>
+          <select id="categoriaActual"></select>
+          <button onclick="guardarCancion()">💾</button>
+        </div>
+  
+        <button class="cerrar-modal" onclick="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+  <div class="tab-content" id="tab2">
+    <h2>Iniciativa / Lista de NPCs</h2>
+    <p>Próximamente...</p>
+  </div>
+
+  <div class="tab-content" id="tab3">
+    <h2>Creaturas / Eventos</h2>
+    <p>Próximamente...</p>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
