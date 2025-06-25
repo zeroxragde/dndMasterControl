@@ -18,94 +18,48 @@
   </div>
 
   <div class="tab-content active" id="tab1">
-    <div class="tab1-layout">
-      <aside class="music-sidebar">
-        <div class="player-controls">
-            <button><i class="fas fa-backward"></i></button>
-            <button><i class="fas fa-play"></i></button>
-            <button><i class="fas fa-forward"></i></button>
+    <div class="tab-content active" id="tab-principal">
+        <div class="fila-contenido">
+      
+          <!-- 🎵 Reproductor -->
+          <div class="bloque bloque-reproductor">
+            <div class="player compacto">
+                <div class="player-controls">
+                  <button id="prev" title="Anterior">&#9664;&#9664;</button>
+                  <button id="play" title="Play/Pausa">&#9654;</button>
+                  <button id="next" title="Siguiente">&#9654;&#9654;</button>
+                  <label class="switch-loop" title="Activar/Desactivar loop">
+                    <input type="checkbox" id="loopToggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              
+                <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
+              
+                <div class="player-info">
+                  <span>🎵 <span id="nombreCancion">Sin canción</span></span>
+                  <button id="btnLista">Lista</button>
+                </div>
+              </div>
+      
+          <!-- 🧭 Iniciativa -->
+          <div class="bloque">
+            <h3>Iniciativa</h3>
           </div>
-          
-          <input type="range" min="0" max="100" value="50" class="player-volume">
-          
-          <div class="player-info">
-            <i class="fas fa-music"></i> <span>Sin canción</span>
+      
+          <!-- 🧙‍♂️ NPCs -->
+          <div class="bloque">
+            <h3>NPCs</h3>
           </div>
-          
-          <div class="player-extra">
-            <button onclick="abrirLista()">
-              <i class="fas fa-folder-open"></i> Lista
-            </button>
+      
+          <!-- 🐉 Criaturas -->
+          <div class="bloque">
+            <h3>Criaturas activas</h3>
           </div>
-      </aside>
-  
-      <div id="panelLista" class="panel-lista">
-        <h3>🎶 Lista de canciones</h3>
       
-        <div class="modal-row">
-          <label for="filtroCategoria">Filtrar:</label>
-          <select id="filtroCategoria"></select>
         </div>
-      
-        <div class="modal-row">
-          <label for="busquedaNombre">Buscar:</label>
-          <input type="text" id="busquedaNombre" placeholder="Escribe un nombre...">
-        </div>
-      
-        <ul id="listaCanciones"></ul>
-      
-        <hr>
-      
-        <div class="modal-row">
-          <input type="text" id="nuevaCategoria" placeholder="Nueva categoría">
-          <button onclick="agregarCategoria()">➕</button>
-        </div>
-      
-        <div class="modal-row">
-          <button onclick="subirCancion()">📤</button>
-          <select id="categoriaActual"></select>
-          <button onclick="guardarCancion()">💾</button>
-        </div>
-      
-        <button class="cerrar-modal" onclick="cerrarLista()">Cerrar</button>
       </div>
-    </div>
-  
-    <!-- Modal -->
-    <div class="modal" id="modalLista">
-      <div class="modal-content">
-        <h3>🎶 Lista de canciones</h3>
-  
-        <div class="modal-row">
-          <label>Filtrar por categoría:</label>
-          <select id="filtroCategoria"></select>
-        </div>
-  
-        <div class="modal-row">
-          <label>Buscar por nombre:</label>
-          <input type="text" id="busquedaNombre" placeholder="Escribe un nombre...">
-        </div>
-  
-        <ul id="listaCanciones"></ul>
-  
-        <hr>
-  
-        <div class="modal-row">
-          <label>Nueva categoría:</label>
-          <input type="text" id="nuevaCategoria">
-          <button onclick="agregarCategoria()">➕ Agregar</button>
-        </div>
-  
-        <div class="modal-row">
-          <label>Categoría de esta canción:</label>
-          <button onclick="subirCancion()">📤</button>
-          <select id="categoriaActual"></select>
-          <button onclick="guardarCancion()">💾</button>
-        </div>
-  
-        <button class="cerrar-modal" onclick="cerrarModal()">Cerrar</button>
-      </div>
-    </div>
+      
   </div>
   
 

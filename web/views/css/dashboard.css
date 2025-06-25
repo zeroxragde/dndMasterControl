@@ -103,4 +103,43 @@ h1 {
   font-size: 14px;
   color: #ccc;
 }
-ñ
+.fila-contenido {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 20px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.bloque {
+  background: #1f1f1f;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 200px;
+  color: #fff;
+  flex: 1;
+}
+
+.bloque-reproductor {
+  flex: 2;
+  min-width: 300px;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
