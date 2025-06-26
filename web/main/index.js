@@ -1,7 +1,9 @@
 const { app, BrowserWindow, screen, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
-
+require('electron-reload')(__dirname, {
+  electron: require('path').join(__dirname, '..', 'node_modules', '.bin', 'electron.cmd')
+});
 let mapaWindow = null;
 let dashboardWindow = null;
 const configPath = path.join(__dirname, '..', 'config.json');

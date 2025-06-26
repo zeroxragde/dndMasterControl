@@ -24,22 +24,40 @@
           <!-- 🎵 Reproductor -->
           <div class="bloque bloque-reproductor">
             <div class="player compacto">
-                <div class="player-controls">
-                  <button id="prev" title="Anterior">&#9664;&#9664;</button>
-                  <button id="play" title="Play/Pausa">&#9654;</button>
-                  <button id="next" title="Siguiente">&#9654;&#9654;</button>
-                  <label class="switch-loop" title="Activar/Desactivar loop">
+              <div class="player-controls">
+                <button id="prev" title="Anterior">&#9664;&#9664;</button>
+                <button id="play" title="Play/Pausa">&#9654;</button>
+                <button id="next" title="Siguiente">&#9654;&#9654;</button>
+              
+                <div class="loop-toggle-container" title="Repetir canción">
+                  <label class="switch-loop">
                     <input type="checkbox" id="loopToggle">
                     <span class="slider"></span>
                   </label>
+                  <span class="loop-label">🔁 Loop</span>
                 </div>
+              </div>
               
                 <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
               
                 <div class="player-info">
                   <span>🎵 <span id="nombreCancion">Sin canción</span></span>
-                  <button id="btnLista">Lista</button>
+                  <button id="btnLista"   onclick="document.getElementById('listaPanel').style.display='none'" class="btn-lista">🎶 Lista</button>
                 </div>
+
+                <div id="listaPanel" class="panel-lista">
+                  <div class="lista-header">
+                    <h3>🎵 Lista de canciones</h3>
+                    <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">Cerrar</button>
+                  </div>
+                  <ul id="listaCanciones" class="lista-canciones">
+                    <!-- Se llenará dinámicamente -->
+                    <li>Intro - Aventura en Arleneth</li>
+                    <li>Batalla - Tambores de guerra</li>
+                    <li>Exploración - Ecos del bosque</li>
+                  </ul>
+                </div>
+
               </div>
       
           <!-- 🧭 Iniciativa -->

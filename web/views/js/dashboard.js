@@ -3,6 +3,10 @@ const audio = document.getElementById('audioPlayer');
 const nombre = document.getElementById('nombreCancion');
 let canciones = [];
 let indice = 0;
+document.getElementById('btnLista').addEventListener('click', () => {
+  const panel = document.getElementById('listaPanel');
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+});
 
 function mostrarTab(id, event) {
   document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
