@@ -5,6 +5,7 @@
   <title>Tablero del DM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="js/dashboard.js"></script>
 </head>
@@ -43,30 +44,53 @@
                 <div class="player-info">
                   <span>🎵 <span id="nombreCancion">Sin canción</span></span>
                   <button id="btnLista" class="btn-lista">🎶 Lista</button>
+                    <!-- Botón para abrir modal de subida -->
+                  <button id="abrirSubida" class="btn">
+                    📤 Subir canción
+                  </button>
                 </div>
 
-      <div id="listaPanel" class="panel-lista">
-        <div class="lista-header">
-          <h3>🎵 Lista de canciones</h3>
-          <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">Cerrar</button>
-        </div>
+                <!-- Modal de subida -->
+                <div id="modalSubida" class="modal" style="display: none;">
+                  <div class="modal-content">
+                    <h3>Subir canciones</h3>
+                    <p>Selecciona archivos de audio para subir a <code>assets/[dmname]_canciones</code></p>
 
-        <!-- Buscador -->
-        <input
-          type="text"
-          id="buscadorCanciones"
-          placeholder="Buscar canción..."
-          onkeyup="filtrarCanciones()"
-          style="width: 90%; padding: 6px; margin-bottom: 10px; font-size: 14px;"
-        />
+                    <input type="file" id="inputCanciones" multiple accept=".mp3,.wav,.ogg" class="btn" style="width: 100%;">
 
-        <ul id="listaCanciones" class="lista-canciones">
-          <!-- Se llenará dinámicamente -->
-          <li>Intro - Aventura en Arleneth</li>
-          <li>Batalla - Tambores de guerra</li>
-          <li>Exploración - Ecos del bosque</li>
-        </ul>
-      </div>
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                      <button id="subirArchivos" class="btn">📁 Subir</button>
+                      <button id="cerrarSubida" class="btn">❌ Cancelar</button>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div id="listaPanel" class="modal-panel">
+                  <div class="modal-header">
+                    <h3>🎵 Lista de canciones</h3>
+                    <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">✖</button>
+                  </div>
+                
+                  <input
+                    type="text"
+                    id="buscadorCanciones"
+                    placeholder="Buscar canción..."
+                    onkeyup="filtrarCanciones()"
+                  />
+                
+                  <select id="categoriaCanciones">
+                    <option value="">Todas las categorías</option>
+                    <!-- Se cargarán dinámicamente -->
+                  </select>
+                
+                  <ul id="listaCanciones">
+                    <!-- Se llenará dinámicamente -->
+                    <li>Intro - Aventura en Arleneth</li>
+                    <li>Batalla - Tambores de guerra</li>
+                    <li>Exploración - Ecos del bosque</li>
+                  </ul>
+                </div>
       
           <!-- 🧭 Iniciativa -->
           <div class="bloque">
