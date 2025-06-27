@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <script src="js/dashboard.js"></script>
 </head>
 <body>
   <h1 id="tituloDashboard">Tablero del DM</h1>
@@ -42,23 +42,31 @@
               
                 <div class="player-info">
                   <span>🎵 <span id="nombreCancion">Sin canción</span></span>
-                  <button id="btnLista"   onclick="document.getElementById('listaPanel').style.display='none'" class="btn-lista">🎶 Lista</button>
+                  <button id="btnLista" class="btn-lista">🎶 Lista</button>
                 </div>
 
-                <div id="listaPanel" class="panel-lista">
-                  <div class="lista-header">
-                    <h3>🎵 Lista de canciones</h3>
-                    <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">Cerrar</button>
-                  </div>
-                  <ul id="listaCanciones" class="lista-canciones">
-                    <!-- Se llenará dinámicamente -->
-                    <li>Intro - Aventura en Arleneth</li>
-                    <li>Batalla - Tambores de guerra</li>
-                    <li>Exploración - Ecos del bosque</li>
-                  </ul>
-                </div>
+      <div id="listaPanel" class="panel-lista">
+        <div class="lista-header">
+          <h3>🎵 Lista de canciones</h3>
+          <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">Cerrar</button>
+        </div>
 
-              </div>
+        <!-- Buscador -->
+        <input
+          type="text"
+          id="buscadorCanciones"
+          placeholder="Buscar canción..."
+          onkeyup="filtrarCanciones()"
+          style="width: 90%; padding: 6px; margin-bottom: 10px; font-size: 14px;"
+        />
+
+        <ul id="listaCanciones" class="lista-canciones">
+          <!-- Se llenará dinámicamente -->
+          <li>Intro - Aventura en Arleneth</li>
+          <li>Batalla - Tambores de guerra</li>
+          <li>Exploración - Ecos del bosque</li>
+        </ul>
+      </div>
       
           <!-- 🧭 Iniciativa -->
           <div class="bloque">
@@ -93,6 +101,6 @@
     <p>Próximamente...</p>
   </div>
 
-  <script src="js/dashboard.js"></script>
+
 </body>
 </html>

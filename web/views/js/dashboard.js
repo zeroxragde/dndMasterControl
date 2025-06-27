@@ -1,13 +1,33 @@
-const { dialog } = require('electron').remote;
-const audio = document.getElementById('audioPlayer');
-const nombre = document.getElementById('nombreCancion');
-let canciones = [];
-let indice = 0;
-document.getElementById('btnLista').addEventListener('click', () => {
-  const panel = document.getElementById('listaPanel');
-  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+
+
+  const audio = document.getElementById('audioPlayer');
+  const nombre = document.getElementById('nombreCancion');
+  let canciones = [];
+  let indice = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+
+  document.getElementById('btnLista').addEventListener('click', () => {
+    const panel = document.getElementById('listaPanel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  });
+
+  audio.addEventListener('ended', siguienteCancion);
 });
 
+function filtrarCanciones() {
+  const input = document.getElementById('buscadorCanciones');
+  const filtro = input.value.toLowerCase();
+  const lista = document.getElementById('listaCanciones');
+  const items = lista.getElementsByTagName('li');
+
+  for (let i = 0; i < items.length; i++) {
+    const texto = items[i].textContent || items[i].innerText;
+    items[i].style.display = texto.toLowerCase().includes(filtro) ? '' : 'none';
+  }
+}
 function mostrarTab(id, event) {
   document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
   document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -15,20 +35,6 @@ function mostrarTab(id, event) {
   event.target.classList.add('active');
 }
 
-function abrirLista() {
-  dialog.showOpenDialog({
-    title: 'Selecciona canciones',
-    filters: [{ name: 'Audio', extensions: ['mp3', 'wav', 'ogg'] }],
-    properties: ['openFile', 'multiSelections']
-  }).then(result => {
-    if (!result.canceled && result.filePaths.length > 0) {
-      canciones = result.filePaths;
-      indice = 0;
-      cargarCancion();
-      audio.play();
-    }
-  });
-}
 
 function cargarCancion() {
   if (canciones.length === 0) return;
@@ -60,4 +66,4 @@ function ajustarVolumen(valor) {
   audio.volume = parseFloat(valor);
 }
 
-audio.addEventListener('ended', siguienteCancion);
+
