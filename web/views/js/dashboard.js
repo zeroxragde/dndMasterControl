@@ -9,12 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function inicializarUI() {
   // Botones de modales
-  registrarToggle('btnLista', 'listaPanel');
+  registrarToggle('btnLista', 
+    'listaPanel');
   registrarToggle('abrirSubida', 'modalSubida', true);
   registrarToggle('cerrarSubida', 'modalSubida', false);
 
   // Drag modal
-  hacerModalMovible('listaPanel', '.lista-header');
+  hacerModalMovible('listaPanel', '.modal-header');
+  hacerModalMovible('modalSubida', '.modal-header');
 
   // Eventos audio
   audio.addEventListener('ended', siguienteCancion);

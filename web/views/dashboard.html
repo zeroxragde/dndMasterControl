@@ -19,100 +19,109 @@
   </div>
 
   <div class="tab-content active" id="tab1">
-    <div class="tab-content active" id="tab-principal">
-        <div class="fila-contenido">
-      
-          <!-- 🎵 Reproductor -->
-          <div class="bloque bloque-reproductor">
-            <div class="player compacto">
-              <div class="player-controls">
-                <button id="prev" title="Anterior">&#9664;&#9664;</button>
-                <button id="play" title="Play/Pausa">&#9654;</button>
-                <button id="next" title="Siguiente">&#9654;&#9654;</button>
-              
-                <div class="loop-toggle-container" title="Repetir canción">
-                  <label class="switch-loop">
-                    <input type="checkbox" id="loopToggle">
-                    <span class="slider"></span>
-                  </label>
-                  <span class="loop-label">🔁 Loop</span>
-                </div>
-              </div>
-              
-                <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
-              
-                <div class="player-info">
-                  <span>🎵 <span id="nombreCancion">Sin canción</span></span>
-                  <button id="btnLista" class="btn-lista">🎶 Lista</button>
-                    <!-- Botón para abrir modal de subida -->
-                  <button id="abrirSubida" class="btn">
-                    📤 Subir canción
-                  </button>
-                </div>
-
-                <!-- Modal de subida -->
-                <div id="modalSubida" class="modal" style="display: none;">
-                  <div class="modal-content">
-                    <h3>Subir canciones</h3>
-                    <p>Selecciona archivos de audio para subir a <code>assets/[dmname]_canciones</code></p>
-
-                    <input type="file" id="inputCanciones" multiple accept=".mp3,.wav,.ogg" class="btn" style="width: 100%;">
-
-                    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
-                      <button id="subirArchivos" class="btn">📁 Subir</button>
-                      <button id="cerrarSubida" class="btn">❌ Cancelar</button>
-                    </div>
-                  </div>
-                </div>
-
-
-                <div id="listaPanel" class="modal-panel">
-                  <div class="modal-header">
-                    <h3>🎵 Lista de canciones</h3>
-                    <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">✖</button>
-                  </div>
-                
-                  <input
-                    type="text"
-                    id="buscadorCanciones"
-                    placeholder="Buscar canción..."
-                    onkeyup="filtrarCanciones()"
-                  />
-                
-                  <select id="categoriaCanciones">
-                    <option value="">Todas las categorías</option>
-                    <!-- Se cargarán dinámicamente -->
-                  </select>
-                
-                  <ul id="listaCanciones">
-                    <!-- Se llenará dinámicamente -->
-                    <li>Intro - Aventura en Arleneth</li>
-                    <li>Batalla - Tambores de guerra</li>
-                    <li>Exploración - Ecos del bosque</li>
-                  </ul>
-                </div>
-      
-          <!-- 🧭 Iniciativa -->
-          <div class="bloque">
-            <h3>Iniciativa</h3>
+    <div class="fila-contenido">
+      <!-- 🎵 Reproductor -->
+      <div class="bloque bloque-reproductor">
+        <div class="player compacto">
+          <div class="player-controls">
+            <button id="prev" title="Anterior">&#9664;&#9664;</button>
+            <button id="play" title="Play/Pausa">&#9654;</button>
+            <button id="next" title="Siguiente">&#9654;&#9654;</button>
+            <div class="loop-toggle-container" title="Repetir canción">
+              <label class="switch-loop">
+                <input type="checkbox" id="loopToggle">
+                <span class="slider"></span>
+              </label>
+              <span class="loop-label">🔁 Loop</span>
+              <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
+            </div>
           </div>
-      
-          <!-- 🧙‍♂️ NPCs -->
-          <div class="bloque">
-            <h3>NPCs</h3>
+          <div class="player-info">
+            <span>🎵 <span id="nombreCancion">Sin canción</span></span>
+
+            <div class="player-info-buttons">
+              <button id="btnLista" class="btn">🎶 Lista</button>
+              <button id="abrirSubida" class="btn">📤 Subir canción</button>
+            </div>
           </div>
-      
-          <!-- 🐉 Criaturas -->
-          <div class="bloque">
-            <h3>Criaturas activas</h3>
-          </div>
-      
         </div>
       </div>
-      
-  </div>
-  
 
+
+      <!-- 🎵 Reproductor Sonidos -->
+      <div class="bloque bloque-reproductor">
+        <div class="player compacto">
+          <div class="player-controls">
+            <button id="prev" title="Anterior">&#9664;&#9664;</button>
+            <button id="play" title="Play/Pausa">&#9654;</button>
+            <button id="next" title="Siguiente">&#9654;&#9654;</button>
+            <div class="loop-toggle-container" title="">
+              <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
+            </div>
+          </div>
+          <div class="player-info">
+            <span>🎵 <span id="nombreCancion">Sin sonido</span></span>
+
+            <div class="player-info-buttons">
+              <button id="btnLista" class="btn">🎶 Lista</button>
+              <button id="abrirSubida" class="btn">📤 Subir sonido</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Modales -->
+      <div id="modalSubida" class="modal-panel" style="display: none;">
+        <div class="modal-header">
+          <h3>📤 Subir canciones</h3>
+          <button id="cerrarSubida" class="cerrar-modal">✖</button>
+        </div>
+
+        <p>Selecciona la categoría y los archivos de audio que quieres añadir.</p>
+
+        <label for="categoriaSubida">Categoría:</label>
+        <select id="categoriaSubida" name="categoriaSubida" style="width: 100%; margin-top: 5px; margin-bottom: 15px;">
+          <option value="">Sin categoría</option>
+          </select>
+        
+        <input type="file" id="inputCanciones" multiple accept=".mp3,.wav,.ogg" class="btn" style="width: 100%; box-sizing: border-box;">
+
+        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+            <button id="subirArchivos" class="btn">📁 Subir Archivos</button>
+        </div>
+      </div>
+
+      <div id="listaPanel" class="modal-panel">
+        <div class="modal-header">
+          <h3>🎵 Lista de canciones</h3>
+          <button class="cerrar-modal" onclick="document.getElementById('listaPanel').style.display='none'">✖</button>
+        </div>
+      
+        <input
+          type="text"
+          id="buscadorCanciones"
+          placeholder="Buscar canción..."
+          onkeyup="filtrarCanciones()"
+        />
+      
+        <select id="categoriaCanciones">
+          <option value="">Todas las categorías</option>
+          <!-- Se cargarán dinámicamente -->
+        </select>
+      
+        <ul id="listaCanciones">
+          <!-- Se llenará dinámicamente -->
+          <li>Intro - Aventura en Arleneth</li>
+          <li>Batalla - Tambores de guerra</li>
+          <li>Exploración - Ecos del bosque</li>
+        </ul>
+      </div>
+
+
+
+    </div>
+  </div>
 
 
   <div class="tab-content" id="tab2">
@@ -124,6 +133,12 @@
     <h2>Creaturas / Eventos</h2>
     <p>Próximamente...</p>
   </div>
+
+
+
+
+
+
 
 
 </body>
