@@ -26,6 +26,10 @@ function inicializarUI() {
   registrarToggle('abrirSubida', 'modalSubida', true);
   registrarToggle('cerrarSubida', 'modalSubida', false);
 
+  registrarToggle('btnOpenEditor', 'modalEditor', true);
+ // registrarToggle('btnCloseEditor', 'modalEditor', false);
+  hacerModalMovible('modalEditor', '.modal-header');
+
   hacerModalMovible('listaPanel', '.modal-header');
   hacerModalMovible('modalSubida', '.modal-header');
 

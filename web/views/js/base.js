@@ -22,29 +22,47 @@ function registrarToggle(botonId, modalId, mostrar = null) {
     const header = modal.querySelector(headerSelector);
     if (!modal || !header) return;
   
-    let offsetX = 0, offsetY = 0, isDragging = false;
+    let initialX, initialY;
+    let initialModalLeft, initialModalTop;
+    
+    function onMouseDown(e) {
+      // Evita la selección de texto mientras se arrastra
+      e.preventDefault(); 
+      
+      // Guarda la posición inicial del modal y del ratón
+      initialModalLeft = modal.offsetLeft;
+      initialModalTop = modal.offsetTop;
+      initialX = e.clientX;
+      initialY = e.clientY;
   
-    header.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      const rect = modal.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-      modal.style.position = "absolute";
-      modal.style.zIndex = 999;
-    });
+      // Establece la posición como absoluta para poder moverlo libremente
+      modal.style.position = 'absolute';
+      modal.style.zIndex = 1000;
   
-    document.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        modal.style.left = `${e.clientX - offsetX}px`;
-        modal.style.top = `${e.clientY - offsetY}px`;
-      }
-    });
+      // Empieza a escuchar los eventos de movimiento y de soltar el clic
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    }
   
-    document.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
+    function onMouseMove(e) {
+      // Calcula cuánto se ha movido el ratón desde el punto inicial
+      const dx = e.clientX - initialX;
+      const dy = e.clientY - initialY;
+  
+      // Aplica ese mismo cambio a la posición inicial del modal
+      modal.style.left = `${initialModalLeft + dx}px`;
+      modal.style.top = `${initialModalTop + dy}px`;
+    }
+  
+    function onMouseUp() {
+      // Deja de escuchar los eventos cuando se suelta el clic
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+  
+    // Activa todo el proceso cuando se hace clic en el encabezado
+    header.addEventListener('mousedown', onMouseDown);
   }
-  
 
   function mostrarTab(id, event) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -55,7 +73,7 @@ function registrarToggle(botonId, modalId, mostrar = null) {
 
 
 
-  
+
   function filtrarCanciones() {
     const input = document.getElementById('buscadorCanciones');
     const filtro = input.value.toLowerCase();
