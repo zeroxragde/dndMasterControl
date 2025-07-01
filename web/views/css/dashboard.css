@@ -30,14 +30,15 @@
 .tab-content {
   opacity: 0;
   pointer-events: none;
+  position: absolute;
   transition: opacity 0.3s;
 }
 
 .tab-content.active {
   opacity: 1;
   pointer-events: auto;
+  margin: 23px;
 }
-
 .fila-contenido {
   display: flex;
   flex-direction: row;

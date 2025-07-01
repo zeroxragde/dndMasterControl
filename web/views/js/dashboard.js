@@ -1,117 +1,72 @@
+// --- Variables específicas para el Dashboard ---
 const audio = document.getElementById('audioPlayer');
-const nombre = document.getElementById('nombreCancion');
+const nombreCancion = document.getElementById('nombreCancion');
 let canciones = [];
-let indice = 0;
+let indiceCancion = 0;
 
+const criaturasData = [
+  { nombre: "Sothrax, el Devorador", cr: 2 },
+  { nombre: "Guardian", cr: 1 },
+  { nombre: "Tempestus (Elemental)", cr: 2 },
+  { nombre: "Arpías", cr: 2 },
+  { nombre: "Sombras Errantes", cr: 2 },
+  { nombre: "Espectros de la Cripta", cr: 3 },
+];
+
+// --- Evento Principal ---
+// Espera a que todo el HTML esté cargado para empezar
 document.addEventListener("DOMContentLoaded", () => {
   inicializarUI();
 });
 
+// --- Función de Inicialización del Dashboard ---
 function inicializarUI() {
-  // Botones de modales
-  registrarToggle('btnLista', 
-    'listaPanel');
+  // 1. Inicializa los modales (usando funciones de base.js)
+  registrarToggle('btnLista','listaPanel');
   registrarToggle('abrirSubida', 'modalSubida', true);
   registrarToggle('cerrarSubida', 'modalSubida', false);
 
-  // Drag modal
   hacerModalMovible('listaPanel', '.modal-header');
   hacerModalMovible('modalSubida', '.modal-header');
 
-  // Eventos audio
-  audio.addEventListener('ended', siguienteCancion);
-}
-
-function registrarToggle(botonId, modalId, mostrar = null) {
-  const boton = document.getElementById(botonId);
-  if (boton) {
-    boton.addEventListener('click', () => {
-      toggleModal(modalId, mostrar);
-    });
+  // 2. Renderiza la lista de criaturas
+  const tbodyCriaturas = document.getElementById('listaCriaturasBody');
+  if (tbodyCriaturas) {
+    renderizarCriaturas(criaturasData, tbodyCriaturas);
   }
 }
 
-function toggleModal(id, mostrar = null) {
-  const el = document.getElementById(id);
-  if (!el) return;
+/**
+ * Dibuja la lista de criaturas en la tabla.
+ * @param {Array<Object>} criaturas - El array con los datos de las criaturas.
+ * @param {HTMLElement} tbody - El elemento <tbody> de la tabla.
+ */
+function renderizarCriaturas(criaturas, tbody) {
+  tbody.innerHTML = ''; // Limpiamos la tabla
 
-  const visible = el.style.display === 'block' || el.style.display === 'flex';
-  const nuevoEstado = mostrar !== null ? mostrar : !visible;
-  el.style.display = nuevoEstado ? 'flex' : 'none';
-}
+  criaturas.forEach((criatura, index) => {
+    const fila = document.createElement('tr');
 
-function hacerModalMovible(modalId, headerSelector = '.modal-header') {
-  const modal = document.getElementById(modalId);
-  const header = modal.querySelector(headerSelector);
-  if (!modal || !header) return;
+    const celdaNombre = document.createElement('td');
+    celdaNombre.textContent = criatura.nombre;
+    fila.appendChild(celdaNombre);
 
-  let offsetX = 0, offsetY = 0, isDragging = false;
+    const celdaCr = document.createElement('td');
+    celdaCr.textContent = criatura.cr;
+    fila.appendChild(celdaCr);
 
-  header.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    const rect = modal.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    modal.style.position = "absolute";
-    modal.style.zIndex = 999;
-  });
+    fila.addEventListener('click', () => {
+      const filaSeleccionada = tbody.querySelector('.selected');
+      if (filaSeleccionada) {
+        filaSeleccionada.classList.remove('selected');
+      }
+      fila.classList.add('selected');
+    });
 
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      modal.style.left = `${e.clientX - offsetX}px`;
-      modal.style.top = `${e.clientY - offsetY}px`;
+    if (index === 0) {
+      fila.classList.add('selected');
     }
+    
+    tbody.appendChild(fila);
   });
-
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
-}
-
-function filtrarCanciones() {
-  const input = document.getElementById('buscadorCanciones');
-  const filtro = input.value.toLowerCase();
-  const items = document.querySelectorAll('#listaCanciones li');
-
-  items.forEach(item => {
-    const texto = item.textContent || item.innerText;
-    item.style.display = texto.toLowerCase().includes(filtro) ? '' : 'none';
-  });
-}
-
-function mostrarTab(id, event) {
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// 🎵 Reproductor
-function cargarCancion() {
-  if (!canciones.length) return;
-  audio.src = canciones[indice];
-  nombre.textContent = `🎵 ${canciones[indice].split(/[/\\\\]/).pop()}`;
-}
-
-function anteriorCancion() {
-  if (!canciones.length) return;
-  indice = (indice - 1 + canciones.length) % canciones.length;
-  cargarCancion();
-  audio.play();
-}
-
-function siguienteCancion() {
-  if (!canciones.length) return;
-  indice = (indice + 1) % canciones.length;
-  cargarCancion();
-  audio.play();
-}
-
-function togglePlay() {
-  if (!audio.src) return;
-  audio.paused ? audio.play() : audio.pause();
-}
-
-function ajustarVolumen(valor) {
-  audio.volume = parseFloat(valor);
 }

@@ -220,4 +220,115 @@ body {
     background: #2e2e2e;
     color: #00bcd4;
   }
-  
+  /* ================================================= */
+/* --- ESTILOS GENÉRICOS PARA GESTOR DE LISTAS --- */
+/* ================================================= */
+
+/* Contenedor principal que alinea la lista y los botones de acción */
+.list-manager-container {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px 20px 20px;
+}
+
+.list-view {
+  width: 400px;      /* Ancho fijo para el contenedor de la lista */
+  flex-shrink: 0;    /* Evita que se encoja si añades más elementos */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  background-color: #7b1111;
+}
+
+/* Contenedor de la tabla para darle un alto fijo y scroll */
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #333; /* Un borde para un mejor acabado visual */
+}
+
+/* Tabla de datos genérica */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1f1f1f;
+}
+
+/* Encabezados de la tabla */
+.data-table th {
+  background-color: #005f73;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+  /* Hacemos el encabezado "pegajoso" para que no desaparezca al hacer scroll */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Celdas de la tabla */
+.data-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+/* Efecto al pasar el ratón por una fila */
+.data-table tbody tr:hover {
+  background-color: #2a2a2a;
+}
+
+/* Estilo para la fila seleccionada */
+.data-table tr.selected {
+  background-color: #9d0208;
+  color: white;
+  font-weight: bold;
+}
+
+/* Contenedor para los filtros debajo de la tabla */
+.list-filters select {
+  width: 100%;
+  padding: 8px;
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 6px;
+}
+
+/* Columna de botones de acción a la derecha */
+.list-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-actions .btn {
+  width: 45px;
+  height: 45px;
+  font-size: 18px;
+}
+
+/* Contenedor para los botones del pie de página (Nueva, Salir) */
+.footer-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 20px 20px 20px;
+}
+
+/* --- Estilo opcional para la barra de scroll --- */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+  border: 2px solid #1f1f1f;
+}

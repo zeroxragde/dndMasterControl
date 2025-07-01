@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="js/base.js"></script>
   <script src="js/dashboard.js"></script>
 </head>
 <body>
@@ -14,7 +15,7 @@
 
   <div class="tabs">
     <button class="tab-button active" onclick="mostrarTab('tab1', event)">🎵 Ambientación musical</button>
-    <button class="tab-button" onclick="mostrarTab('tab2', event)">🧙 Iniciativa / NPCs</button>
+    <button class="tab-button" onclick="mostrarTab('tab2', event)">🧙 Creaturas </button>
     <button class="tab-button" onclick="mostrarTab('tab3', event)">📜 Creaturas / Eventos</button>
   </div>
 
@@ -117,17 +118,49 @@
           <li>Exploración - Ecos del bosque</li>
         </ul>
       </div>
-
-
-
     </div>
   </div>
 
 
   <div class="tab-content" id="tab2">
-    <h2>Iniciativa / Lista de NPCs</h2>
-    <p>Próximamente...</p>
-  </div>
+   
+    <div class="list-manager-container">
+    
+        <div class="list-view">
+        
+          <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>CR</th>
+                  </tr>
+                </thead>
+                <tbody id="listaCriaturasBody">
+                  </tbody>
+              </table>
+          </div>
+            
+            <div class="list-filters">
+              <select>
+                <option>Todas las criaturas</option>
+              </select>
+            </div>
+        </div>
+    
+        <div class="list-actions">
+          <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+          <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+          <button class="btn" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
+          <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
+        </div>
+    
+    </div>
+    
+    <div class="footer-actions">
+      <button class="btn">Nueva Creatura</button>
+    </div>
+  </div><!--TERMINA TAB 2-->
 
   <div class="tab-content" id="tab3">
     <h2>Creaturas / Eventos</h2>

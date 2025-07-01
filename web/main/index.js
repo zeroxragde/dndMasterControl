@@ -56,7 +56,7 @@ function createMainWindow() {
       }
     });
     dashboardWindow.maximize();
-   // dashboardWindow.webContents.openDevTools();
+    dashboardWindow.webContents.openDevTools();
     dashboardWindow.loadFile(path.join(__dirname, '../views/dashboard.html'));
 
     dashboardWindow.on('closed', () => {
