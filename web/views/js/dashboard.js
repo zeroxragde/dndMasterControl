@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- Función de Inicialización del Dashboard ---
 function inicializarUI() {
+inicializarTodosLosModales();
+
+/*
   // 1. Inicializa los modales (usando funciones de base.js)
   registrarToggle('btnLista','listaPanel');
   registrarToggle('abrirSubida', 'modalSubida', true);
@@ -32,14 +35,39 @@ function inicializarUI() {
 
   hacerModalMovible('listaPanel', '.modal-header');
   hacerModalMovible('modalSubida', '.modal-header');
-
+*/
   // 2. Renderiza la lista de criaturas
   const tbodyCriaturas = document.getElementById('listaCriaturasBody');
   if (tbodyCriaturas) {
     renderizarCriaturas(criaturasData, tbodyCriaturas);
   }
 }
+/**
+ * Función que inicializa todos los modales de la página.
+ * Se asegura de que los listeners se configuren una sola vez.
+ */
+function inicializarTodosLosModales() {
+  // Lista de configuraciones para todos los modales de la app
+  const configs = [
+    { id: 'listaPanel', triggerId: 'btnLista', movable: true },
+    { id: 'modalSubida', triggerId: 'abrirSubida', movable: true },
+    { id: 'creature-editor-modal', triggerId: 'btnNuevaCriatura' }
+  ];
 
+  // Instanciamos cada modal
+  configs.forEach(config => new Modal(config));
+
+  // Listener de Cierre Global (la solución definitiva)
+  document.body.addEventListener('click', function(event) {
+    const closeButton = event.target.closest('.modal-close-btn, .editor-close-btn');
+    if (closeButton) {
+      const modalToClose = event.target.closest('.modal-panel, .editor-modal');
+      if (modalToClose) {
+        modalToClose.style.display = 'none';
+      }
+    }
+  });
+}
 /**
  * Dibuja la lista de criaturas en la tabla.
  * @param {Array<Object>} criaturas - El array con los datos de las criaturas.
