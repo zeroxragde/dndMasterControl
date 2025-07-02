@@ -51,7 +51,7 @@ function inicializarTodosLosModales() {
   const configs = [
     { id: 'listaPanel', triggerId: 'btnLista', movable: true },
     { id: 'modalSubida', triggerId: 'abrirSubida', movable: true },
-    { id: 'modalEditor', triggerId: 'btnNuevaCriatura' }
+    { id: 'modalEditor', triggerId: 'btnOpenEditor' }
   ];
 
   // Instanciamos cada modal
