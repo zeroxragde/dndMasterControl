@@ -1,20 +1,21 @@
-/**
- * Clase para gestionar un componente modal.
- */
 class Modal {
+  static activeModals = new Map();
+
   constructor(config) {
     this.modalNode = document.getElementById(config.id);
     this.triggerButton = document.getElementById(config.triggerId);
     this.isMovable = config.movable || false;
-    
+
     if (!this.modalNode || !this.triggerButton) return;
 
-    // Asigna el evento para abrir el modal.
     this.triggerButton.addEventListener('click', () => this.open());
 
     if (this.isMovable) {
       this._makeMovable('.modal-header');
     }
+
+    // Registrar la instancia
+    Modal.activeModals.set(this.modalNode.id, this);
   }
 
   open() {
@@ -56,31 +57,16 @@ class Modal {
 
     handle.addEventListener('mousedown', onMouseDown);
   }
-}
 
-/**
- * Función que inicializa todos los modales de la página.
- * Se asegura de que los listeners se configuren una sola vez.
- */
-function inicializarTodosLosModales() {
-  // Lista de configuraciones para todos los modales de la app
-  const configs = [
-    { id: 'listaPanel', triggerId: 'btnLista', movable: true },
-    { id: 'modalSubida', triggerId: 'abrirSubida', movable: true },
-    { id: 'creature-editor-modal', triggerId: 'btnNuevaCriatura' }
-  ];
-
-  // Instanciamos cada modal
-  configs.forEach(config => new Modal(config));
-
-  // Listener de Cierre Global (la solución definitiva)
-  document.body.addEventListener('click', function(event) {
-    const closeButton = event.target.closest('.modal-close-btn, .editor-close-btn');
-    if (closeButton) {
-      const modalToClose = event.target.closest('.modal-panel, .editor-modal');
-      if (modalToClose) {
-        modalToClose.style.display = 'none';
+  static setupGlobalCloseListener() {
+    document.body.addEventListener('click', function(event) {
+      const closeButton = event.target.closest('.modal-close-btn, .editor-close-btn');
+      if (closeButton) {
+        const modalNode = event.target.closest('.modal-panel, .editor-modal');
+        if (modalNode && Modal.activeModals.has(modalNode.id)) {
+          Modal.activeModals.get(modalNode.id).close();
+        }
       }
-    }
-  });
+    });
+  }
 }
