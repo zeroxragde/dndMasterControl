@@ -166,78 +166,79 @@
         <div class="modal-header">
           <h3><b id="titleEditor">Nueva</b> Creatura</h3>
           <button id="cerrarEditor" class="modal-close-btn">✖</button>
-          <br/>
-
-              <div class="editor-container">
+        </div>
+        <div class="modal-content">
+          
+          <div class="editor-container">
                   
-                  <nav class="editor-nav">
-                    <button class="editor-tab-button active" data-tab="editor-tab-datos1">Datos 1</button>
-                    <button class="editor-tab-button" data-tab="editor-tab-datos2">Datos 2</button>
-                    <button class="editor-tab-button" data-tab="editor-tab-datos3">Datos 3</button>
-                    <button class="editor-tab-button" data-tab="editor-tab-acciones">Acciones</button>
-                    <div class="nav-spacer"></div>
-                    <button class="btn">GUARDAR</button>
-                    <button id="editor-salir" class="btn">Salir</button>
-                  </nav>
+            <nav class="editor-nav">
+              <button class="editor-tab-button active" data-tab="editor-tab-datos1">Datos 1</button>
+              <button class="editor-tab-button" data-tab="editor-tab-datos2">Datos 2</button>
+              <button class="editor-tab-button" data-tab="editor-tab-datos3">Datos 3</button>
+              <button class="editor-tab-button" data-tab="editor-tab-acciones">Acciones</button>
+              <div class="nav-spacer"></div>
+              <button class="btn">GUARDAR</button>
+              <button id="editor-salir" class="btn">Salir</button>
+            </nav>
 
-                  <main class="editor-content">
-                    
-                    <div id="editor-tab-datos1" class="editor-tab-content active">
-                      <div class="form-row">
-                        <label>NOMBRE</label>
-                        <select class="flex-grow"><option>Seleccionar base...</option></select>
-                        <input type="text" placeholder="Otro...">
-                      </div>
-                      <div class="form-row">
-                        <label>DADOS</label>
-                        <input type="text" style="width: 80px;">
-                        <select><option>d4</option><option>d6</option></select>
-                        <label>BONUS</label>
-                        <input type="text" style="width: 80px;">
-                        <button class="btn btn-plus">+</button>
-                        <div class="checkbox-container">
-                          <input type="checkbox" id="escudo-check">
-                          <label for="escudo-check">Escudo</label>
-                        </div>
-                      </div>
-                      <div class="form-row button-group">
-                        <button class="btn">VELOCIDAD</button>
-                        <button class="btn">VELOCIDAD CAVADO</button>
-                        <button class="btn">VEL. ESCALADO</button>
-                        <button class="btn">VELOCIDAD VUELO</button>
-                        <button class="btn">VELOCIDAD NADO</button>
-                      </div>
-                      <div class="form-row button-group">
-                        <button class="btn stat-btn">FUERZA</button>
-                        <button class="btn stat-btn">DES</button>
-                        <button class="btn stat-btn">CON</button>
-                        <button class="btn stat-btn">INT</button>
-                        <button class="btn stat-btn">SAB</button>
-                        <button class="btn stat-btn">CAR</button>
-                      </div>
-                      <div class="form-row">
-                        <select class="flex-grow"></select>
-                        <label>COMPETENTE</label>
-                        <select class="flex-grow"></select>
-                        <label>COMPETENTE</label>
-                      </div>
-                      <div class="form-row">
-                        <label>EXPERTO</label>
-                        <select class="flex-grow"></select>
-                        <label>INMUNE</label>
-                      </div>
-                      <div class="form-row">
-                        <textarea class="flex-grow" placeholder="Resistencias..."></textarea>
-                        <textarea class="flex-grow" placeholder="Inmunidades..."></textarea>
-                        <textarea class="flex-grow" placeholder="Vulnerabilidades..."></textarea>
-                      </div>
-                    </div>
-
-                    <div id="editor-tab-datos2" class="editor-tab-content">
-                      <h2>Datos 2 - Próximamente...</h2>
-                    </div>
-                    </main>
+            <main class="editor-content">
+              
+              <div id="editor-tab-datos1" class="editor-tab-content active">
+                <div class="form-row">
+                  <label>NOMBRE</label>
+                  <select class="flex-grow"><option>Seleccionar base...</option></select>
+                  <input type="text" placeholder="Otro...">
                 </div>
+                <div class="form-row">
+                  <label>DADOS</label>
+                  <input type="text" style="width: 80px;">
+                  <select><option>d4</option><option>d6</option></select>
+                  <label>BONUS</label>
+                  <input type="text" style="width: 80px;">
+                  <button class="btn btn-plus">+</button>
+                  <div class="checkbox-container">
+                    <input type="checkbox" id="escudo-check">
+                    <label for="escudo-check">Escudo</label>
+                  </div>
+                </div>
+                <div class="form-row button-group">
+                  <button class="btn">VELOCIDAD</button>
+                  <button class="btn">VELOCIDAD CAVADO</button>
+                  <button class="btn">VEL. ESCALADO</button>
+                  <button class="btn">VELOCIDAD VUELO</button>
+                  <button class="btn">VELOCIDAD NADO</button>
+                </div>
+                <div class="form-row button-group">
+                  <button class="btn stat-btn">FUERZA</button>
+                  <button class="btn stat-btn">DES</button>
+                  <button class="btn stat-btn">CON</button>
+                  <button class="btn stat-btn">INT</button>
+                  <button class="btn stat-btn">SAB</button>
+                  <button class="btn stat-btn">CAR</button>
+                </div>
+                <div class="form-row">
+                  <select class="flex-grow"></select>
+                  <label>COMPETENTE</label>
+                  <select class="flex-grow"></select>
+                  <label>COMPETENTE</label>
+                </div>
+                <div class="form-row">
+                  <label>EXPERTO</label>
+                  <select class="flex-grow"></select>
+                  <label>INMUNE</label>
+                </div>
+                <div class="form-row">
+                  <textarea class="flex-grow" placeholder="Resistencias..."></textarea>
+                  <textarea class="flex-grow" placeholder="Inmunidades..."></textarea>
+                  <textarea class="flex-grow" placeholder="Vulnerabilidades..."></textarea>
+                </div>
+              </div>
+
+              <div id="editor-tab-datos2" class="editor-tab-content">
+                <h2>Datos 2 - Próximamente...</h2>
+              </div>
+              </main>
+          </div>
 
         </div>
 
