@@ -21,32 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- Función de Inicialización del Dashboard ---
 function inicializarUI() {
-inicializarTodosLosModales();
 
-/*
-  // 1. Inicializa los modales (usando funciones de base.js)
-  registrarToggle('btnLista','listaPanel');
-  registrarToggle('abrirSubida', 'modalSubida', true);
-  registrarToggle('cerrarSubida', 'modalSubida', false);
-
-  registrarToggle('btnOpenEditor', 'modalEditor', true);
- // registrarToggle('btnCloseEditor', 'modalEditor', false);
-  hacerModalMovible('modalEditor', '.modal-header');
-
-  hacerModalMovible('listaPanel', '.modal-header');
-  hacerModalMovible('modalSubida', '.modal-header');
-*/
+  inicializarComponentes();
   // 2. Renderiza la lista de criaturas
   const tbodyCriaturas = document.getElementById('listaCriaturasBody');
   if (tbodyCriaturas) {
     renderizarCriaturas(criaturasData, tbodyCriaturas);
   }
 }
-/**
- * Función que inicializa todos los modales de la página.
- * Se asegura de que los listeners se configuren una sola vez.
- */
-function inicializarTodosLosModales() {
+
+/*function inicializarTodosLosModales() {
   // Lista de configuraciones para todos los modales de la app
   const configs = [
     { id: 'listaPanel', triggerId: 'btnLista', movable: true },
@@ -67,7 +51,27 @@ function inicializarTodosLosModales() {
       }
     }
   });
+}*/
+
+/**
+ * Crea las instancias de las clases Modal y Tabs para la página.
+ */
+function inicializarComponentes() {
+  // Configuración para todos los modales.
+
+  const modalConfigs = [
+    { id: 'listaPanel', triggerId: 'btnLista', closeClassName: 'modal-close-btn', movable: true },
+    { id: 'modalSubida', triggerId: 'abrirSubida', closeClassName: 'modal-close-btn', movable: true },
+    { id: 'modalEditor', triggerId: 'btnOpenEditor', closeClassName: 'editor-close-btn', movable: true, width: '1500px' }
+  ];
+  modalConfigs.forEach(config => new Modal(config));
+
+  // Configuración para todos los sistemas de pestañas.
+  const tabConfigs = ['creature-editor-container'];
+  tabConfigs.forEach(id => new Tabs(id));
 }
+
+
 /**
  * Dibuja la lista de criaturas en la tabla.
  * @param {Array<Object>} criaturas - El array con los datos de las criaturas.

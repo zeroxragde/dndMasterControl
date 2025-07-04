@@ -73,7 +73,6 @@ function registrarToggle(botonId, modalId, mostrar = null) {
 
 
 
-
   function filtrarCanciones() {
     const input = document.getElementById('buscadorCanciones');
     const filtro = input.value.toLowerCase();
@@ -85,42 +84,7 @@ function registrarToggle(botonId, modalId, mostrar = null) {
     });
   }
   
-/**
- * Abre un modal y opcionalmente ajusta su ancho.
- * @param {string} modalId - El ID del modal a abrir.
- * @param {Object} [opciones] - Opciones de configuración.
- * @param {string} [opciones.width] - El ancho deseado para el modal (e.g., '90%', '1000px').
- */
-function abrirModal(modalId, opciones = {}) {
-  const modal = document.getElementById(modalId);
-  if (!modal) return;
 
-  // Busca el contenedor principal del contenido del modal.
-  // Si es el editor, será '.editor-container', si no, el modal mismo.
-  const container = modal.querySelector('.editor-container') || modal;
-
-  // Si se especifica un ancho en las opciones, lo aplicamos.
-  if (opciones.width) {
-    container.style.width = opciones.width;
-  } else {
-    // Si no, eliminamos el estilo en línea para que use el que tiene en el CSS.
-    container.style.width = '';
-  }
-
-  // Mostramos el modal.
-  modal.style.display = 'flex';
-}
-
-/**
- * Cierra un modal.
- * @param {string} modalId - El ID del modal a cerrar.
- */
-function cerrarModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
   
   // 🎵 Reproductor
   function cargarCancion() {

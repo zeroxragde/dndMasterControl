@@ -1,67 +1,57 @@
 /**
  * Clase para gestionar un componente modal.
- * Encapsula la lógica para abrir, cerrar, mover y dimensionar un modal.
+ * Encapsula la lógica para abrir, cerrar, mover y dimensionar un modal,
+ * y gestiona un listener de cierre global de forma automática.
  */
 class Modal {
-  // Almacena todas las instancias de modales creadas para referencia.
-  static activeModals = new Map();
+  // Propiedades estáticas para gestionar todas las instancias y el listener global.
+  static #instances = new Map();
+  static #listenerInitialized = false;
 
   constructor(config) {
     this.modalNode = document.getElementById(config.id);
     this.triggerButton = document.getElementById(config.triggerId);
     
-    // Propiedades configurables con valores por defecto.
     this.isMovable = config.movable || false;
-    this.width = config.width || null; // Ancho personalizado (e.g., '90%', '1000px')
+    this.width = config.width || null;
 
     if (!this.modalNode || !this.triggerButton) {
-      console.error(`Error al inicializar el modal: No se encontró el nodo con id "${config.id}" o el disparador con id "${config.triggerId}".`);
+      console.error(`Error al inicializar el modal: Faltan elementos para id "${config.id}".`);
       return;
     }
 
     // Asigna el evento para abrir el modal.
     this.triggerButton.addEventListener('click', () => this.open());
 
-    // Si es movible, activa la funcionalidad.
     if (this.isMovable) {
       this._makeMovable('.modal-header');
     }
 
-    // Registra esta instancia en el mapa estático para referencia global.
-    Modal.activeModals.set(this.modalNode.id, this);
+    // Registra esta instancia en el mapa estático.
+    Modal.#instances.set(this.modalNode.id, this);
+
+    // Asegura que el listener de cierre global se configure una sola vez.
+    Modal.#initializeGlobalCloseListener();
   }
 
-  /**
-   * Abre el modal y aplica el ancho personalizado si fue especificado.
-   */
   open() {
     const container = this.modalNode.querySelector('.editor-container') || this.modalNode;
-    
     if (this.width) {
-      container.style.width = this.width; // Aplica el ancho personalizado.
+      container.style.width = this.width;
     } else {
-      container.style.width = ''; // Usa el ancho definido en el CSS.
+      container.style.width = '';
     }
-    
     this.modalNode.style.display = 'flex';
   }
 
-  /**
-   * Cierra el modal.
-   */
   close() {
     this.modalNode.style.display = 'none';
   }
 
-  /**
-   * (Método privado) Añade la funcionalidad de arrastrar y soltar al modal.
-   */
   _makeMovable(handleSelector) {
     const handle = this.modalNode.querySelector(handleSelector);
     if (!handle) return;
-
     let initialX, initialY, initialModalLeft, initialModalTop;
-
     const onMouseDown = (e) => {
       e.preventDefault();
       initialModalLeft = this.modalNode.offsetLeft;
@@ -72,35 +62,39 @@ class Modal {
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     };
-
     const onMouseMove = (e) => {
       const dx = e.clientX - initialX;
       const dy = e.clientY - initialY;
       this.modalNode.style.left = `${initialModalLeft + dx}px`;
       this.modalNode.style.top = `${initialModalTop + dy}px`;
     };
-
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-
     handle.addEventListener('mousedown', onMouseDown);
   }
 
   /**
-   * Configura un listener global en el documento para manejar el cierre de cualquier modal.
-   * Este método estático se llama una sola vez.
+   * (Método estático privado) Configura el listener de cierre global.
+   * Gracias a la bandera #listenerInitialized, este código solo se ejecuta una vez.
    */
-  static setupGlobalCloseListener() {
+  static #initializeGlobalCloseListener() {
+    if (this.#listenerInitialized) {
+      return; // Si ya está inicializado, no hacemos nada.
+    }
+    
     document.body.addEventListener('click', function(event) {
       const closeButton = event.target.closest('.modal-close-btn, .editor-close-btn');
       if (closeButton) {
         const modalNode = event.target.closest('.modal-panel, .editor-modal');
-        if (modalNode && Modal.activeModals.has(modalNode.id)) {
-          Modal.activeModals.get(modalNode.id).close();
+        // Usamos el mapa estático para encontrar la instancia correcta y llamar su método close().
+        if (modalNode && Modal.#instances.has(modalNode.id)) {
+          Modal.#instances.get(modalNode.id).close();
         }
       }
     });
+
+    this.#listenerInitialized = true; // Marcamos como inicializado.
   }
 }
