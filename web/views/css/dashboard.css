@@ -30,6 +30,7 @@
 .tab-content {
   opacity: 0;
   pointer-events: none;
+  width: 90%;
   position: absolute;
   transition: opacity 0.3s;
 }

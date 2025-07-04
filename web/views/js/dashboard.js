@@ -62,7 +62,7 @@ function inicializarComponentes() {
   const modalConfigs = [
     { id: 'listaPanel', triggerId: 'btnLista', closeClassName: 'modal-close-btn', movable: true },
     { id: 'modalSubida', triggerId: 'abrirSubida', closeClassName: 'modal-close-btn', movable: true },
-    { id: 'modalEditor', triggerId: 'btnOpenEditor', closeClassName: 'editor-close-btn', movable: true, width: '1500px' }
+    { id: 'modalEditor', triggerId: 'btnOpenEditor', closeClassName: 'editor-close-btn', movable: true, width: '70%' }
   ];
   modalConfigs.forEach(config => new Modal(config));
 

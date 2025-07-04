@@ -35,7 +35,7 @@ function createMainWindow() {
 
     const displays = screen.getAllDisplays();
     const target = displays[datos.monitor] || displays[0];
-
+/*
     mapaWindow = new BrowserWindow({
       x: target.bounds.x,
       y: target.bounds.y,
@@ -46,7 +46,7 @@ function createMainWindow() {
       }
     });
     mapaWindow.loadFile(path.join(__dirname, '../views/mapa.html'));
-
+*/
     dashboardWindow = new BrowserWindow({
       width: 800,
       height: 600,
@@ -59,9 +59,10 @@ function createMainWindow() {
     dashboardWindow.webContents.openDevTools();
     dashboardWindow.loadFile(path.join(__dirname, '../views/dashboard.html'));
 
+    /*
     dashboardWindow.on('closed', () => {
       if (mapaWindow) mapaWindow.close();
-    });
+    });*/
   });
 }
 
