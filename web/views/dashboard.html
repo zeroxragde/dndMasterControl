@@ -1,272 +1,430 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Tablero del DM</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tablero del DM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <script src="js/base.js"></script>
-  <script src="js/Clases/modal.js"></script>
-  <script src="js/Clases/tab.js"></script>
-  <script src="js/dashboard.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/Clases/modal.js"></script>
+    <script src="js/Clases/tab.js"></script>
+    <script src="js/Clases/listview.js"></script>
+    <script src="js/dashboard.js"></script>
 
-</head>
-<body>
-  <h1 id="tituloDashboard">Tablero del DM</h1>
-
-  <div class="tabs">
-    <button class="tab-button active" onclick="mostrarTab('tab1', event)">🎵 Ambientación musical</button>
-    <button class="tab-button" onclick="mostrarTab('tab2', event)">🧙 Creaturas </button>
-    <button class="tab-button" onclick="mostrarTab('tab3', event)">📜 Creaturas / Eventos</button>
-  </div>
-
-  <div class="tab-content active" id="tab1">
-    <div class="fila-contenido">
-      <!-- 🎵 Reproductor -->
-      <div class="bloque bloque-reproductor">
-        <div class="player compacto">
-          <div class="player-controls">
-            <button id="prev" title="Anterior">&#9664;&#9664;</button>
-            <button id="play" title="Play/Pausa">&#9654;</button>
-            <button id="next" title="Siguiente">&#9654;&#9654;</button>
-            <div class="loop-toggle-container" title="Repetir canción">
-              <label class="switch-loop">
-                <input type="checkbox" id="loopToggle">
-                <span class="slider"></span>
-              </label>
-              <span class="loop-label">🔁 Loop</span>
-              <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
-            </div>
-          </div>
-          <div class="player-info">
-            <span>🎵 <span id="nombreCancion">Sin canción</span></span>
-
-            <div class="player-info-buttons">
-              <button id="btnLista" class="btn">🎶 Lista</button>
-              <button id="abrirSubida" class="btn">📤 Subir canción</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- 🎵 Reproductor Sonidos -->
-      <div class="bloque bloque-reproductor">
-        <div class="player compacto">
-          <div class="player-controls">
-            <button id="prev" title="Anterior">&#9664;&#9664;</button>
-            <button id="play" title="Play/Pausa">&#9654;</button>
-            <button id="next" title="Siguiente">&#9654;&#9654;</button>
-            <div class="loop-toggle-container" title="">
-              <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
-            </div>
-          </div>
-          <div class="player-info">
-            <span>🎵 <span id="nombreCancion">Sin sonido</span></span>
-
-            <div class="player-info-buttons">
-              <button id="btnLista" class="btn">🎶 Lista</button>
-              <button id="abrirSubida" class="btn">📤 Subir sonido</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Modales -->
-      <div id="modalSubida" class="modal-panel" style="display: none;">
-        <div class="modal-header">
-          <h3>📤 Subir canciones</h3>
-          <button id="cerrarSubida" class="modal-close-btn">✖</button>
-        </div>
-
-        <p>Selecciona la categoría y los archivos de audio que quieres añadir.</p>
-
-        <label for="categoriaSubida">Categoría:</label>
-        <select id="categoriaSubida" name="categoriaSubida" style="width: 100%; margin-top: 5px; margin-bottom: 15px;">
-          <option value="">Sin categoría</option>
-          </select>
-        
-        <input type="file" id="inputCanciones" multiple accept=".mp3,.wav,.ogg" class="btn" style="width: 100%; box-sizing: border-box;">
-
-        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
-            <button id="subirArchivos" class="btn">📁 Subir Archivos</button>
-        </div>
-      </div>
-
-      <div id="listaPanel" class="modal-panel">
-        <div class="modal-header">
-          <h3>🎵 Lista de canciones</h3>
-          <button class="modal-close-btn">✖</button>
-        </div>
-      
-        <input
-          type="text"
-          id="buscadorCanciones"
-          placeholder="Buscar canción..."
-          onkeyup="filtrarCanciones()"
-        />
-      
-        <select id="categoriaCanciones">
-          <option value="">Todas las categorías</option>
-          <!-- Se cargarán dinámicamente -->
-        </select>
-      
-        <ul id="listaCanciones">
-          <!-- Se llenará dinámicamente -->
-          <li>Intro - Aventura en Arleneth</li>
-          <li>Batalla - Tambores de guerra</li>
-          <li>Exploración - Ecos del bosque</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="tab-content" id="tab2">
-    <div class="list-manager-container">
-        <div class="list-view">
-          <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>CR</th>
-                  </tr>
-                </thead>
-                <tbody id="listaCriaturasBody">
-                  </tbody>
-              </table>
-          </div>
-            
-            <div class="list-filters">
-              <select>
-                <option>Todas las criaturas</option>
-              </select>
-            </div>
-        </div>
+  </head>
+  <body>
+    <h1 id="tituloDashboard">Tablero del DM</h1>
+    <div id="web-container" class="web-container">
     
-        <div class="list-actions">
-          <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-          <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
-          <button class="btn" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
-          <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
-        </div>
-    
-    </div>
-    
-    <div class="footer-actions">
-      <button id="btnOpenEditor" class="btn">Nueva Creatura</button>
-    </div>
+      <nav class="web-nav" role="tablist">
+
+        <button class="web-tab-button active" role="tab" aria-controls="web-tab-ambiente" aria-selected="true">🎵 Ambientación musical</button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-creaturas" aria-selected="false">🧙 Creaturas </button>
 
 
-      <!-- Modales -->
-      <div id="modalEditor" class="modal-panel" style="display: none;">
-        <div class="modal-header">
-          <h3><b id="titleEditor">Nueva</b> Creatura</h3>
-          <button id="cerrarEditor" class="modal-close-btn">✖</button>
-        </div>
-        <div class="modal-content">
+      </nav>
 
-          <div id="creature-editor-container" class="editor-container">
-    
-            <nav class="editor-nav" role="tablist">
-              <button class="editor-tab-button active" role="tab" aria-controls="editor-tab-datos1">Datos 1</button>
-              <button class="editor-tab-button" role="tab" aria-controls="editor-tab-datos2">Datos 2</button>
-              <button class="editor-tab-button" role="tab" aria-controls="editor-tab-datos3">Datos 3</button>
-              <button class="editor-tab-button" role="tab" aria-controls="editor-tab-acciones">Acciones</button>
-              <div class="nav-spacer"></div>
-              <button class="btn">GUARDAR</button>
-              <button id="editor-salir" class="btn editor-close-btn">Salir</button>
-            </nav>
-        
-            <main class="editor-content">
+      <main class="web-content">
+
+        <div id="web-tab-ambiente" class="web-tab-content active" role="tabpanel">
+          <div class="fila-contenido">
+            <!-- 🎵 Reproductor -->
+            <div class="bloque bloque-reproductor">
+              <div class="player compacto">
+                <div class="player-controls">
+                  <button id="prev" title="Anterior">&#9664;&#9664;</button>
+                  <button id="play" title="Play/Pausa">&#9654;</button>
+                  <button id="next" title="Siguiente">&#9654;&#9654;</button>
+                  <div class="loop-toggle-container" title="Repetir canción">
+                    <label class="switch-loop">
+                      <input type="checkbox" id="loopToggle">
+                      <span class="slider"></span>
+                    </label>
+                    <span class="loop-label">🔁 Loop</span>
+                    <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
+                  </div>
+                </div>
+                <div class="player-info">
+                  <span>🎵 <span id="nombreCancion">Sin canción</span></span>
+
+                  <div class="player-info-buttons">
+                    <button id="btnLista" class="btn">🎶 Lista</button>
+                    <button id="abrirSubida" class="btn">📤 Subir canción</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- 🎵 Reproductor Sonidos -->
+            <div class="bloque bloque-reproductor">
+              <div class="player compacto">
+                <div class="player-controls">
+                  <button id="prev" title="Anterior">&#9664;&#9664;</button>
+                  <button id="play" title="Play/Pausa">&#9654;</button>
+                  <button id="next" title="Siguiente">&#9654;&#9654;</button>
+                  <div class="loop-toggle-container" title="">
+                    <input type="range" id="volume" min="0" max="100" value="50" title="Volumen">
+                  </div>
+                </div>
+                <div class="player-info">
+                  <span>🎵 <span id="nombreCancion">Sin sonido</span></span>
+
+                  <div class="player-info-buttons">
+                    <button id="btnLista" class="btn">🎶 Lista</button>
+                    <button id="abrirSubida" class="btn">📤 Subir sonido</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Modales -->
+            <div id="modalSubida" class="modal-panel" style="display: none;">
+              <div class="modal-header">
+                <h3>📤 Subir canciones</h3>
+                <button id="cerrarSubida" class="modal-close-btn">✖</button>
+              </div>
+
+              <p>Selecciona la categoría y los archivos de audio que quieres añadir.</p>
+
+              <label for="categoriaSubida">Categoría:</label>
+              <select id="categoriaSubida" name="categoriaSubida" style="width: 100%; margin-top: 5px; margin-bottom: 15px;">
+                <option value="">Sin categoría</option>
+                </select>
               
-                <div id="editor-tab-datos1" class="editor-tab-content active" role="tabpanel">
-                  <div class="form-row">
-                    <label>NOMBRE</label>
-                    <select class="flex-grow"><option>Seleccionar base...</option></select>
-                    <input type="text" placeholder="Otro...">
-                  </div>
-                  <div class="form-row">
-                    <label>DADOS</label>
-                    <input type="text" style="width: 80px;">
-                    <select><option>d4</option><option>d6</option></select>
-                    <label>BONUS</label>
-                    <input type="text" style="width: 80px;">
-                    <button class="btn btn-plus">+</button>
-                    <div class="checkbox-container">
-                      <input type="checkbox" id="escudo-check">
-                      <label for="escudo-check">Escudo</label>
-                    </div>
-                  </div>
-                  <div class="form-row button-group">
-                    <button class="btn">VELOCIDAD</button>
-                    <button class="btn">VELOCIDAD CAVADO</button>
-                    <button class="btn">VEL. ESCALADO</button>
-                    <button class="btn">VELOCIDAD VUELO</button>
-                    <button class="btn">VELOCIDAD NADO</button>
-                  </div>
-                  <div class="form-row button-group">
-                    <button class="btn stat-btn">FUERZA</button>
-                    <button class="btn stat-btn">DES</button>
-                    <button class="btn stat-btn">CON</button>
-                    <button class="btn stat-btn">INT</button>
-                    <button class="btn stat-btn">SAB</button>
-                    <button class="btn stat-btn">CAR</button>
-                  </div>
-                  <div class="form-row">
-                    <select class="flex-grow"></select>
-                    <label>COMPETENTE</label>
-                    <select class="flex-grow"></select>
-                    <label>COMPETENTE</label>
-                  </div>
-                  <div class="form-row">
-                    <label>EXPERTO</label>
-                    <select class="flex-grow"></select>
-                    <label>INMUNE</label>
-                  </div>
-                  <div class="form-row">
-                    <textarea class="flex-grow" placeholder="Resistencias..."></textarea>
-                    <textarea class="flex-grow" placeholder="Inmunidades..."></textarea>
-                    <textarea class="flex-grow" placeholder="Vulnerabilidades..."></textarea>
-                  </div>
-                </div>
-          
-                <div id="editor-tab-datos2" class="editor-tab-content" role="tabpanel">
-                  <h2>Datos 2 - Próximamente...</h2>
-                </div>
-          
-                <div id="editor-tab-datos3" class="editor-tab-content" role="tabpanel">
-                  <h2>Datos 3 - Próximamente...</h2>
-                </div>
-                <div id="editor-tab-acciones" class="editor-tab-content" role="tabpanel">
-                  <h2>Acciones - Próximamente...</h2>
-                </div>
-          
-              </main>
+              <input type="file" id="inputCanciones" multiple accept=".mp3,.wav,.ogg" class="btn" style="width: 100%; box-sizing: border-box;">
+
+              <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                  <button id="subirArchivos" class="btn">📁 Subir Archivos</button>
+              </div>
+            </div>
+
+            <div id="listaPanel" class="modal-panel">
+              <div class="modal-header">
+                <h3>🎵 Lista de canciones</h3>
+                <button class="modal-close-btn">✖</button>
+              </div>
+            
+              <input
+                type="text"
+                id="buscadorCanciones"
+                placeholder="Buscar canción..."
+                onkeyup="filtrarCanciones()"
+              />
+            
+              <select id="categoriaCanciones">
+                <option value="">Todas las categorías</option>
+                <!-- Se cargarán dinámicamente -->
+              </select>
+            
+              <ul id="listaCanciones">
+                <!-- Se llenará dinámicamente -->
+                <li>Intro - Aventura en Arleneth</li>
+                <li>Batalla - Tambores de guerra</li>
+                <li>Exploración - Ecos del bosque</li>
+              </ul>
+            </div>
           </div>
-
         </div>
-      </div>
+
+        <div id="web-tab-creaturas" class="web-tab-content" role="tabpanel">
+            <div id="creature-list-container" class="list-manager-container">
+                <div class="list-view">
+                  <div class="table-container">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>CR</th>
+                          </tr>
+                        </thead>
+                        <tbody id="listaCriaturasBody">
+                          </tbody>
+                      </table>
+                  </div>
+                    
+                    <div class="list-filters">
+                      <select>
+                        <option>Todas las criaturas</option>
+                      </select>
+                    </div>
+                </div>
+            
+                <div class="list-actions">
+                  <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                  <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                  <button class="btn" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
+                  <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
+                </div>
+            
+            </div>
+            
+            <div class="footer-actions">
+              <button id="btnOpenEditor" class="btn">Nueva Creatura</button>
+            </div>
+
+            <!-- Modales -->
+            <div id="modalEditor" class="modal-panel" style="display: none;">
+              <div class="modal-header">
+                <h3 id="editor-title-display"></h3>
+                <button id="cerrarEditor" class="modal-close-btn">✖</button>
+              </div>
+              <div class="modal-content editor-scroll-content">
+
+                  <div id="creature-editor-container" class="editor-container">
+                      
+                      <nav class="editor-nav" role="tablist">
+                        
+                        <button class="editor-tab-button active" role="tab" aria-controls="editor-tab-datos1" aria-selected="true">Datos 1</button>
+                        <button class="editor-tab-button" role="tab" aria-controls="editor-tab-datos2" aria-selected="false">Datos 2</button>
+                        <button class="editor-tab-button" role="tab" aria-controls="editor-tab-datos3" aria-selected="false">Datos 3</button>
+                        <button class="editor-tab-button" role="tab" aria-controls="editor-tab-acciones" aria-selected="false">Acciones</button>
+                        
+                        <div class="nav-spacer"></div>
+                        <button class="btn">GUARDAR</button>
+                        <button class="btn editor-close-btn">Salir</button>
+                      </nav>
+
+                      <main class="editor-content">
+                        
+                   
+
+                        <div id="editor-tab-datos1" class="editor-tab-content active" role="tabpanel">
+                              <div class="form-row">
+                                  <div class="form-group" style="flex: 3 1 0%;">
+                                      <label for="editor-nombre">NOMBRE</label>
+                                      <input type="text" id="editor-nombre" placeholder="Nombre de la criatura...">
+                                  </div>
+                                  <div class="form-group" style="flex: 1 1 0%;">
+                                      <label for="editor-tamaño">TAMAÑO</label>
+                                      <select id="editor-tamaño"></select>
+                                  </div>
+                                  <div class="form-group" style="flex: 1 1 0%;">
+                                      <label for="editor-tipo">TIPO</label>
+                                      <select id="editor-tipo"></select>
+                                  </div>
+                              </div>
+
+                              <div class="form-row">
+                                  <div class="form-group">
+                                      <label for="editor-hp-dados">PUNTOS DE GOLPE</label>
+                                      <div class="input-group">
+                                          <input type="text" id="editor-hp-dados" placeholder="Ej: 2d8+2">
+                                          <input type="text" id="editor-hp-promedio" style="width: 100px;" placeholder="promedio">
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="editor-ac">CLASE DE ARMADURA</label>
+                                      <div class="input-group">
+                                          <input type="text" id="editor-ac" style="width: 80px;" placeholder="CA">
+                                          <select id="editor-armadura" class="flex-grow"></select>
+                                          <div class="checkbox-container">
+                                              <input type="checkbox" id="editor-escudo">
+                                              <label for="editor-escudo">Escudo</label>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="form-row stat-row">
+                                  <div class="stat-group">
+                                      <label for="input-velocidad">VELOCIDAD</label>
+                                      <input type="text" id="input-velocidad" class="numeric-input" placeholder="ft.">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-vel-cavado">V. CAVADO</label>
+                                      <input type="text" id="input-vel-cavado" class="numeric-input" placeholder="ft.">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-vel-escalado">V. ESCALADO</label>
+                                      <input type="text" id="input-vel-escalado" class="numeric-input" placeholder="ft.">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-vel-vuelo">V. VUELO</label>
+                                      <input type="text" id="input-vel-vuelo" class="numeric-input" placeholder="ft.">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-vel-nado">V. NADO</label>
+                                      <input type="text" id="input-vel-nado" class="numeric-input" placeholder="ft.">
+                                  </div>
+                              </div>
+
+                              <div class="form-row stat-row">
+                                  <div class="stat-group">
+                                      <label for="input-fuerza">FUERZA</label>
+                                      <input type="text" id="input-fuerza" class="numeric-input" value="10">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-destreza">DESTREZA</label>
+                                      <input type="text" id="input-destreza" class="numeric-input" value="10">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-con">CON</label>
+                                      <input type="text" id="input-con" class="numeric-input" value="10">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-int">INTELIGENCIA</label>
+                                      <input type="text" id="input-int" class="numeric-input" value="10">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-sab">SABIDURÍA</label>
+                                      <input type="text" id="input-sab" class="numeric-input" value="10">
+                                  </div>
+                                  <div class="stat-group">
+                                      <label for="input-car">CARISMA</label>
+                                      <input type="text" id="input-car" class="numeric-input" value="10">
+                                  </div>
+                              </div>
+
+                              <div class="form-row">
+                                  <div class="control-group">
+                                      <label>TIRADAS DE SALVACIÓN</label>
+                                      <select id="select-salvaciones"></select>
+                                      <button class="btn" data-target-panel="panel-salvaciones" data-source-select="select-salvaciones" data-type="competente">AÑADIR</button>
+                                      <div id="panel-salvaciones" class="display-panel"></div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label>HABILIDADES</label>
+                                      <select id="select-habilidades"></select>
+                                      <div class="input-group">
+                                          <button class="btn" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="competente">COMPETENTE</button>
+                                          <button class="btn" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="experto">EXPERTO</button>
+                                      </div>
+                                      <div id="panel-habilidades" class="display-panel"></div>
+                                  </div>
+                              </div>
+
+                              <div class="form-row">
+                                  <div class="control-group">
+                                      <label>RESIST., INMUN., VULNER. (DAÑO)</label>
+                                      <select id="select-tipos-daño"></select>
+                                      <div class="input-group">
+                                          <button class="btn" data-target-panel="panel-resistencias" data-source-select="select-tipos-daño" data-type="resistencia">RESISTENCIA</button>
+                                          <button class="btn" data-target-panel="panel-inmunidades" data-source-select="select-tipos-daño" data-type="inmune">INMUNE</button>
+                                          <button class="btn" data-target-panel="panel-vulnerabilidades" data-source-select="select-tipos-daño" data-type="vulnerable">VULNERABLE</button>
+                                      </div>
+                                  </div>
+                                  <div class="control-group">
+                                      <label>INMUNIDAD A CONDICIÓN</label>
+                                      <select id="select-inmunidad-condicion"></select>
+                                      <button class="btn" data-target-panel="panel-inmunidad-condicion" data-source-select="select-inmunidad-condicion" data-type="inmune">AÑADIR</button>
+                                  </div>
+                              </div>
+                        </div>
 
 
-  </div><!--TERMINA TAB 2-->
+                        <div id="editor-tab-datos2" class="editor-tab-content" role="tabpanel">
 
-  <div class="tab-content" id="tab3">
-    <h2>Creaturas / Eventos</h2>
-    <p>Próximamente...</p>
+                          
+
+   <div class="form-row">
+        <div class="control-group" style="flex-basis: 48%;">
+            <label>VULNER., RESIST., INMUNE (DAÑO)</label>
+            <select id="select-tipos-daño"></select>
+            <div class="input-group">
+                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="vulnerable">VULNERABLE</button>
+                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="resistente">RESISTENTE</button>
+                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="inmune">INMUNE</button>
+            </div>
+            <div id="panel-daño" class="display-panel"></div>
+        </div>
+        <div class="control-group" style="flex-basis: 48%;">
+            <label>IDIOMAS</label>
+            <select id="select-idiomas"></select>
+            <div class="input-group">
+                <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="habla">HABLA</button>
+                <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="entiende">ENTIENDE</button>
+                <input type="text" id="input-telepatia" class="numeric-input" placeholder="Telepatía (pies)">
+            </div>
+            <div id="panel-idiomas" class="display-panel"></div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group sense-group">
+            <label>Vista ciega</label>
+            <input type="text" id="sentido-vista-ciega" class="numeric-input" value="0">
+            <span>Pies</span>
+            <div class="checkbox-container">
+                <input type="checkbox" id="check-ciego-mas-alla">
+                <label for="check-ciego-mas-alla">Ciego más allá de este radio</label>
+            </div>
+        </div>
+        <div class="form-group sense-group">
+            <label>Vision Nocturna</label>
+            <input type="text" id="sentido-vision-nocturna" value="0">
+            <span>Pies</span>
+        </div>
+        <div class="form-group sense-group">
+            <label>Sentido Sísmico</label>
+            <input type="text" id="sentido-sismico" value="0">
+            <span>Pies</span>
+        </div>
+        <div class="form-group sense-group">
+            <label>Vision Verdadera</label>
+            <input type="text" id="sentido-vision-verdadera" value="0">
+            <span>Pies</span>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-column" style="width: 25%;">
+            <div class="form-group">
+                <label for="editor-cr-tab2">VALOR DE DESAFÍO (CR)</label>
+                <select id="editor-cr-tab2"></select>
+                <span id="bonificacion-cr" style="font-size: 12px; color: #aaa; margin-top: 5px;">(Bonificación de competencia: +2)</span>
+            </div>
+             <div class="cr-xp-group">
+                <div class="form-group">
+                    <label>CR</label><input type="text">
+                </div>
+                <div class="form-group">
+                    <label>XP</label><input type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-column" style="width: 50%;">
+            <div class="form-group">
+                <label for="editor-notas">NOTAS</label>
+                <textarea id="editor-notas"></textarea>
+            </div>
+        </div>
+        <div class="form-column" style="width: 25%;">
+            <div class="form-group">
+                <label>IMAGEN</label>
+                <div class="image-uploader">
+                    <img id="preview-imagen-criatura" src="" alt="Vista previa" style="display:none;">
+                    <input type="file" id="input-imagen-criatura" accept="image/*" style="display:none;">
+                    <button id="btn-subir-foto" class="btn">Subir Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                        </div>
+
+                        <div id="editor-tab-datos3" class="editor-tab-content" role="tabpanel">
+                          <h2>Datos 3 - Próximamente...</h2>
+                        </div>
+
+                        <div id="editor-tab-acciones" class="editor-tab-content" role="tabpanel">
+                          <h2>Acciones - Próximamente...</h2>
+                        </div>
+
+                      </main>
+                  </div>
+
+              </div>
+            </div>
+        </div>
+
+      </main>
   </div>
-
-
-
-
-
-
-
-
-</body>
+  </body>
 </html>

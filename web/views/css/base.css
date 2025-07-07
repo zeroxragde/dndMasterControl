@@ -148,36 +148,53 @@ body {
     transform: translateX(20px);
   }
   
-  .modal-panel {
-    position: absolute;
-    top: 100px;
-    left: 100px;
-    overflow-x: hidden;
-    background: #1e1e1e;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 10px;
-    padding: 15px;
-    /*width: 400px;*/
-    max-height: 70vh;
-    overflow-y: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.6);
-    display: none;
-    z-index: 1000;
-    flex-direction: column;
-  }
-  
+/* ======================================================= */
+/* ====== ESTILOS CORREGIDOS USANDO TU CSS ORIGINAL ====== */
+/* ======================================================= */
 
-  .modal-panel .modal-header {
-    display: flex;
-    cursor: move;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
+.modal-panel {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  overflow-x: hidden;
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  z-index: 1000;
+
+  /* --- LOS 3 CAMBIOS CLAVE --- */
+  display: none;             /* 1. Lo hacemos un contenedor flex */
+  flex-direction: column;    /* 2. Apilamos sus hijos (header y content) */
+  padding: 0;                /* 3. Quitamos el padding para que el header ocupe todo el ancho */
+
+  /* Propiedades que se mantienen */
+  width: 60%;
+
+  height: 85vh;
+}
+
+/* --- NUEVA REGLA PARA EL CONTENIDO CON SCROLL --- */
+.modal-content-scroll {
+  padding: 15px;             /* 1. Le ponemos el padding que antes tenía el panel */
+  overflow-y: auto;          /* 2. ¡LA MAGIA! Solo esta área tendrá scroll */
+  flex-grow: 1;              /* 3. Ocupa todo el espacio vertical sobrante */
+}
+
+/* --- TUS ESTILOS ORIGINALES (con un pequeño ajuste) --- */
+.modal-panel .modal-header {
+  display: flex;
+  cursor: move;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 15px; /* Ajuste: Le damos su propio padding */
+  border-bottom: 1px solid #444; /* Borde para separarlo visualmente */
+  flex-shrink: 0; /* Asegura que el header no se encoja */
+}
+
   .modal-panel h3 {
     margin: 0;
     font-size: 16px;
@@ -332,3 +349,280 @@ body {
   border-radius: 4px;
   border: 2px solid #1f1f1f;
 }
+/* ======================================================= */
+/* ====== ESTILOS PARA EL FORMULARIO DEL EDITOR (V2) ====== */
+/* ======================================================= */
+
+/* Contenedor para cada fila del formulario */
+.form-row {
+  display: flex;
+  align-items: center; /* Centra verticalmente los elementos de la fila */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Estilo para las etiquetas de texto simple */
+.form-label {
+  color: #ccc;
+  font-weight: bold;
+  white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+}
+
+/* Estilo base para todos los inputs y selects */
+.editor-tab-content input[type="text"],
+.editor-tab-content select {
+  background-color: #1f1f1f;
+  border: 1px solid #555;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Clase para que un elemento ocupe el espacio sobrante */
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* Contenedor para el checkbox de "Escudo" */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+.checkbox-container label {
+  margin-left: 5px;
+}
+
+/* Grupo de botones (para velocidades y stats) */
+.button-group {
+  justify-content: space-between; /* Distribuye los botones equitativamente */
+}
+.button-group .btn {
+  flex-grow: 1; /* Hace que todos los botones tengan un tamaño similar */
+}
+
+/* Botones de estadísticas (para que no sean tan anchos) */
+.stat-btn {
+  flex-grow: 0;
+  min-width: 60px;
+}
+
+/* Botones que parecen etiquetas (como COMPETENTE) */
+.btn-label {
+  background-color: #1f1f1f;
+  color: #ccc;
+  cursor: default;
+}
+.btn-label:hover {
+  background-color: #1f1f1f;
+  color: #ccc;
+  box-shadow: none;
+}
+
+/* Estilo para las áreas de texto con borde punteado */
+.editor-tab-content textarea {
+  flex-grow: 1;
+  height: 100px;
+  background-color: transparent;
+  border: 2px dotted #444;
+  border-radius: 6px;
+  color: white;
+  padding: 10px;
+  resize: vertical;
+}
+
+
+/* ======================================================= */
+/* ====== ESTILOS PARA EL FORMULARIO DEL EDITOR (V. FINAL) ====== */
+/* ======================================================= */
+
+.form-row {
+  display: flex; /* Mantenemos Flexbox para alinear */
+  align-items: flex-end;
+  gap: 20px; /* Espacio entre los grupos */
+  margin-bottom: 25px;
+}
+
+/* Regla general para los grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* --- ANCHOS EXPLÍCITOS PARA LA PRIMERA FILA --- */
+.form-group-nombre {
+  width: 50%; /* El nombre ocupará la mitad del espacio */
+}
+.form-group-tamaño {
+  width: 25%; /* El tamaño ocupará un cuarto del espacio */
+}
+.form-group-tipo {
+  width: 25%; /* El tipo ocupará el cuarto restante */
+}
+
+/* Reglas generales para el resto del formulario */
+.form-group label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #aaa;
+  text-transform: uppercase;
+}
+
+.editor-tab-content input[type="text"],
+.editor-tab-content select {
+  width: 100%; /* Hacemos que llenen el 100% de su contenedor (.form-group) */
+  background-color: #1f1f1f;
+  border: 1px solid #555;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box; /* Importante para que el padding no afecte el ancho total */
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  background-color: #1f1f1f;
+  border-bottom: 2px solid #333;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 16px;
+  padding: 14px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+  color: #fff;
+}
+
+.tab-button.active {
+  color: #fff;
+  border-bottom: 3px solid #00bcd4;
+  font-weight: bold;
+}
+
+.tab-content {
+  opacity: 0;
+  pointer-events: none;
+  width: 99%;
+  position: absolute;
+  transition: opacity 0.3s;
+}
+
+.tab-content.active {
+  opacity: 1;
+  pointer-events: auto;
+  margin: 23px;
+}
+.fila-contenido {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 20px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.bloque {
+  background: #1f1f1f;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 200px;
+  color: #fff;
+  flex: 1;
+}
+
+.bloque-reproductor {
+  flex: 2;
+  min-width: 300px;
+}
+/* ======================================================= */
+/* ====== ESTILOS PARA EL EDITOR CON MENÚ FIJO ====== */
+/* ======================================================= */
+
+/* --- ESTRUCTURA DEL EDITOR --- */
+.editor-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column; /* Apila el header y el body */
+  width: 90%;
+  max-width: 1200px;
+  height: 85%;
+  background-color: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 10px;
+  overflow: hidden; /* Muy importante para que los bordes redondeados se apliquen bien */
+}
+
+/* 1. El Título Fijo */
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #444;
+  flex-shrink: 0; /* Evita que el header se encoja */
+}
+.editor-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.editor-header .editor-close-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 2. El Cuerpo del Editor */
+.editor-body {
+  display: flex;
+  flex-grow: 1; /* Ocupa todo el espacio vertical restante */
+  overflow: hidden; /* Previene scrolls no deseados en este nivel */
+}
+
+/* 2A. El Menú de Navegación Fijo */
+.editor-nav {
+  display: flex;
+  flex-direction: column;
+  background-color: #1f1f1f;
+  padding: 10px;
+  border-right: 1px solid #444;
+  flex-shrink: 0; /* Evita que el menú se encoja */
+}
+
+/* --- LA CLAVE DEL SCROLL --- */
+/* 2B. El Área de Contenido con Scroll */
+.editor-content {
+  flex-grow: 1; /* Ocupa todo el espacio horizontal restante */
+  padding: 20px;
+  overflow-y: auto; /* AÑADE UN SCROLL VERTICAL SOLO A ESTA ÁREA */
+}
+
+/* --- Estilos del Formulario (puedes pegar los tuyos aquí) --- */
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+/* ... etc ... */

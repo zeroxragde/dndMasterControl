@@ -1,64 +1,96 @@
+/* Contenedor para agrupar los paneles de display */
+.display-panel-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+/* ======================================================= */
+/* ====== ESTILOS FINALES Y COMPLETOS PARA "DATOS 2" ====== */
+/* ======================================================= */
 
-.tabs {
+/* --- Estructura y Espaciado General --- */
+#editor-tab-datos2 .form-row {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start; /* Alinea desde arriba para consistencia */
+  gap: 20px;
+  margin-bottom: 25px;
+}
+#editor-tab-datos2 .form-group,
+#editor-tab-datos2 .control-group,
+#editor-tab-datos2 .form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Espacio uniforme entre elementos internos */
+}
+
+/* --- Controles Superiores (Daños e Idiomas) --- */
+#editor-tab-datos2 .control-group {
+  flex: 1 1 48%; /* Crea dos columnas */
+}
+
+/* --- Sentidos --- */
+#editor-tab-datos2 .sense-group {
+  flex: 1; /* Distribuye el espacio equitativamente */
+}
+#editor-tab-datos2 .sense-group .input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- Fila Inferior (CR, Notas, Imagen) --- */
+#editor-tab-datos2 .form-column {
+  height: 100%;
+}
+#editor-tab-datos2 .cr-xp-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* --- Estilos para los Paneles de Visualización --- */
+#editor-tab-datos2 .display-panel {
+  min-height: 80px;
+  max-height: 120px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px dotted #444; /* Borde punteado */
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+
+/* --- Estilo para el Cargador de Imagen --- */
+#editor-tab-datos2 .image-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  background-color: #1f1f1f;
-  border-bottom: 2px solid #333;
+  gap: 10px;
+  padding: 10px;
+  border: 2px dotted #444; /* Borde punteado */
+  border-radius: 6px;
+  height: 100%;
+  min-height: 180px;
+}
+#editor-tab-datos2 .image-uploader img {
+  display: block;
+  width: 100%;
+  max-width: 150px;
+  height: 150px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 
-.tab-button {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 16px;
-  padding: 14px 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid transparent;
-}
-
-.tab-button:hover {
-  color: #fff;
-}
-
-.tab-button.active {
-  color: #fff;
-  border-bottom: 3px solid #00bcd4;
-  font-weight: bold;
-}
-
-.tab-content {
-  opacity: 0;
-  pointer-events: none;
-  width: 90%;
-  position: absolute;
-  transition: opacity 0.3s;
-}
-
-.tab-content.active {
-  opacity: 1;
-  pointer-events: auto;
-  margin: 23px;
-}
-.fila-contenido {
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  padding: 20px;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-}
-
-.bloque {
-  background: #1f1f1f;
-  padding: 15px;
-  border-radius: 10px;
-  min-width: 200px;
-  color: #fff;
-  flex: 1;
-}
-
-.bloque-reproductor {
-  flex: 2;
-  min-width: 300px;
+/* --- Altura Uniforme para Inputs y Selects --- */
+#editor-tab-datos2 input[type="text"],
+#editor-tab-datos2 select,
+#editor-tab-datos2 textarea {
+    box-sizing: border-box; /* Clave para unificar alturas */
+    padding: 10px;
+    font-size: 14px;
 }

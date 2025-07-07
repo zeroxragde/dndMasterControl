@@ -12,6 +12,7 @@ class Modal {
       
       this.isMovable = config.movable || false;
       this.width = config.width || null;
+      this.height = config.height || null;
       this.onOpen = config.onOpen || null;
   
       if (!this.modalNode || !this.triggerButton) {
@@ -38,6 +39,11 @@ class Modal {
         container.style.width = this.width;
       } else {
         container.style.width = '';
+      }
+      if (this.height) {
+        container.style.height = this.height;
+      } else {
+        container.style.height = '';
       }
       this.modalNode.style.display = 'flex';
   
