@@ -2,7 +2,7 @@
 // --- Variables específicas para el Dashboard ---
 // Al principio de tu archivo dashboard.js
 import { Creatura } from './Modelos/creatura.js';
-
+const { ipcRenderer } = require('electron');
 const audio = document.getElementById('audioPlayer');
 const nombreCancion = document.getElementById('nombreCancion');
 let canciones = [];
@@ -65,10 +65,75 @@ function inicializarComponentes() {
   });
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
+  poblarFiltroDeCategorias();
 
 }
 
+/**
+ * Inicializa el editor de mapas: espera la resolución, ajusta el tamaño del canvas
+ * y dibuja la imagen de fondo.
+ */
+function inicializarMapaEditor() {
+  const canvas = document.getElementById('map-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
+  // Escuchamos el evento 'mapa-resolucion' que viene del proceso principal
+  ipcRenderer.on('mapa-resolucion', (event, resolucion) => {
+      console.log('Resolución del mapa recibida:', resolucion);
+      
+      // Aplicamos la resolución recibida al canvas
+      canvas.width = resolucion.width;
+      canvas.height = resolucion.height;
+
+      // --- LÓGICA PARA CARGAR Y DIBUJAR LA IMAGEN DE FONDO ---
+
+      // 1. Creamos un nuevo objeto de imagen
+      const fondo = new Image();
+      
+      // 2. Le decimos dónde encontrar la imagen.
+      // La ruta es relativa al archivo HTML (dashboard.html).
+      fondo.src = '../assets/img/fondoStab.png';
+      
+      // 3. Esperamos a que la imagen se cargue por completo
+      fondo.onload = () => {
+          // 4. Dibujamos la imagen en el canvas, estirándola para que ocupe todo el espacio.
+          ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+      };
+
+      // Opcional: Si la imagen no carga, muestra un color de fondo de respaldo
+      fondo.onerror = () => {
+          console.error("No se pudo cargar la imagen de fondo.");
+          ctx.fillStyle = "#2a2a2a";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+      };
+  });
+  
+  // ... aquí va el resto de tu lógica para el editor de mapas ...
+}
+/**
+ * Rellena el select de categorías del gestor de recursos.
+ */
+function poblarFiltroDeCategorias() {
+  const selector = document.getElementById('asset-category-select');
+  if (!selector) return;
+
+  const categorias = [
+      "personaje",
+      "imagen",
+      "tile",
+      "mapa"
+  ];
+
+  // Añadimos cada categoría del array
+  categorias.forEach(cat => {
+      const opcion = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
+      selector.add(opcion);
+  });
+}
+
+
+/*
 function inicializarMapaEditor() {
   const canvas = document.getElementById('map-canvas');
   if (!canvas) return;
@@ -114,7 +179,7 @@ function inicializarMapaEditor() {
   });
   
   // ... logic for btn-process-sprite to draw grid and handle clicks ...
-}
+}*/
 /**
  * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.
  */
