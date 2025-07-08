@@ -1,12 +1,21 @@
 
 // --- Variables específicas para el Dashboard ---
 // Al principio de tu archivo dashboard.js
+
+// Al principio de tu archivo dashboard.js
 import { Creatura } from './Modelos/creatura.js';
 const { ipcRenderer } = require('electron');
 const audio = document.getElementById('audioPlayer');
 const nombreCancion = document.getElementById('nombreCancion');
 let canciones = [];
 let indiceCancion = 0;
+// --- Variable Global para la Configuración ---
+// La guardaremos aquí para usarla en toda la aplicación.
+let userConfig = {};
+// Al principio de dashboard.js
+// Al principio de dashboard.js
+let mapCanvas = null;
+let fondoMapa = new Image();
 
 const criaturasData = [
   { nombre: "Sothrax, el Devorador", cr: 2 },
@@ -19,8 +28,29 @@ const criaturasData = [
 
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarUI();
+document.addEventListener("DOMContentLoaded", async () => {
+   // Usamos async/await para esperar la configuración antes de continuar
+   try {
+      userConfig = await ipcRenderer.invoke('get-user-config');
+      if (!userConfig) {
+        console.error("No se pudo cargar la configuración del usuario.");
+        // Aquí podrías mostrar un error o redirigir al login
+        return;
+      }
+      // --- ¡AQUÍ ESTÁ LA LÍNEA QUE NECESITAS! ---
+      // 1. Buscamos el elemento del título por su ID.
+      const tituloDashboard = document.getElementById('tituloDashboard');
+      // 2. Si existe, actualizamos su contenido.
+      if (tituloDashboard) {
+        tituloDashboard.innerHTML = `Tablero del DM <b>${userConfig.dm}</b>`;
+      }
+    } catch (error) {
+      console.error("Error al invocar get-user-config:", error);
+    }
+    // Una vez que tenemos la configuración, inicializamos todos los componentes
+    console.log(`Configuración cargada para el DM: ${userConfig.dm}`);
+
+    inicializarUI();
 });
 
 // --- Función de Inicialización del Dashboard ---
@@ -65,56 +95,56 @@ function inicializarComponentes() {
   });
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
-  poblarFiltroDeCategorias();
+
 
 }
+
 
 /**
- * Inicializa el editor de mapas: espera la resolución, ajusta el tamaño del canvas
- * y dibuja la imagen de fondo.
+ * Inicializa el editor de mapas: espera la resolución, ajusta el tamaño del canvas,
+ * dibuja el fondo y activa la funcionalidad de arrastrar y soltar.
  */
 function inicializarMapaEditor() {
-  const canvas = document.getElementById('map-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  mapCanvas = new MapCanvas('map-canvas');
 
-  // Escuchamos el evento 'mapa-resolucion' que viene del proceso principal
   ipcRenderer.on('mapa-resolucion', (event, resolucion) => {
-      console.log('Resolución del mapa recibida:', resolucion);
+      mapCanvas.setSize(resolucion.width, resolucion.height);
       
-      // Aplicamos la resolución recibida al canvas
-      canvas.width = resolucion.width;
-      canvas.height = resolucion.height;
-
-      // --- LÓGICA PARA CARGAR Y DIBUJAR LA IMAGEN DE FONDO ---
-
-      // 1. Creamos un nuevo objeto de imagen
-      const fondo = new Image();
-      
-      // 2. Le decimos dónde encontrar la imagen.
-      // La ruta es relativa al archivo HTML (dashboard.html).
-      fondo.src = '../assets/img/fondoStab.png';
-      
-      // 3. Esperamos a que la imagen se cargue por completo
-      fondo.onload = () => {
-          // 4. Dibujamos la imagen en el canvas, estirándola para que ocupe todo el espacio.
-          ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
-      };
-
-      // Opcional: Si la imagen no carga, muestra un color de fondo de respaldo
-      fondo.onerror = () => {
-          console.error("No se pudo cargar la imagen de fondo.");
-          ctx.fillStyle = "#2a2a2a";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
+      fondoMapa.src = '../assets/img/fondoStab.png';
+      fondoMapa.onload = () => {
+          // Le pasamos la imagen de fondo a nuestra clase
+          mapCanvas.setBackground(fondoMapa);
       };
   });
+
+  // La lógica de 'drop' se mantiene igual
+  const viewport = document.getElementById('map-viewport');
+  if(viewport) {
+      viewport.addEventListener('dragover', (e) => e.preventDefault());
+      viewport.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const imageUrl = e.dataTransfer.getData('text/plain');
+          const rect = mapCanvas.canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          mapCanvas.addToken(imageUrl, x, y);
+      });
+  }
+
+
+  // --- El resto de tus inicializaciones para el editor de mapas ---
   
-  // ... aquí va el resto de tu lógica para el editor de mapas ...
+
+  inicializarCargadorDeAssetsMapaEditor();
+  poblarFiltroDeCategoriasMapaEditor();
+  actualizarYRenderizarAssetList();
 }
+
+
 /**
  * Rellena el select de categorías del gestor de recursos.
  */
-function poblarFiltroDeCategorias() {
+function poblarFiltroDeCategoriasMapaEditor() {
   const selector = document.getElementById('asset-category-select');
   if (!selector) return;
 
@@ -132,54 +162,107 @@ function poblarFiltroDeCategorias() {
   });
 }
 
+/**
+ * Pide la lista de assets actualizada al proceso principal,
+ * lee el JSON y genera la tabla de imágenes en el DOM.
+ * Este es el único método necesario para actualizar la lista.
+ */
+async function actualizarYRenderizarAssetList() {
+ 
+  const assetListContainer = document.getElementById('asset-list');
+  if (!assetListContainer) return;
 
-/*
-function inicializarMapaEditor() {
-  const canvas = document.getElementById('map-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  try {
+      const assetsRecibidos = await ipcRenderer.invoke('get-asset-list');
+          
+      // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+      // Usamos .flat() para eliminar el anidamiento y obtener un array simple.
+      const assets = assetsRecibidos.flat();
+      assetListContainer.innerHTML = '';
 
-  // Set canvas size (this should match the map.html window eventually)
-  // For now, we'll use a placeholder size
-  canvas.width = 1920;
-  canvas.height = 1080;
-  ctx.fillStyle = "#D2B48C"; // Parchment color
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (!assets || assets.length === 0) {
+          assetListContainer.innerHTML = '<p class="empty-list-message">No hay imágenes.</p>';
+          return;
+      }
 
-  // --- Asset Loading ---
-  const btnLoadImage = document.getElementById('btn-load-image');
+      const gridContainer = document.createElement('div');
+      gridContainer.className = 'asset-grid';
+
+      assets.forEach(asset => {
+          if (!asset || !asset.url) return;
+
+          const card = document.createElement('div');
+          card.className = 'asset-card';
+          
+          const img = document.createElement('img');
+          img.src = asset.url;
+          img.className = 'asset-thumbnail';
+          img.alt = asset.nombre;
+          img.draggable = true; // <-- 1. HACEMOS LA IMAGEN ARRASTRABLE
+
+          // --- 2. EVENTO 'DRAGSTART' ---
+          // Cuando se empieza a arrastrar, guardamos la URL de la imagen.
+          img.addEventListener('dragstart', (event) => {
+              event.dataTransfer.setData('text/plain', asset.url);
+          });
+
+          // (El resto de la creación de la tarjeta se simplifica)
+          card.appendChild(img);
+          gridContainer.appendChild(card);
+      });
+
+      assetListContainer.appendChild(gridContainer);
+
+  } catch (error) {
+      console.error("Error al renderizar la lista de assets:", error);
+  }
+
+}
+
+
+/**
+ * Configura el botón para cargar imágenes y la respuesta del proceso principal.
+ */
+function inicializarCargadorDeAssetsMapaEditor() {
+  const botonCargar = document.getElementById('btn-load-image');
+  const filtroCategoria = document.getElementById('asset-category-select');
   const assetList = document.getElementById('asset-list');
-  // ... logic to handle image loading and adding to asset list ...
 
-  // --- Spritesheet Modal ---
-  new Modal({
-      id: 'spritesheet-modal',
-      triggerId: 'btn-open-spritesheet',
-      closeClassName: 'modal-close-btn',
-      width: '600px'
+  if (!botonCargar) return;
+
+  // Cuando se hace clic en el botón...
+  botonCargar.addEventListener('click', () => {
+      const categoriaSeleccionada = filtroCategoria.value;
+      if (!categoriaSeleccionada) {
+          alert('Por favor, selecciona una categoría antes de subir una imagen.');
+          return;
+      }
+
+      // Aquí necesitarás una forma de obtener el nombre de usuario actual.
+      // Por ahora, usaremos un valor de ejemplo.
+      const username = userConfig.dm; 
+
+      // ...enviamos un mensaje al proceso principal para que abra el diálogo.
+      ipcRenderer.send('abrir-dialogo-imagen', { categoria: categoriaSeleccionada, username: username });
   });
 
-  const spritesheetInput = document.getElementById('spritesheet-file-input');
-  const previewContainer = document.getElementById('spritesheet-preview');
-
-  spritesheetInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-          const img = new Image();
-          img.onload = () => {
-              previewContainer.innerHTML = ''; // Clear previous
-              previewContainer.appendChild(img);
-          };
-          img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
+  // Escuchamos la respuesta de éxito del proceso principal
+  ipcRenderer.on('imagen-cargada-exito', (event, nuevoRegistro) => {
+      console.log('Imagen cargada con éxito:', nuevoRegistro);
+      // Aquí puedes añadir el código para mostrar la nueva imagen en la lista de assets.
+      const assetItem = document.createElement('div');
+      assetItem.innerHTML = `<p>${nuevoRegistro.nombre}</p>`; // Muestra el nombre original
+      assetList.appendChild(assetItem);
+      alert(`¡Imagen "${nuevoRegistro.nombre}" cargada con éxito!`);
   });
-  
-  // ... logic for btn-process-sprite to draw grid and handle clicks ...
-}*/
+
+  // Escuchamos si hubo un error
+  ipcRenderer.on('imagen-cargada-error', (event, mensajeError) => {
+      console.error(mensajeError);
+      alert(`Error: ${mensajeError}`);
+  });
+}
+
 /**
  * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.
  */

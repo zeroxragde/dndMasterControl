@@ -3,9 +3,10 @@
  * Contiene todas las propiedades necesarias para un stat-block completo.
  */
 // Importa las clases que necesita
+// 1. "Importamos" las clases que necesita usando require
+// 1. "Importamos" las clases que necesita usando require
 import { Accion } from './accion.js';
 import { AccionLegendaria } from './accionlegendaria.js';
-
 export class Creatura {
   constructor() {
     // --- Identificación básica ---
@@ -105,3 +106,5 @@ export class Creatura {
     this.notas = "";
   }
 }
+// Al final de creatura.js
+module.exports = { Creatura };

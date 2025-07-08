@@ -1,8 +1,9 @@
 /**
  * Representa una acción legendaria, que hereda de Accion y añade un costo.
  */
-// Primero, importa la clase de la que hereda
+// 1. "Importamos" la clase Accion usando require
 import { Accion } from './accion.js';
+
 export class AccionLegendaria extends Accion {
   /**
    * @param {string} nombre - El nombre de la acción.
