@@ -94,3 +94,226 @@
     padding: 10px;
     font-size: 14px;
 }
+/* --- ESTILOS PARA LA PESTAÑA "DATOS 3" --- */
+#special-creature-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #1f1f1f;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  margin-bottom: 15px;
+}
+#special-creature-options .checkbox-container label {
+  font-size: 16px;
+  font-weight: bold;
+}
+.info-labels-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.info-label {
+  background: #1f1f1f;
+  border-left: 3px solid #00bcd4;
+  padding: 15px;
+  border-radius: 0 6px 6px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ======================================================= */
+/* ====== ESTILOS PARA LA VISTA DE DETALLE DE CRIATURA ====== */
+/* ======================================================= */
+.creature-stat-block {
+  flex-grow: 1; /* Ocupa el espacio sobrante al lado de la lista */
+  padding: 20px;
+  background-image: url('../../assets/img/fondoStab.png'); /* Ruta a tu imagen de fondo */
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #58180D; /* Color de texto oscuro para el pergamino */
+  border-radius: 8px;
+  border: 2px solid #58180D;
+}
+#stat-block-tabs {
+  display: flex;
+  height: 100%;
+}
+.stat-block-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+  border-right: 2px solid #58180D;
+  padding-right: 15px;
+  margin-right: 15px;
+}
+.stat-block-nav .stat-tab-button {
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: bold;
+  cursor: pointer;
+  color: #58180D;
+  padding: 5px;
+}
+.stat-block-nav .stat-tab-button.active {
+  background-color: rgba(88, 24, 13, 0.2);
+}
+.stat-block-content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.stat-header h2 {
+  font-size: 28px;
+  margin: 0;
+  color: #58180D;
+}
+.stat-header p {
+  margin: 0;
+  font-style: italic;
+}
+.stat-divider {
+  border-bottom: 2px solid #58180D;
+  margin: 10px 0;
+}
+.ability-scores {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+.ability-scores .score {
+  display: flex;
+  flex-direction: column;
+}
+.stat-footer {
+  display: flex;
+  gap: 20px;
+}
+.notes-section { flex-grow: 2; }
+.image-section { flex-shrink: 0; }
+#detail-notas {
+  width: 100%;
+  height: 100px;
+  background: none;
+  border: 1px solid #58180D;
+}
+#detail-imagen {
+  width: 150px;
+  height: 150px;
+  border: 1px solid #58180D;
+  object-fit: cover;
+}
+/* ======================================================= */
+/* ====== ESTILO PARA EL LAYOUT DE LISTA Y DETALLES ====== */
+/* ======================================================= */
+
+/* El nuevo contenedor que ordena todo */
+.creature-view-wrapper {
+  display: flex;         /* Pone la lista y los detalles uno al lado del otro */
+  gap: 20px;             /* Espacio entre ellos */
+  align-items: flex-start; /* Los alinea arriba */
+}
+
+/* Le damos un tamaño base a la lista para que no ocupe todo */
+.list-manager-container {
+  width: 450px;
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+/* Hacemos que la vista de detalles ocupe el resto del espacio */
+.creature-stat-block {
+  flex-grow: 1; /* Crecerá para rellenar el espacio sobrante */
+}
+
+/* --- Y aquí los estilos visuales que querías --- */
+#tab2.tab-content.active {
+    border: 1px solid #ff0000;
+    padding: 15px;
+}
+.data-table th {
+    background-color: #008080;
+}
+.data-table tr.selected {
+    background-color: #8B0000;
+}
+/* Le da un fondo y espaciado al menú de navegación del stat block */
+.stat-block-nav {
+  background-color: #3e3e3e; /* Fondo gris oscuro */
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* --- Map Editor Styles --- */
+.map-editor-container {
+  display: flex;
+  gap: 15px;
+  height: calc(85vh - 50px); /* Adjust based on your layout */
+}
+
+.asset-manager {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asset-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.asset-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid #444;
+  padding: 8px;
+  background: #1f1f1f;
+}
+
+.map-canvas-container {
+  flex-grow: 1;
+  border: 1px solid #444;
+  display: flex;
+  flex-direction: column;
+  overflow: auto; /* Respects the overflow requirement */
+}
+
+#map-canvas {
+  width: 100%;
+  height: auto;
+}
+
+.map-toolbar {
+  padding: 8px;
+  background: #1f1f1f;
+  display: flex;
+  gap: 8px;
+}
+
+/* Spritesheet Modal */
+.spritesheet-preview {
+  margin-top: 15px;
+  border: 1px dashed #555;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+  position: relative;
+}
+/* --- LA CLAVE DEL SCROLL --- */
+/* 1. El 'viewport' es el contenedor que tiene el scroll */
+.map-viewport {
+  flex-grow: 1; /* Ocupa todo el espacio disponible */
+  overflow: auto; /* AÑADE SCROLL EN AMBOS EJES CUANDO SEA NECESARIO */
+  border: 1px solid #444;
+  background-color: #000; /* Fondo negro por si el canvas no carga */
+}
+
+/* 2. El 'canvas' es el mapa, que es más grande que el viewport */
+#map-canvas {
+  /* El tamaño se define con JavaScript, pero podemos darle un display inicial */
+  display: block;
+}

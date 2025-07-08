@@ -12,7 +12,7 @@
     <script src="js/Clases/modal.js"></script>
     <script src="js/Clases/tab.js"></script>
     <script src="js/Clases/listview.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
 
   </head>
   <body>
@@ -23,6 +23,7 @@
 
         <button class="web-tab-button active" role="tab" aria-controls="web-tab-ambiente" aria-selected="true">🎵 Ambientación musical</button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-creaturas" aria-selected="false">🧙 Creaturas </button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-editor-map" aria-selected="false">🗺️ Mapa Editor</button>
 
 
       </nav>
@@ -132,40 +133,114 @@
         </div>
 
         <div id="web-tab-creaturas" class="web-tab-content" role="tabpanel">
-            <div id="creature-list-container" class="list-manager-container">
-                <div class="list-view">
-                  <div class="table-container">
-                      <table class="data-table">
-                        <thead>
-                          <tr>
-                            <th>Nombre</th>
-                            <th>CR</th>
-                          </tr>
-                        </thead>
-                        <tbody id="listaCriaturasBody">
-                          </tbody>
-                      </table>
+
+
+            <div class="creature-view-wrapper">
+
+              <div>
+                  <div id="creature-list-container" class="list-manager-container">
+                      <div class="list-view">
+                        <div class="table-container">
+                            <table class="data-table">
+                              <thead>
+                                <tr>
+                                  <th>Nombre</th>
+                                  <th>CR</th>
+                                </tr>
+                              </thead>
+                              <tbody id="listaCriaturasBody">
+                                </tbody>
+                            </table>
+                        </div>
+                          
+                          <div class="list-filters">
+                            <select>
+                              <option>Todas las criaturas</option>
+                            </select>
+                          </div>
+                      </div>
+                  
+                      <div class="list-actions">
+                        <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
+                        <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
+                      </div>
+                  
                   </div>
-                    
-                    <div class="list-filters">
-                      <select>
-                        <option>Todas las criaturas</option>
-                      </select>
+                  
+                  <div class="footer-actions">
+                    <button id="btnOpenEditor" class="btn">Nueva Creatura</button>
+                  </div>
+              </div>
+              
+              <div>
+                  
+                  <div id="creature-detail-view" class="creature-stat-block" style="display: block;">
+    
+                    <div id="stat-block-tabs">
+                      <nav class="stat-block-nav" role="tablist">
+                        <button class="stat-tab-button active" role="tab" aria-controls="panel-general">General</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-habilidades">Habilidades</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-acciones">Acciones</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-legendarias">A. Legendarias</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-guarida">Acciones Guarida</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-miticas">Acciones Míticas</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-regional">Efecto Regional</button>
+                        <button class="stat-tab-button" role="tab" aria-controls="panel-hechizos">Hechizos</button>
+                      </nav>
+                      
+                      <main class="stat-block-content">
+                        <div id="panel-general" class="stat-tab-panel active" role="tabpanel">
+                          <header class="stat-header">
+                            <h2 id="detail-nombre">Ankheg</h2>
+                            <p id="detail-sublinea">Large fiend, unaligned</p>
+                          </header>
+                          <div class="stat-divider"></div>
+                          <div class="stat-main">
+                            <p><strong>Clase Armadura</strong> <span id="detail-ac">12</span></p>
+                            <p><strong>Punto de Golpe</strong> <span id="detail-hp">60 (8d10 + 16)</span></p>
+                            <p><strong>Velocidad</strong> <span id="detail-velocidad">30 pies</span></p>
+                          </div>
+                          <div class="stat-divider"></div>
+                          <div class="ability-scores">
+                            <div class="score"><strong>FUE</strong><span id="detail-fue">10 (+0)</span></div>
+                            <div class="score"><strong>DES</strong><span id="detail-des">10 (+0)</span></div>
+                            <div class="score"><strong>CON</strong><span id="detail-con">10 (+0)</span></div>
+                            <div class="score"><strong>INT</strong><span id="detail-int">10 (+0)</span></div>
+                            <div class="score"><strong>SAB</strong><span id="detail-sab">10 (+0)</span></div>
+                            <div class="score"><strong>CAR</strong><span id="detail-car">10 (+0)</span></div>
+                          </div>
+                          <div class="stat-divider"></div>
+                          <div class="stat-footer">
+                            <div class="notes-section">
+                              <p><strong>Nivel de desafío</strong> <span id="detail-cr">Des</span></p>
+                              <p><strong>Notas</strong></p>
+                              <textarea id="detail-notas" readonly></textarea>
+                            </div>
+                            <div class="image-section">
+                              <img id="detail-imagen" src="" alt="Imagen de la criatura">
+                            </div>
+                          </div>
+                        </div>
+                        </main>
                     </div>
-                </div>
-            
-                <div class="list-actions">
-                  <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                  <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
-                  <button class="btn" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
-                  <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
-                </div>
-            
-            </div>
-            
-            <div class="footer-actions">
-              <button id="btnOpenEditor" class="btn">Nueva Creatura</button>
-            </div>
+                  </div>
+              </div>
+          
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
             <!-- Modales -->
             <div id="modalEditor" class="modal-panel" style="display: none;">
@@ -318,103 +393,169 @@
 
 
                         <div id="editor-tab-datos2" class="editor-tab-content" role="tabpanel">
+     
+                          <div class="form-row">
+                                <div class="control-group" style="flex-basis: 48%;">
+                                    <label>VULNER., RESIST., INMUNE (DAÑO)</label>
+                                    <select id="select-tipos-daño"></select>
+                                    <div class="input-group">
+                                        <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="vulnerable">VULNERABLE</button>
+                                        <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="resistente">RESISTENTE</button>
+                                        <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="inmune">INMUNE</button>
+                                    </div>
+                                    <div id="panel-daño" class="display-panel"></div>
+                                </div>
+                                <div class="control-group" style="flex-basis: 48%;">
+                                    <label>IDIOMAS</label>
+                                    <select id="select-idiomas"></select>
+                                    <div class="input-group">
+                                        <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="habla">HABLA</button>
+                                        <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="entiende">ENTIENDE</button>
+                                        <input type="text" id="input-telepatia" class="numeric-input" placeholder="Telepatía (pies)">
+                                    </div>
+                                    <div id="panel-idiomas" class="display-panel"></div>
+                                </div>
+                            </div>
 
-                          
+                            <div class="form-row">
+                                <div class="form-group sense-group">
+                                    <label>Vista ciega</label>
+                                    <input type="text" id="sentido-vista-ciega" class="numeric-input" value="0">
+                                    <span>Pies</span>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" id="check-ciego-mas-alla">
+                                        <label for="check-ciego-mas-alla">Ciego más allá de este radio</label>
+                                    </div>
+                                </div>
+                                <div class="form-group sense-group">
+                                    <label>Vision Nocturna</label>
+                                    <input type="text" id="sentido-vision-nocturna" value="0">
+                                    <span>Pies</span>
+                                </div>
+                                <div class="form-group sense-group">
+                                    <label>Sentido Sísmico</label>
+                                    <input type="text" id="sentido-sismico" value="0">
+                                    <span>Pies</span>
+                                </div>
+                                <div class="form-group sense-group">
+                                    <label>Vision Verdadera</label>
+                                    <input type="text" id="sentido-vision-verdadera" value="0">
+                                    <span>Pies</span>
+                                </div>
+                            </div>
 
-   <div class="form-row">
-        <div class="control-group" style="flex-basis: 48%;">
-            <label>VULNER., RESIST., INMUNE (DAÑO)</label>
-            <select id="select-tipos-daño"></select>
-            <div class="input-group">
-                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="vulnerable">VULNERABLE</button>
-                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="resistente">RESISTENTE</button>
-                <button class="btn" data-target-panel="panel-daño" data-source-select="select-tipos-daño" data-type="inmune">INMUNE</button>
-            </div>
-            <div id="panel-daño" class="display-panel"></div>
-        </div>
-        <div class="control-group" style="flex-basis: 48%;">
-            <label>IDIOMAS</label>
-            <select id="select-idiomas"></select>
-            <div class="input-group">
-                <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="habla">HABLA</button>
-                <button class="btn" data-target-panel="panel-idiomas" data-source-select="select-idiomas" data-type="entiende">ENTIENDE</button>
-                <input type="text" id="input-telepatia" class="numeric-input" placeholder="Telepatía (pies)">
-            </div>
-            <div id="panel-idiomas" class="display-panel"></div>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group sense-group">
-            <label>Vista ciega</label>
-            <input type="text" id="sentido-vista-ciega" class="numeric-input" value="0">
-            <span>Pies</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="check-ciego-mas-alla">
-                <label for="check-ciego-mas-alla">Ciego más allá de este radio</label>
-            </div>
-        </div>
-        <div class="form-group sense-group">
-            <label>Vision Nocturna</label>
-            <input type="text" id="sentido-vision-nocturna" value="0">
-            <span>Pies</span>
-        </div>
-        <div class="form-group sense-group">
-            <label>Sentido Sísmico</label>
-            <input type="text" id="sentido-sismico" value="0">
-            <span>Pies</span>
-        </div>
-        <div class="form-group sense-group">
-            <label>Vision Verdadera</label>
-            <input type="text" id="sentido-vision-verdadera" value="0">
-            <span>Pies</span>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-column" style="width: 25%;">
-            <div class="form-group">
-                <label for="editor-cr-tab2">VALOR DE DESAFÍO (CR)</label>
-                <select id="editor-cr-tab2"></select>
-                <span id="bonificacion-cr" style="font-size: 12px; color: #aaa; margin-top: 5px;">(Bonificación de competencia: +2)</span>
-            </div>
-             <div class="cr-xp-group">
-                <div class="form-group">
-                    <label>CR</label><input type="text">
-                </div>
-                <div class="form-group">
-                    <label>XP</label><input type="text">
-                </div>
-            </div>
-        </div>
-        <div class="form-column" style="width: 50%;">
-            <div class="form-group">
-                <label for="editor-notas">NOTAS</label>
-                <textarea id="editor-notas"></textarea>
-            </div>
-        </div>
-        <div class="form-column" style="width: 25%;">
-            <div class="form-group">
-                <label>IMAGEN</label>
-                <div class="image-uploader">
-                    <img id="preview-imagen-criatura" src="" alt="Vista previa" style="display:none;">
-                    <input type="file" id="input-imagen-criatura" accept="image/*" style="display:none;">
-                    <button id="btn-subir-foto" class="btn">Subir Foto</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="form-row">
+                                <div class="form-column" style="width: 25%;">
+                                    <div class="form-group">
+                                        <label for="editor-cr-tab2">VALOR DE DESAFÍO (CR)</label>
+                                        <select id="editor-cr-tab2"></select>
+                                        <span id="bonificacion-cr" style="font-size: 12px; color: #aaa; margin-top: 5px;">(Bonificación de competencia: +2)</span>
+                                    </div>
+                                    <div class="cr-xp-group">
+                                        <div class="form-group">
+                                            <label>CR</label><input type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>XP</label><input type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-column" style="width: 50%;">
+                                    <div class="form-group">
+                                        <label for="editor-notas">NOTAS</label>
+                                        <textarea id="editor-notas"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-column" style="width: 25%;">
+                                    <div class="form-group">
+                                        <label>IMAGEN</label>
+                                        <div class="image-uploader">
+                                            <img id="preview-imagen-criatura" src="" alt="Vista previa" style="display:none;">
+                                            <input type="file" id="input-imagen-criatura" accept="image/*" style="display:none;">
+                                            <button id="btn-subir-foto" class="btn">Subir Foto</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
                         </div>
 
                         <div id="editor-tab-datos3" class="editor-tab-content" role="tabpanel">
-                          <h2>Datos 3 - Próximamente...</h2>
+                          <div class="form-column" style="width: 100%;">
+                            <div id="special-creature-options">
+                              <div class="checkbox-container">
+                                <input type="checkbox" id="check-legendaria" data-target-label="label-legendaria">
+                                <label for="check-legendaria">Legendaria</label>
+                              </div>
+                              <div class="checkbox-container">
+                                <input type="checkbox" id="check-mitica" data-target-label="label-mitica">
+                                <label for="check-mitica">Mítica</label>
+                              </div>
+                              <div class="checkbox-container">
+                                <input type="checkbox" id="check-guarida" data-target-label="label-guarida">
+                                <label for="check-guarida">Guarida</label>
+                              </div>
+                              <div class="checkbox-container">
+                                <input type="checkbox" id="check-regional" data-target-label="label-regional">
+                                <label for="check-regional">Regional</label>
+                              </div>
+                            </div>
+                            <button class="btn" id="btn-actualizar-datos">Actualizar Datos</button>
+                        
+                            <div class="info-labels-container">
+                              <div id="label-legendaria" class="info-label" style="display: none;">
+                                El [MON] puede realizar 3 acciones legendarias, a elegir entre las opciones que aparecen a continuación. Solo se puede usar una opción de acción legendaria a la vez y solo al final del turno de otra criatura. El monstruo recupera las acciones legendarias gastadas al comienzo de su turno.
+                              </div>
+                              <div id="label-mitica" class="info-label" style="display: none;">
+                                Si el rasgo mítico del monstruo está activo, puede usar las siguientes opciones como acciones legendarias durante 1 hora después de usar (Alguna habilidad).
+                              </div>
+                              <div id="label-guarida" class="info-label" style="display: none;">
+                                Cuando lucha dentro de su guarida, el monstruo puede invocar la magia ambiental para realizar acciones de guarida. En el conteo de iniciativa 20 (perdiendo los empates de iniciativa), el monstruo puede realizar una acción de guarida para causar uno de los siguientes efectos:<br><br>El monstruo no puede repetir un efecto hasta que todos hayan sido utilizados, y no puede usar el mismo efecto dos rondas seguidas.
+                              </div>
+                              <div id="label-regional" class="info-label" style="display: none;">
+                                La región que contiene la guarida del monstruo se ve distorsionada por la presencia de la criatura, lo que crea uno o más de los siguientes efectos:<br><br>Si el monstruo muere, los dos primeros efectos desaparecen en los primeros 3d10 días.
+                              </div>
+                            </div>
+                          </div>
                         </div>
 
                         <div id="editor-tab-acciones" class="editor-tab-content" role="tabpanel">
-                          <h2>Acciones - Próximamente...</h2>
+  <div class="form-row">
+        <div class="form-column" style="width: 65%;">
+            <div class="form-group">
+                <label>NOMBRE DE LA HABILIDAD/ACCIÓN</label>
+                <input type="text" id="accion-nombre" placeholder="Ej: Garras, Aliento de Fuego...">
+            </div>
+            <div class="form-group">
+                <label>DESCRIPCIÓN</label>
+                <textarea id="accion-descripcion" style="min-height: 120px;"></textarea>
+            </div>
+        </div>
+        <div class="form-column" style="width: 35%;">
+            <div class="action-buttons-grid">
+                <button class="btn" data-action-type="Habilidad">HABILIDAD</button>
+                <button class="btn" data-action-type="Accion">ACCION</button>
+                <button class="btn" data-action-type="Reaccion">REACCION</button>
+                <button class="btn" data-action-type="Accion Bonus">ACCION BONUS</button>
+                <button class="btn" data-action-type="Hechizo">HECHIZO</button>
+                <div class="input-group">
+                    <select id="accion-preestablecida"><option>Seleccionar Preestablecido</option></select>
+                    <button class="btn" id="btn-usar-pred">USAR PRED</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions-list-container">
+        <div id="lista-de-acciones">
+            </div>
+    </div>
+    
+    <div class="notes-container">
+      <p><b>[MON]</b>: Muestra el nombre del monstruo.</p>
+      </div>
                         </div>
 
                       </main>
@@ -422,6 +563,57 @@
 
               </div>
             </div>
+        </div>
+
+        <div id="web-tab-editor-map" class="web-tab-content active" role="tabpanel">
+          <div class="map-editor-container">
+
+            <div class="asset-manager">
+              <div class="asset-controls">
+                <button id="btn-load-image" class="btn" title="Cargar Imagen"><i class="fa-solid fa-image"></i></button>
+                <button id="btn-open-spritesheet" class="btn" title="Abrir Editor de Spritesheet"><i class="fa-solid fa-table-cells"></i></button>
+                <select id="asset-category-filter"></select>
+                <button id="btn-delete-asset" class="btn" title="Eliminar Imagen Seleccionada"><i class="fa-solid fa-trash"></i></button>
+              </div>
+              <div id="asset-list" class="asset-list">
+                </div>
+            </div>
+        
+            <div class="map-canvas-container">
+              <div id="map-viewport" class="map-viewport">
+                <canvas id="map-canvas"></canvas>
+              </div>
+              <div class="map-toolbar">
+                <button class="btn"><i class="fa-solid fa-hand-pointer"></i></button>
+                <button class="btn"><i class="fa-solid fa-pencil"></i></button>
+                </div>
+            </div>
+          </div>
+        
+          <div id="spritesheet-modal" class="modal-panel" style="display: none;">
+              <div class="modal-header">
+                  <h3>Editor de Spritesheet</h3>
+                  <button class="modal-close-btn">✖</button>
+              </div>
+              <div class="modal-content">
+                  <div class="form-group">
+                    <label>Imagen de Spritesheet:</label>
+                    <input type="file" id="spritesheet-file-input" accept="image/*">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="sprite-width">Ancho de Celda (px):</label>
+                      <input type="number" id="sprite-width" value="32">
+                    </div>
+                    <div class="form-group">
+                      <label for="sprite-height">Alto de Celda (px):</label>
+                      <input type="number" id="sprite-height" value="32">
+                    </div>
+                  </div>
+                  <div id="spritesheet-preview" class="spritesheet-preview"></div>
+                  <button id="btn-process-sprite" class="btn">Procesar</button>
+              </div>
+          </div>
         </div>
 
       </main>

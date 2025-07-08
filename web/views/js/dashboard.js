@@ -1,7 +1,7 @@
 
 // --- Variables específicas para el Dashboard ---
 // Al principio de tu archivo dashboard.js
-import { Creatura } from './Clases/Modelos/creatura.js';
+import { Creatura } from './Modelos/creatura.js';
 
 const audio = document.getElementById('audioPlayer');
 const nombreCancion = document.getElementById('nombreCancion');
@@ -25,45 +25,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- Función de Inicialización del Dashboard ---
 function inicializarUI() {
-
   inicializarComponentes();
-  // 2. Renderiza la lista de criaturas
   const tbodyCriaturas = document.getElementById('listaCriaturasBody');
- /* if (tbodyCriaturas) {
-    renderizarCriaturas(criaturasData, tbodyCriaturas);
-  }*/
   poblarDropdownsEditor();
 }
 
-/*function inicializarTodosLosModales() {
-  // Lista de configuraciones para todos los modales de la app
-  const configs = [
-    { id: 'listaPanel', triggerId: 'btnLista', movable: true },
-    { id: 'modalSubida', triggerId: 'abrirSubida', movable: true },
-    { id: 'modalEditor', triggerId: 'btnOpenEditor',  movable: true , width: '1000px'}
-  ];
-
-  // Instanciamos cada modal
-  configs.forEach(config => new Modal(config));
-
-  // Listener de Cierre Global (la solución definitiva)
-  document.body.addEventListener('click', function(event) {
-    const closeButton = event.target.closest('.modal-close-btn, .editor-close-btn');
-    if (closeButton) {
-      const modalToClose = event.target.closest('.modal-panel, .editor-modal');
-      if (modalToClose) {
-        modalToClose.style.display = 'none';
-      }
-    }
-  });
-}*/
 
 /**
  * Crea las instancias de las clases Modal y Tabs para la página.
  */
 function inicializarComponentes() {
   // Configuración para todos los modales.
-
   const modalConfigs = [
     { id: 'listaPanel', triggerId: 'btnLista', closeClassName: 'modal-close-btn', movable: true,width: '20%', },
     { id: 'modalSubida', triggerId: 'abrirSubida', closeClassName: 'modal-close-btn', movable: true,width: '40%',height: '300px' },
@@ -73,7 +45,7 @@ function inicializarComponentes() {
       closeClassName: 'editor-close-btn',
       movable: true, 
       width: '100%',
-      height: '760px',
+      height: '70vh',
       onOpen: () => {
         new Tabs({ id: 'creature-editor-container', orientation: 'vertical', title: 'EDITOR DE CRIATURA' });
       }
@@ -91,8 +63,79 @@ function inicializarComponentes() {
       { header: 'CR',     key: 'cr' }
     ]
   });
+  inicializarOpcionesEspeciales();
+  inicializarMapaEditor();
+
 }
 
+
+function inicializarMapaEditor() {
+  const canvas = document.getElementById('map-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Set canvas size (this should match the map.html window eventually)
+  // For now, we'll use a placeholder size
+  canvas.width = 1920;
+  canvas.height = 1080;
+  ctx.fillStyle = "#D2B48C"; // Parchment color
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // --- Asset Loading ---
+  const btnLoadImage = document.getElementById('btn-load-image');
+  const assetList = document.getElementById('asset-list');
+  // ... logic to handle image loading and adding to asset list ...
+
+  // --- Spritesheet Modal ---
+  new Modal({
+      id: 'spritesheet-modal',
+      triggerId: 'btn-open-spritesheet',
+      closeClassName: 'modal-close-btn',
+      width: '600px'
+  });
+
+  const spritesheetInput = document.getElementById('spritesheet-file-input');
+  const previewContainer = document.getElementById('spritesheet-preview');
+
+  spritesheetInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+              previewContainer.innerHTML = ''; // Clear previous
+              previewContainer.appendChild(img);
+          };
+          img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+  });
+  
+  // ... logic for btn-process-sprite to draw grid and handle clicks ...
+}
+/**
+ * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.
+ */
+function inicializarOpcionesEspeciales() {
+  const container = document.getElementById('special-creature-options');
+  if (!container || container.dataset.initialized) return;
+
+  container.addEventListener('change', (event) => {
+    // Se asegura que el evento venga de un checkbox
+    if (event.target.type === 'checkbox') {
+      const labelId = event.target.dataset.targetLabel;
+      const labelToShow = document.getElementById(labelId);
+      if (labelToShow) {
+        // Muestra la etiqueta si el checkbox está marcado, la oculta si no lo está.
+        labelToShow.style.display = event.target.checked ? 'block' : 'none';
+      }
+    }
+  });
+
+  container.dataset.initialized = 'true';
+}
 /**
  * Rellena todos los menús desplegables del editor de criaturas.
  */

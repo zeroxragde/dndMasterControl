@@ -163,15 +163,10 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
   z-index: 1000;
-
-  /* --- LOS 3 CAMBIOS CLAVE --- */
   display: none;             /* 1. Lo hacemos un contenedor flex */
   flex-direction: column;    /* 2. Apilamos sus hijos (header y content) */
   padding: 0;                /* 3. Quitamos el padding para que el header ocupe todo el ancho */
-
-  /* Propiedades que se mantienen */
   width: 60%;
-
   height: 85vh;
 }
 
