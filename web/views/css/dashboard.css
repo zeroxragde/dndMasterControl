@@ -385,3 +385,35 @@
   font-size: 10px;
   color: #888;
 }
+/* ======================================================= */
+/* ====== ESTILOS FINALES PARA LA BARRA DE HERRAMIENTAS ====== */
+/* ======================================================= */
+
+.map-toolbar {
+  display: flex;
+  align-items: center; /* ¡LA CLAVE! Centra todo verticalmente */
+  gap: 8px;
+  padding: 8px;
+  background: #1f1f1f;
+  border: 1px solid #444;
+  border-top: none;
+}
+
+/* Grupo para el input y botón de añadir capa */
+.layer-controls {
+    display: flex;
+    gap: 5px;
+}
+
+/* Espaciador que empuja los controles de capa a la derecha */
+.toolbar-spacer {
+  flex-grow: 1; /* Ocupa todo el espacio sobrante */
+}
+
+/* Ajustes para que input y select se vean bien junto a los botones */
+.map-toolbar input[type="text"],
+.map-toolbar select {
+  padding: 6px 10px;
+  height: 38px; /* Ajusta esta altura para que coincida con tus .btn */
+  box-sizing: border-box;
+}

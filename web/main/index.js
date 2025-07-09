@@ -117,8 +117,8 @@ ipcMain.on('abrir-dialogo-imagen', (event, categoria) => {
         const extension = path.extname(filePath).toLowerCase();
         const uuid = uuidv4();
         
-        const userFolder = path.join(app.getPath('userData'), 'assets', username, 'imgMapas');
-        const jsonPath = path.join(app.getPath('userData'), 'assets', 'system', `${username}_imagenes_mapas.json`);
+        const userFolder = path.join(app.getAppPath(), 'assets', username, 'imgMapas');
+        const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
         const destinoPath = path.join(userFolder, `${uuid}${extension}`);
 
         fs.mkdirSync(userFolder, { recursive: true });
@@ -144,13 +144,7 @@ ipcMain.on('abrir-dialogo-imagen', (event, categoria) => {
     }
   }).catch(err => console.error('Error en el diálogo:', err));
 });
-// --- IPC Listener para actuar como relé del estado del mapa ---
-ipcMain.on('update-map-state', (event, tokens) => {
-  // Si la ventana del mapa existe, le enviamos los datos de los tokens
-  if (mapaWindow) {
-    mapaWindow.webContents.send('render-map-state', tokens);
-  }
-});
+
 // Escucha la petición de la lista de assets
 ipcMain.handle('get-asset-list', async () => {
   try {
@@ -158,7 +152,34 @@ ipcMain.handle('get-asset-list', async () => {
     const username = config.dm;
     if (!username) return [];
 
-  //  const jsonPath = path.join(app.getPath('userData'), 'assets', 'system', `${username}_imagenes_mapas.json`);
+    const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
+    if (fs.existsSync(jsonPath)) {
+      const assetData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      
+      return assetData.map(asset => {
+        const imagePath = path.join(app.getAppPath(), 'assets', username, 'imgMapas', `${asset.uuid}.${asset.extension}`);
+        if (fs.existsSync(imagePath)) {
+          const imageBuffer = fs.readFileSync(imagePath);
+          const imageBase64 = imageBuffer.toString('base64');
+          const dataUrl = `data:image/${asset.extension};base64,${imageBase64}`;
+          return { ...asset, url: dataUrl };
+        }
+        return { ...asset, url: '' };
+      });
+    }
+    return [];
+  } catch (error) {
+    return [];
+  }
+});
+
+/*ipcMain.handle('get-asset-list', async () => {
+  try {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    const username = config.dm;
+    if (!username) return [];
+
+  //  const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
     const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
        
     if (fs.existsSync(jsonPath)) {
@@ -188,8 +209,13 @@ ipcMain.handle('get-asset-list', async () => {
     console.error("Error al leer la lista de assets:", error);
     return [];
   }
+});*/
+// En tu archivo main/index.js
+ipcMain.on('update-map-state', (event, mapState) => {
+  if (mapaWindow) {
+    mapaWindow.webContents.send('render-map-state', mapState);
+  }
 });
-
 // ===================================================================
 // --- CICLO DE VIDA DE LA APLICACIÓN ---
 // ===================================================================
@@ -199,7 +225,7 @@ async function handleAppReady() {
   // Registramos nuestro protocolo personalizado 'asset://' para poder mostrar imágenes locales
   protocol.registerFileProtocol('asset', (request, callback) => {
     const url = request.url.substr(8); 
-    const fullPath = path.join(app.getPath('userData'), 'assets', url);
+    const fullPath = path.join(app.getAppPath(), 'assets', url);
     callback({ path: path.normalize(fullPath) });
   });
 

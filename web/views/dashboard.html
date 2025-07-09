@@ -583,14 +583,27 @@
             </div>
         
             <div class="map-canvas-container">
+    
               <div id="map-viewport" class="map-viewport">
-                <canvas id="map-canvas"></canvas>
+                  <canvas id="map-canvas"></canvas>
               </div>
+          
               <div class="map-toolbar">
-                <button class="btn"><i class="fa-solid fa-hand-pointer"></i></button>
-                <button class="btn"><i class="fa-solid fa-pencil"></i></button>
-                </div>
-            </div>
+                  <button class="btn" title="Seleccionar"><i class="fa-solid fa-hand-pointer"></i></button>
+                  <button class="btn" title="Dibujar"><i class="fa-solid fa-pencil"></i></button>
+                  <button id="btn-refresh-map" class="btn" title="Actualizar Mapa">
+                      <i class="fa-solid fa-sync-alt"></i>
+                  </button>
+          
+                  <div class="toolbar-spacer"></div>
+          
+                  <div class="layer-controls">
+                      <input type="text" id="new-layer-name" placeholder="Nombre de capa...">
+                      <button id="btn-add-layer" class="btn">Añadir</button>
+                  </div>
+                  <select id="layer-selector" title="Seleccionar capa activa"></select>
+              </div>
+          </div>
           </div>
         
           <div id="spritesheet-modal" class="modal-panel" style="display: none;">

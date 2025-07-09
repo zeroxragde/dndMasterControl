@@ -1,5 +1,3 @@
-// En tu nuevo archivo js/mapa.js
-
 const { ipcRenderer } = require('electron');
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -7,71 +5,73 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
-    let backgroundImage = null;
+    const imageCache = {}; // Usamos un caché para optimizar la carga de imágenes
 
-    // Escuchamos la resolución inicial para darle tamaño al canvas
-    ipcRenderer.on('mapa-resolucion', (event, resolucion) => {
-        canvas.width = resolucion.width;
-        canvas.height = resolucion.height;
+    // Le damos tamaño al canvas cuando recibimos la resolución
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        // Cargamos la misma imagen de fondo que en el editor
-        const fondo = new Image();
-        fondo.src = '../../assets/img/fondoStab.png';
-        fondo.onload = () => {
-            backgroundImage = fondo;
-            // Dibujamos el fondo inicial
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-        };
-    });
-
-    // Escuchamos las actualizaciones del estado del mapa
-    ipcRenderer.on('render-map-state', (event, tokens) => {
-        // Limpiamos el canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // 1. Redibujamos el fondo
-        if (backgroundImage) {
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-        }
-
-        // 2. Dibujamos cada token recibido
-
-
-
-
-
-// Dentro de tu archivo mapa.js
-
-// Escuchamos las actualizaciones del estado del mapa
-ipcRenderer.on('render-map-state', (event, tokens) => {
-    // Limpiamos el canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 1. Redibujamos el fondo
-    if (backgroundImage) {
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-    }
-
-    // 2. Dibujamos cada token recibido
-    if (tokens && tokens.length > 0) {
-    tokens.forEach(tokenData => {
-    // Comprobamos que el token tenga una URL válida
-    if (tokenData && tokenData.src) {
-        const tempImage = new Image();
-        tempImage.src = tokenData.src; // Usamos la URL recibida
+    // Escucha el estado completo del mapa y lo redibuja
+    ipcRenderer.on('render-map-state', (event, mapState) => {
+        if (!mapState) return;
         
-        // Dibujamos la imagen cuando esté lista
-        tempImage.onload = () => {
-            ctx.drawImage(tempImage, tokenData.x, tokenData.y, tokenData.width, tokenData.height);
+        // Función para dibujar todo una vez que las imágenes estén listas
+        const drawAll = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Dibuja el fondo
+            if (imageCache['background'] && imageCache['background'].complete) {
+                ctx.drawImage(imageCache['background'], 0, 0, canvas.width, canvas.height);
+            }
+
+            // 2. Dibuja los tokens de cada capa en orden
+            if (mapState.layers && mapState.layerOrder) {
+                mapState.layerOrder.forEach(layerName => {
+                    mapState.layers[layerName].forEach(tokenData => {
+                        if (imageCache[tokenData.src] && imageCache[tokenData.src].complete) {
+                            ctx.drawImage(imageCache[tokenData.src], tokenData.x, tokenData.y, tokenData.width, tokenData.height);
+                        }
+                    });
+                });
+            }
+        };
+
+        // --- LÓGICA DE PRECARGA DE IMÁGENES ---
+        const promises = []; // Un array para todas las promesas de carga
+
+        // Precarga del fondo
+        if (mapState.backgroundSrc) {
+            promises.push(new Promise(resolve => {
+                const fondo = new Image();
+                fondo.src = mapState.backgroundSrc;
+                fondo.onload = () => {
+                    imageCache['background'] = fondo;
+                    resolve();
+                };
+                fondo.onerror = resolve; // Si falla, continuamos sin fondo
+            }));
         }
-    }
-});
-    }
-    });
 
-
-
-
-
+        // Precarga de los tokens
+        if (mapState.layers && mapState.layerOrder) {
+            mapState.layerOrder.forEach(layerName => {
+                mapState.layers[layerName].forEach(tokenData => {
+                    if (tokenData.src && !imageCache[tokenData.src]) {
+                        promises.push(new Promise(resolve => {
+                            const img = new Image();
+                            img.src = tokenData.src;
+                            img.onload = () => {
+                                imageCache[tokenData.src] = img;
+                                resolve();
+                            };
+                            img.onerror = resolve; // Si una imagen falla, no detenemos todo
+                        }));
+                    }
+                });
+            });
+        }
+        
+        // Cuando TODAS las imágenes se hayan cargado, dibujamos todo de una vez.
+        Promise.all(promises).then(drawAll);
     });
 });

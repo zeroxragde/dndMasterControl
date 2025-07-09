@@ -13,7 +13,16 @@ class MapCanvas {
       
       this.tokens = [];
       this.selectedToken = null;
-      
+      // --- LÓGICA DE CAPAS ---
+      this.layers = {
+        'base': [] // Todas las capas se guardan aquí, empezando con 'base'
+      };
+      this.layerOrder = ['base']; // El orden en que se dibujan las capas
+      this.activeLayer = 'base';  // La capa donde se añaden nuevos tokens
+
+      this.selectedToken = null;
+      this.isDragging = false;
+
       // Variables de estado
       this.isDragging = false;
       this.isResizing = false;
@@ -52,18 +61,51 @@ class MapCanvas {
           width: 100,
           height: 100
         };
-        this.tokens.push(token);
+        //this.tokens.push(token);
+        this.layers[this.activeLayer].push(token);
         this.draw();
       };
     }
-  
+    /**
+     * Añade una nueva capa al sistema.
+     * @param {string} layerName - El nombre de la nueva capa.
+     */
+    addLayer(layerName) {
+      if (!layerName || this.layers[layerName]) {
+        console.warn(`La capa "${layerName}" ya existe o el nombre es inválido.`);
+        return false;
+      }
+      this.layers[layerName] = []; // Crea el array vacío para la nueva capa
+      this.layerOrder.push(layerName); // La añade al final del orden de dibujado
+      console.log(`Capa añadida: ${layerName}`);
+      return true;
+    }
+
+    /**
+     * Establece cuál es la capa activa para añadir nuevos tokens.
+     * @param {string} layerName - El nombre de la capa a activar.
+     */
+    setActiveLayer(layerName) {
+      if (this.layers[layerName]) {
+        this.activeLayer = layerName;
+        console.log(`Capa activa cambiada a: ${this.activeLayer}`);
+      }
+    }
+
     draw() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       if (this.backgroundImage) {
         this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
       }
+      /*
       this.tokens.forEach(token => {
         this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
+      });*/
+          // Dibuja los tokens de cada capa en orden
+      this.layerOrder.forEach(layerName => {
+        this.layers[layerName].forEach(token => {
+          this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
+        });
       });
       if (this.selectedToken) {
         this.ctx.strokeStyle = '#00bcd4';
@@ -74,17 +116,66 @@ class MapCanvas {
        // --- ¡LÍNEA CLAVE AÑADIDA! ---
         // --- ¡AQUÍ ESTÁ EL CAMBIO! ---
         // Convertimos los tokens a un formato simple antes de enviarlos.
+
+        // Dibuja los tokens de cada capa en orden
+        const serializableLayers = {};
+        this.layerOrder.forEach(layerName => {
+          serializableLayers[layerName] = []; // Prepara la capa en el objeto a enviar
+
+          this.layers[layerName].forEach(token => {
+            // Dibuja en el canvas local
+            this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
+            
+            // Añade la versión simple del token para enviar
+            serializableLayers[layerName].push({
+              src: token.img.src,
+              x: token.x,
+              y: token.y,
+              width: token.width,
+              height: token.height
+            });
+          });
+        });
+
+
+        /*
         const serializableTokens = this.tokens.map(token => ({
             src: token.img.src, // Solo enviamos la URL de la imagen
             x: token.x,
             y: token.y,
             width: token.width,
             height: token.height
-        }));
+        }));*/
     
         // Enviamos el estado con los datos simples.
-        ipcRenderer.send('update-map-state', serializableTokens);
+        
     }
+    updateMap(){
+      console.log("Forzando actualización del mapa del jugador...");
+    
+      // 1. Prepara los datos para ser enviados
+      const serializableState = {
+        backgroundSrc: this.backgroundImage ? this.backgroundImage.src : null,
+        layers: {},
+        layerOrder: this.layerOrder
+      };
+  
+      this.layerOrder.forEach(layerName => {
+        serializableState.layers[layerName] = this.layers[layerName].map(token => ({
+          src: token.img.src,
+          x: token.x,
+          y: token.y,
+          width: token.width,
+          height: token.height
+        }));
+      });
+  
+      // 2. Envía el objeto de estado completo al proceso principal
+      ipcRenderer.send('update-map-state', serializableState);
+    
+  
+  }
+    
   
     // --- MÉTODOS PRIVADOS ---
     _drawResizeHandles(token) {
@@ -126,7 +217,26 @@ class MapCanvas {
         }
       }
       this.selectedToken = null;
-      for (let i = this.tokens.length - 1; i >= 0; i--) {
+       // Iteramos sobre las capas en orden inverso (de la más alta a la más baja)
+    for (const layerName of [...this.layerOrder].reverse()) {
+      const layerTokens = this.layers[layerName];
+      // Iteramos sobre los tokens de esa capa en orden inverso
+      for (let i = layerTokens.length - 1; i >= 0; i--) {
+        const token = layerTokens[i];
+        if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
+          this.selectedToken = token;
+          this.isDragging = true;
+          this.dragOffsetX = mouseX - token.x;
+          this.dragOffsetY = mouseY - token.y;
+          // Movemos el token al final de su PROPIA capa para que se dibuje encima
+          layerTokens.splice(i, 1);
+          layerTokens.push(token);
+          this.draw();
+          return; // Salimos en cuanto encontramos el primer token
+        }
+      }
+    }
+     /* for (let i = this.tokens.length - 1; i >= 0; i--) {
         const token = this.tokens[i];
         if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
           this.selectedToken = token;
@@ -137,7 +247,7 @@ class MapCanvas {
           this.tokens.push(token);
           break;
         }
-      }
+      }*/
       this.draw();
     }
   

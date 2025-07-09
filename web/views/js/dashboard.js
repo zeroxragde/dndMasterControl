@@ -106,6 +106,40 @@ function inicializarComponentes() {
  */
 function inicializarMapaEditor() {
   mapCanvas = new MapCanvas('map-canvas');
+  // --- LÓGICA DE CAPAS ---
+  const newLayerInput = document.getElementById('new-layer-name');
+  const addLayerButton = document.getElementById('btn-add-layer');
+  const layerSelector = document.getElementById('layer-selector');
+ // Función para actualizar el menú desplegable de capas
+ function actualizarDropdownCapas() {
+    if (!layerSelector || !mapCanvas) return;
+    
+    layerSelector.innerHTML = ''; // Limpiamos el select
+    // Añadimos cada capa del objeto mapCanvas.layers
+    mapCanvas.layerOrder.forEach(layerName => {
+        const option = new Option(layerName, layerName);
+        layerSelector.add(option);
+    });
+    // Nos aseguramos de que el valor seleccionado coincida con la capa activa
+    layerSelector.value = mapCanvas.activeLayer;
+  }
+  // Evento para el botón de "Añadir Capa"
+  addLayerButton.addEventListener('click', () => {
+    const layerName = newLayerInput.value.trim();
+    if (layerName) {
+        // Llamamos al método de la clase para añadir la capa
+        if (mapCanvas.addLayer(layerName)) {
+            newLayerInput.value = ''; // Limpiamos el input
+            actualizarDropdownCapas(); // Actualizamos el menú
+        }
+    }
+  });
+  // Evento para el menú desplegable
+  layerSelector.addEventListener('change', () => {
+    // Llamamos al método de la clase para cambiar la capa activa
+    mapCanvas.setActiveLayer(layerSelector.value);
+  });
+  actualizarDropdownCapas();
 
   ipcRenderer.on('mapa-resolucion', (event, resolucion) => {
       mapCanvas.setSize(resolucion.width, resolucion.height);
@@ -116,7 +150,17 @@ function inicializarMapaEditor() {
           mapCanvas.setBackground(fondoMapa);
       };
   });
-
+    // --- ¡AQUÍ ESTÁ LA NUEVA LÓGICA! ---
+    const refreshButton = document.getElementById('btn-refresh-map');
+    if (refreshButton) {
+        refreshButton.addEventListener('click', () => {
+            // Simplemente llamamos a draw(), que ya se encarga de enviar la actualización
+            console.log("Actualizando el mapa ed...");
+            if (mapCanvas) {
+                mapCanvas.updateMap();
+            }
+        });
+    }
   // La lógica de 'drop' se mantiene igual
   const viewport = document.getElementById('map-viewport');
   if(viewport) {
