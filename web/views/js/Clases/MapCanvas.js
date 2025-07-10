@@ -80,7 +80,25 @@ class MapCanvas {
       console.log(`Capa añadida: ${layerName}`);
       return true;
     }
-
+ /**
+   * Limpia por completo el mapa, eliminando todos los tokens y capas,
+   * y dejando únicamente la capa "base" vacía.
+   */
+  clearMap() {
+    console.log("Limpiando el mapa...");
+    
+    // Resetea las capas al estado inicial
+    this.layers = {
+      'base': []
+    };
+    this.layerOrder = ['base'];
+    this.activeLayer = 'base';
+    this.selectedToken = null;
+    
+    // Vuelve a dibujar el canvas, que ahora estará vacío (solo con el fondo)
+    // Esto también enviará la actualización al mapa del jugador.
+    this.draw();
+  }
     /**
      * Establece cuál es la capa activa para añadir nuevos tokens.
      * @param {string} layerName - El nombre de la capa a activar.

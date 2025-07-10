@@ -110,7 +110,21 @@ function inicializarMapaEditor() {
   const newLayerInput = document.getElementById('new-layer-name');
   const addLayerButton = document.getElementById('btn-add-layer');
   const layerSelector = document.getElementById('layer-selector');
- // Función para actualizar el menú desplegable de capas
+ 
+   // --- LÓGICA DEL BOTÓN "NUEVO MAPA" ---
+    const newMapButton = document.getElementById('btn-new-map');
+    if (newMapButton) {
+        newMapButton.addEventListener('click', () => {
+            // Pide confirmación al usuario para evitar borrados accidentales
+            if (confirm('¿Estás seguro de que quieres borrar el mapa actual? Esta acción no se puede deshacer.')) {
+                if (mapCanvas) {
+                    mapCanvas.clearMap(); // Llama al nuevo método de la clase
+                }
+            }
+        });
+    }
+ 
+  // Función para actualizar el menú desplegable de capas
  function actualizarDropdownCapas() {
     if (!layerSelector || !mapCanvas) return;
     
@@ -211,7 +225,7 @@ function poblarFiltroDeCategoriasMapaEditor() {
  * lee el JSON y genera la tabla de imágenes en el DOM.
  * Este es el único método necesario para actualizar la lista.
  */
-async function actualizarYRenderizarAssetList() {
+/*async function actualizarYRenderizarAssetList() {
  
   const assetListContainer = document.getElementById('asset-list');
   if (!assetListContainer) return;
@@ -261,8 +275,67 @@ async function actualizarYRenderizarAssetList() {
       console.error("Error al renderizar la lista de assets:", error);
   }
 
-}
+}*/
+/**
+ * Pide la lista de assets, la renderiza como una cuadrícula de tarjetas
+ * y hace que las imágenes sean arrastrables.
+ */
+async function actualizarYRenderizarAssetList() {
+    const assetListContainer = document.getElementById('asset-list');
+    if (!assetListContainer) return;
 
+    try {
+        const assetsRecibidos = await ipcRenderer.invoke('get-asset-list');
+        const assets = assetsRecibidos.flat();
+        
+        assetListContainer.innerHTML = '';
+
+        if (!assets || assets.length === 0) {
+            assetListContainer.innerHTML = '<p class="empty-list-message">No hay imágenes.</p>';
+            return;
+        }
+
+        const gridContainer = document.createElement('div');
+        gridContainer.className = 'asset-grid';
+
+        assets.forEach(asset => {
+            if (!asset || !asset.url) return;
+
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            card.dataset.uuid = asset.uuid;
+
+            // Obtenemos el nombre sin la extensión
+            const nombreSinExtension = asset.nombre.includes('.')
+                ? asset.nombre.split('.').slice(0, -1).join('')
+                : asset.nombre;
+
+            // --- HTML COMPLETO DE LA TARJETA ---
+            // Añadimos de nuevo los <span> para el nombre y la categoría
+            card.innerHTML = `
+                <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
+                <label for="check-${asset.uuid}" class="asset-image-label">
+                    <img src="${asset.url}" class="asset-thumbnail" alt="${nombreSinExtension}" draggable="true">
+                </label>
+                <span class="asset-name">${nombreSinExtension}</span>
+                <span class="asset-category">${asset.categoria || 'N/A'}</span>
+            `;
+
+            // Hacemos la imagen arrastrable
+            const img = card.querySelector('.asset-thumbnail');
+            img.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', asset.url);
+            });
+
+            gridContainer.appendChild(card);
+        });
+
+        assetListContainer.appendChild(gridContainer);
+
+    } catch (error) {
+        console.error("Error al renderizar la lista de assets:", error);
+    }
+}
 
 /**
  * Configura el botón para cargar imágenes y la respuesta del proceso principal.
