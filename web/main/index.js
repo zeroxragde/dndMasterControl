@@ -173,48 +173,105 @@ ipcMain.handle('get-asset-list', async () => {
   }
 });
 
-/*ipcMain.handle('get-asset-list', async () => {
+// --- Lógica para eliminar assets ---
+ipcMain.on('delete-assets', (event, uuidsParaBorrar) => {
+  if (!uuidsParaBorrar || uuidsParaBorrar.length === 0) {
+    return; // No hacer nada si no se envían IDs
+  }
+
   try {
     const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     const username = config.dm;
-    if (!username) return [];
+    if (!username) throw new Error("Nombre de DM no encontrado.");
 
-  //  const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
     const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
-       
+    
     if (fs.existsSync(jsonPath)) {
-      const assetData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-      return assetData.map(asset => {
-       // const relativePath = `${username}/imgMapas/${asset.uuid}.${asset.extension}`;
-        const relativePath = `${username}/imgMapas/${asset.uuid}.${asset.extension}`;
-      //  return { ...asset, url: `asset://${relativePath}` };
- 
-      // Para cada asset, leemos el archivo de imagen y lo convertimos a un Data URL
-          return assetData.map(asset => {
-            const imagePath = path.join(app.getAppPath(), 'assets', username, 'imgMapas', `${asset.uuid}.${asset.extension}`);
-            if (fs.existsSync(imagePath)) {
-              const imageBuffer = fs.readFileSync(imagePath);
-              const imageBase64 = imageBuffer.toString('base64');
-              // Creamos una URL que contiene los datos de la imagen directamente
-              const dataUrl = `data:image/${asset.extension};base64,${imageBase64}`;
-              return { ...asset, url: dataUrl };
-            }
-            return { ...asset, url: '' }; // Devuelve una URL vacía si la imagen no se encuentra
-          });
+      let assets = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
+      // Filtramos para encontrar los assets que se van a borrar
+      const assetsAEliminar = assets.filter(asset => uuidsParaBorrar.includes(asset.uuid));
+      // Y nos quedamos con los que NO se van a borrar
+      const assetsQueQuedan = assets.filter(asset => !uuidsParaBorrar.includes(asset.uuid));
+
+      // 1. Borramos los archivos físicos del disco duro
+      assetsAEliminar.forEach(asset => {
+        const imagePath = path.join(app.getAppPath(), 'assets', username, 'imgMapas', `${asset.uuid}.${asset.extension}`);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath); // Comando para borrar el archivo
+          console.log(`Archivo eliminado: ${imagePath}`);
+        }
       });
+
+      // 2. Sobrescribimos el archivo JSON con la lista actualizada (sin los borrados)
+      fs.writeFileSync(jsonPath, JSON.stringify(assetsQueQuedan, null, 2));
+
+      // 3. Enviamos una señal de éxito de vuelta al dashboard
+      event.sender.send('assets-deleted-success');
     }
-    return [];
   } catch (error) {
-    console.error("Error al leer la lista de assets:", error);
-    return [];
+    console.error('Error al eliminar assets:', error);
   }
-});*/
-// En tu archivo main/index.js
+});
+// --- Lógica para guardar el estado del mapa ---
+ipcMain.on('save-map-dialog', (event, mapState) => {
+  // Abre el diálogo para que el usuario elija dónde guardar el archivo
+  dialog.showSaveDialog(dashboardWindow, {
+    title: 'Guardar Mapa',
+    defaultPath: 'mi-mapa.json', // Nombre de archivo sugerido
+    filters: [
+      { name: 'Archivos de Mapa JSON', extensions: ['json'] }
+    ]
+  }).then(result => {
+    // Si el usuario no cancela y elige una ruta
+    if (!result.canceled && result.filePath) {
+      try {
+        // Convierte el estado del mapa a un string JSON y lo guarda en el archivo
+        const jsonData = JSON.stringify(mapState, null, 2);
+        fs.writeFileSync(result.filePath, jsonData);
+        console.log(`Mapa guardado con éxito en: ${result.filePath}`);
+        
+        // (Opcional) Envía una notificación de éxito de vuelta al dashboard
+        event.sender.send('map-saved-success', '¡Mapa guardado!');
+      } catch (error) {
+        console.error('Error al guardar el archivo del mapa:', error);
+      }
+    }
+  }).catch(err => {
+    console.error('Error en el diálogo de guardado:', err);
+  });
+});
+// Escucha la actualización del estado del mapa desde el dashboard
 ipcMain.on('update-map-state', (event, mapState) => {
   if (mapaWindow) {
     mapaWindow.webContents.send('render-map-state', mapState);
   }
+});
+// --- Lógica para cargar un mapa desde un archivo ---
+ipcMain.handle('load-map-dialog', async (event) => {
+  // Abre el diálogo para que el usuario elija un archivo JSON
+  const result = await dialog.showOpenDialog(dashboardWindow, {
+    title: 'Cargar Mapa',
+    filters: [
+      { name: 'Archivos de Mapa JSON', extensions: ['json'] }
+    ],
+    properties: ['openFile']
+  });
+
+  // Si el usuario no cancela y elige un archivo
+  if (!result.canceled && result.filePaths.length > 0) {
+    try {
+      const filePath = result.filePaths[0];
+      // Lee el contenido del archivo JSON
+      const jsonData = fs.readFileSync(filePath, 'utf-8');
+      // Lo convierte a un objeto y lo devuelve al dashboard
+      return JSON.parse(jsonData);
+    } catch (error) {
+      console.error('Error al cargar o parsear el archivo del mapa:', error);
+      return null; // Devuelve null si hay un error
+    }
+  }
+  return null; // Devuelve null si el usuario cancela
 });
 // ===================================================================
 // --- CICLO DE VIDA DE LA APLICACIÓN ---

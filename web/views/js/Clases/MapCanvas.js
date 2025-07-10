@@ -36,6 +36,7 @@ class MapCanvas {
       this.canvas.addEventListener('mousemove', this._onMouseMove.bind(this));
       this.canvas.addEventListener('mouseup', this._onMouseUp.bind(this));
       this.canvas.addEventListener('mouseleave', this._onMouseUp.bind(this));
+      this.canvas.addEventListener('contextmenu', this._onRightClick.bind(this));
     }
   
     // --- MÉTODOS PÚBLICOS ---
@@ -80,25 +81,96 @@ class MapCanvas {
       console.log(`Capa añadida: ${layerName}`);
       return true;
     }
- /**
-   * Limpia por completo el mapa, eliminando todos los tokens y capas,
-   * y dejando únicamente la capa "base" vacía.
-   */
-  clearMap() {
-    console.log("Limpiando el mapa...");
-    
-    // Resetea las capas al estado inicial
-    this.layers = {
-      'base': []
-    };
-    this.layerOrder = ['base'];
-    this.activeLayer = 'base';
-    this.selectedToken = null;
-    
-    // Vuelve a dibujar el canvas, que ahora estará vacío (solo con el fondo)
-    // Esto también enviará la actualización al mapa del jugador.
-    this.draw();
-  }
+    /**
+     * Carga un estado de mapa completo desde un objeto y lo redibuja.
+     * @param {Object} mapState - El objeto de estado del mapa cargado desde un JSON.
+     */
+    loadMapState(mapState) {
+      if (!mapState) return;
+
+      console.log("Cargando estado del mapa...", mapState);
+
+      // 1. Carga el fondo
+      if (mapState.backgroundSrc) {
+          const fondo = new Image();
+          fondo.src = mapState.backgroundSrc;
+          fondo.onload = () => {
+              this.backgroundImage = fondo;
+              this.draw(); // Dibuja el fondo
+          };
+      } else {
+          this.backgroundImage = null;
+      }
+
+      // 2. Carga las capas y los tokens
+      this.layers = {};
+      this.layerOrder = mapState.layerOrder || ['base'];
+      this.activeLayer = this.layerOrder[0] || 'base'; 
+
+      this.layerOrder.forEach(layerName => {
+          this.layers[layerName] = [];
+          if (mapState.layers[layerName]) {
+              mapState.layers[layerName].forEach(tokenData => {
+                  const img = new Image();
+                  img.src = tokenData.src;
+                  // Añadimos el token sin esperar a que cargue, ya que la URL es un Data URL
+                  this.layers[layerName].push({
+                      img: img,
+                      x: tokenData.x,
+                      y: tokenData.y,
+                      width: tokenData.width,
+                      height: tokenData.height
+                  });
+              });
+          }
+      });
+
+      // 3. Redibuja todo el canvas y fuerza la actualización del mapa del jugador
+      this.draw();
+      this.canvas.dispatchEvent(new Event('layersUpdated'));
+    }
+    /**
+     * Recopila el estado actual del mapa y lo devuelve en un formato simple (JSON).
+     */
+    getMapState() {
+      const serializableLayers = {};
+      this.layerOrder.forEach(layerName => {
+          serializableLayers[layerName] = this.layers[layerName].map(token => ({
+              src: token.img.src,
+              x: token.x,
+              y: token.y,
+              width: token.width,
+              height: token.height
+          }));
+      });
+
+      return {
+          backgroundSrc: this.backgroundImage ? this.backgroundImage.src : null,
+          layers: serializableLayers,
+          layerOrder: this.layerOrder,
+          width: this.canvas.width,
+          height: this.canvas.height
+      };
+    }
+    /**
+     * Limpia por completo el mapa, eliminando todos los tokens y capas,
+     * y dejando únicamente la capa "base" vacía.
+    */
+    clearMap() {
+      console.log("Limpiando el mapa...");
+      
+      // Resetea las capas al estado inicial
+      this.layers = {
+        'base': []
+      };
+      this.layerOrder = ['base'];
+      this.activeLayer = 'base';
+      this.selectedToken = null;
+      
+      // Vuelve a dibujar el canvas, que ahora estará vacío (solo con el fondo)
+      // Esto también enviará la actualización al mapa del jugador.
+      this.draw();
+    }
     /**
      * Establece cuál es la capa activa para añadir nuevos tokens.
      * @param {string} layerName - El nombre de la capa a activar.
@@ -206,14 +278,57 @@ class MapCanvas {
       this.ctx.fillRect(x - s / 2, y + height - s / 2, s, s);
     }
   
-    _getMousePos(e) {
-      const rect = this.canvas.getBoundingClientRect();
-      return {
-        mouseX: e.clientX - rect.left,
-        mouseY: e.clientY - rect.top
-      };
-    }
+
+
+  /**
+   * (Privado) Calcula la posición del ratón dentro del canvas.
+   *
+   * --- CAMBIOS ---
+   * 1. Se calcula un factor de escala (scaleX, scaleY) que compara
+   * la resolución real del canvas (ej: 1920px) con su tamaño en la pantalla.
+   * 2. La posición del ratón ahora se multiplica por ese factor de escala.
+   *
+   * --- ¿POR QUÉ? ---
+   * Esto "traduce" las coordenadas del clic en la página a las coordenadas
+   * exactas dentro del dibujo del canvas, asegurando que el ratón y los
+   * manejadores de tamaño siempre estén perfectamente alineados.
+   */
+  _getMousePos(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = this.canvas.width / rect.width;
+    const scaleY = this.canvas.height / rect.height;
     
+    return {
+      mouseX: (e.clientX - rect.left) * scaleX,
+      mouseY: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  // --- ¡NUEVO MÉTODO PARA MANEJAR EL CLIC DERECHO! ---
+  _onRightClick(e) {
+    e.preventDefault(); // Evita que aparezca el menú contextual del navegador
+    const { mouseX, mouseY } = this._getMousePos(e);
+
+    // Iteramos sobre las capas para encontrar el token sobre el que se hizo clic
+    for (const layerName of [...this.layerOrder].reverse()) {
+      const layerTokens = this.layers[layerName];
+      
+      for (let i = layerTokens.length - 1; i >= 0; i--) {
+        const token = layerTokens[i];
+        if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
+          
+          // Encontramos un token, pedimos confirmación para borrar
+          if (confirm(`¿Seguro que quieres eliminar este token?`)) {
+            layerTokens.splice(i, 1); // Lo eliminamos del array de su capa
+            this.selectedToken = null; // Deseleccionamos por si era el token activo
+            this.draw(); // Redibujamos el canvas para que desaparezca
+          }
+          return; // Salimos del bucle
+        }
+      }
+    }
+  }
+
     _getHandleAt(mouseX, mouseY, token) {
       const s = this.handleSize * 2; // Hacemos el área de clic un poco más grande
       const { x, y, width, height } = token;
@@ -235,8 +350,32 @@ class MapCanvas {
         }
       }
       this.selectedToken = null;
+
+      // 2. Buscamos tokens para seleccionar **únicamente en la capa activa**.
+      const activeLayerTokens = this.layers[this.activeLayer] || [];
+          
+      // Iteramos sobre los tokens de esa capa en orden inverso para seleccionar el de más arriba
+      for (let i = activeLayerTokens.length - 1; i >= 0; i--) {
+        const token = activeLayerTokens[i];
+        if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
+          this.selectedToken = token;
+          this.isDragging = true;
+          this.dragOffsetX = mouseX - token.x;
+          this.dragOffsetY = mouseY - token.y;
+          
+          // Movemos el token al final de su PROPIA capa para que se dibuje encima
+          activeLayerTokens.splice(i, 1);
+          activeLayerTokens.push(token);
+          
+          this.draw();
+          return; // Salimos en cuanto encontramos el primer token
+        }
+      }
+
+
+
        // Iteramos sobre las capas en orden inverso (de la más alta a la más baja)
-    for (const layerName of [...this.layerOrder].reverse()) {
+    /*for (const layerName of [...this.layerOrder].reverse()) {
       const layerTokens = this.layers[layerName];
       // Iteramos sobre los tokens de esa capa en orden inverso
       for (let i = layerTokens.length - 1; i >= 0; i--) {
@@ -253,7 +392,7 @@ class MapCanvas {
           return; // Salimos en cuanto encontramos el primer token
         }
       }
-    }
+    }*/
      /* for (let i = this.tokens.length - 1; i >= 0; i--) {
         const token = this.tokens[i];
         if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {

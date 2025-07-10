@@ -125,7 +125,7 @@ function inicializarMapaEditor() {
     }
  
   // Función para actualizar el menú desplegable de capas
- function actualizarDropdownCapas() {
+ /*function actualizarDropdownCapas() {
     if (!layerSelector || !mapCanvas) return;
     
     layerSelector.innerHTML = ''; // Limpiamos el select
@@ -136,7 +136,24 @@ function inicializarMapaEditor() {
     });
     // Nos aseguramos de que el valor seleccionado coincida con la capa activa
     layerSelector.value = mapCanvas.activeLayer;
-  }
+ }*/
+
+ // Función para actualizar el menú desplegable de capas
+ function actualizarDropdownCapas() {
+  if (!layerSelector || !mapCanvas) return;
+  
+  const capaActivaGuardada = layerSelector.value;
+  layerSelector.innerHTML = ''; // Limpiamos el select
+  
+  mapCanvas.layerOrder.forEach(layerName => {
+      const option = new Option(layerName, layerName);
+      layerSelector.add(option);
+  });
+  
+  // Nos aseguramos de que el valor seleccionado se mantenga
+  layerSelector.value = capaActivaGuardada || mapCanvas.activeLayer;
+}
+
   // Evento para el botón de "Añadir Capa"
   addLayerButton.addEventListener('click', () => {
     const layerName = newLayerInput.value.trim();
@@ -192,11 +209,44 @@ function inicializarMapaEditor() {
 
   // --- El resto de tus inicializaciones para el editor de mapas ---
   
+// Dentro de la función inicializarMapaEditor en dashboard.js
+const loadMapButton = document.getElementById('btn-load-map');
+if (loadMapButton) {
+    loadMapButton.addEventListener('click', async () => {
+        if (mapCanvas) {
+            // 1. Pedimos al proceso principal que nos devuelva los datos del archivo JSON
+            const mapState = await ipcRenderer.invoke('load-map-dialog');
 
+            // 2. Si el usuario seleccionó un archivo válido, cargamos el estado
+            if (mapState) {
+                mapCanvas.loadMapState(mapState);
+                actualizarDropdownCapas();
+            }
+        }
+    });
+}
+const saveMapButton = document.getElementById('btn-save-map');
+if (saveMapButton) {
+    saveMapButton.addEventListener('click', () => {
+        if (mapCanvas) {
+            // 1. Obtenemos el estado actual del mapa usando el nuevo método
+            const mapState = mapCanvas.getMapState();
+
+            // 2. Enviamos los datos al proceso principal para que abra el diálogo y los guarde
+            ipcRenderer.send('save-map-dialog', mapState);
+        }
+    });
+}
+
+// (Opcional) Escucha la confirmación de guardado para mostrar una alerta
+ipcRenderer.on('map-saved-success', (event, message) => {
+    alert(message);
+});
   inicializarCargadorDeAssetsMapaEditor();
   poblarFiltroDeCategoriasMapaEditor();
   actualizarYRenderizarAssetList();
 }
+
 
 
 /**
@@ -220,62 +270,7 @@ function poblarFiltroDeCategoriasMapaEditor() {
   });
 }
 
-/**
- * Pide la lista de assets actualizada al proceso principal,
- * lee el JSON y genera la tabla de imágenes en el DOM.
- * Este es el único método necesario para actualizar la lista.
- */
-/*async function actualizarYRenderizarAssetList() {
- 
-  const assetListContainer = document.getElementById('asset-list');
-  if (!assetListContainer) return;
 
-  try {
-      const assetsRecibidos = await ipcRenderer.invoke('get-asset-list');
-          
-      // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
-      // Usamos .flat() para eliminar el anidamiento y obtener un array simple.
-      const assets = assetsRecibidos.flat();
-      assetListContainer.innerHTML = '';
-
-      if (!assets || assets.length === 0) {
-          assetListContainer.innerHTML = '<p class="empty-list-message">No hay imágenes.</p>';
-          return;
-      }
-
-      const gridContainer = document.createElement('div');
-      gridContainer.className = 'asset-grid';
-
-      assets.forEach(asset => {
-          if (!asset || !asset.url) return;
-
-          const card = document.createElement('div');
-          card.className = 'asset-card';
-          
-          const img = document.createElement('img');
-          img.src = asset.url;
-          img.className = 'asset-thumbnail';
-          img.alt = asset.nombre;
-          img.draggable = true; // <-- 1. HACEMOS LA IMAGEN ARRASTRABLE
-
-          // --- 2. EVENTO 'DRAGSTART' ---
-          // Cuando se empieza a arrastrar, guardamos la URL de la imagen.
-          img.addEventListener('dragstart', (event) => {
-              event.dataTransfer.setData('text/plain', asset.url);
-          });
-
-          // (El resto de la creación de la tarjeta se simplifica)
-          card.appendChild(img);
-          gridContainer.appendChild(card);
-      });
-
-      assetListContainer.appendChild(gridContainer);
-
-  } catch (error) {
-      console.error("Error al renderizar la lista de assets:", error);
-  }
-
-}*/
 /**
  * Pide la lista de assets, la renderiza como una cuadrícula de tarjetas
  * y hace que las imágenes sean arrastrables.
@@ -342,10 +337,34 @@ async function actualizarYRenderizarAssetList() {
  */
 function inicializarCargadorDeAssetsMapaEditor() {
   const botonCargar = document.getElementById('btn-load-image');
+  const botonBorrar = document.getElementById('btn-delete-asset'); // El ID de tu botón de borrar 
   const filtroCategoria = document.getElementById('asset-category-select');
   const assetList = document.getElementById('asset-list');
 
-  if (!botonCargar) return;
+  if (!botonCargar || !botonBorrar) return;
+
+
+    // --- ¡NUEVA LÓGICA PARA EL BOTÓN DE BORRAR! ---
+  botonBorrar.addEventListener('click', () => {
+      const uuidsParaBorrar = [];
+      // Busca todos los checkboxes que estén marcados dentro de la lista
+      const checkboxesMarcados = assetList.querySelectorAll('.asset-checkbox:checked');
+
+      if (checkboxesMarcados.length === 0) {
+          alert('No 11has seleccionado ninguna imagen para eliminar.');
+          return;
+      }
+
+      if (confirm(`¿Estás seguro de que quieres eliminar ${checkboxesMarcados.length} imagen(es)? Esta acción no se puede deshacer.`)) {
+          checkboxesMarcados.forEach(checkbox => {
+              // Obtenemos el uuid de la tarjeta padre del checkbox
+              uuidsParaBorrar.push(checkbox.closest('.asset-card').dataset.uuid);
+          });
+          
+          // Enviamos la lista de UUIDs a borrar al proceso principal
+          ipcRenderer.send('delete-assets', uuidsParaBorrar);
+      }
+  });
 
   // Cuando se hace clic en el botón...
   botonCargar.addEventListener('click', () => {
@@ -367,12 +386,18 @@ function inicializarCargadorDeAssetsMapaEditor() {
   ipcRenderer.on('imagen-cargada-exito', (event, nuevoRegistro) => {
       console.log('Imagen cargada con éxito:', nuevoRegistro);
       // Aquí puedes añadir el código para mostrar la nueva imagen en la lista de assets.
-      const assetItem = document.createElement('div');
-      assetItem.innerHTML = `<p>${nuevoRegistro.nombre}</p>`; // Muestra el nombre original
-      assetList.appendChild(assetItem);
+      actualizarYRenderizarAssetList();
       alert(`¡Imagen "${nuevoRegistro.nombre}" cargada con éxito!`);
   });
 
+  // Cuando los assets se borran con éxito, refrescamos la lista y el mapa
+  ipcRenderer.on('assets-deleted-success', () => {
+      console.log("Assets eliminados. Refrescando lista y reseteando mapa...");
+      actualizarYRenderizarAssetList(); // Actualizamos la lista de assets
+      if (mapCanvas) {
+          mapCanvas.clearMap(); // Reseteamos el canvas del mapa
+      }
+  });
   // Escuchamos si hubo un error
   ipcRenderer.on('imagen-cargada-error', (event, mensajeError) => {
       console.error(mensajeError);

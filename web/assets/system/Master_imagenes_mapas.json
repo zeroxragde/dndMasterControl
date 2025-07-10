@@ -1,8 +1,11 @@
 [
   {
-    "nombre": "world.jpg",
-    "uuid": "8fb03c33-4231-4432-a751-61103dbf621b",
-    "extension": "jpg",
-    "categoria": "personaje"
+    "nombre": "feedback.png",
+    "uuid": "011fb9ae-f7c8-4f09-8859-8ac20d0e491f",
+    "extension": "png",
+    "categoria": {
+      "categoria": "personaje",
+      "username": "Master"
+    }
   }
 ]
