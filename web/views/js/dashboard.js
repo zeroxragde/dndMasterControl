@@ -254,7 +254,8 @@ ipcRenderer.on('map-saved-success', (event, message) => {
  */
 function poblarFiltroDeCategoriasMapaEditor() {
   const selector = document.getElementById('asset-category-select');
-  if (!selector) return;
+  const selectorFilter = document.getElementById('asset-category-filter');
+  if (!selector || !selectorFilter) return;
 
   const categorias = [
       "personaje",
@@ -262,14 +263,20 @@ function poblarFiltroDeCategoriasMapaEditor() {
       "tile",
       "mapa"
   ];
+  
+  selectorFilter.add(new Option("Todas", -1));
 
-  // Añadimos cada categoría del array
   categorias.forEach(cat => {
-      const opcion = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
-      selector.add(opcion);
+      // Crea una nueva opción para cada select (NO reuses objetos Option)
+      const opcionSelector = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
+      const opcionFilter = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
+      selector.add(opcionSelector);
+      selectorFilter.add(opcionFilter);
   });
-}
 
+  // Selecciona la primera opción ("Todas")
+  selectorFilter.selectedIndex = 0; 
+}
 
 /**
  * Pide la lista de assets, la renderiza como una cuadrícula de tarjetas
@@ -304,8 +311,11 @@ async function actualizarYRenderizarAssetList() {
             const nombreSinExtension = asset.nombre.includes('.')
                 ? asset.nombre.split('.').slice(0, -1).join('')
                 : asset.nombre;
-
+                const categoriaTexto = (typeof asset.categoria === 'object' && asset.categoria !== null) 
+                ? asset.categoria.categoria // 2. Si es un objeto, usamos su propiedad 'categoria'.
+                : asset.categoria;  
             // --- HTML COMPLETO DE LA TARJETA ---
+            console.log("Añadiendo asset:", nombreSinExtension, asset.categoria);
             // Añadimos de nuevo los <span> para el nombre y la categoría
             card.innerHTML = `
                 <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
@@ -313,7 +323,7 @@ async function actualizarYRenderizarAssetList() {
                     <img src="${asset.url}" class="asset-thumbnail" alt="${nombreSinExtension}" draggable="true">
                 </label>
                 <span class="asset-name">${nombreSinExtension}</span>
-                <span class="asset-category">${asset.categoria || 'N/A'}</span>
+                <span class="asset-category">${categoriaTexto || 'N/A'}</span>
             `;
 
             // Hacemos la imagen arrastrable
@@ -332,78 +342,129 @@ async function actualizarYRenderizarAssetList() {
     }
 }
 
+
+
+
 /**
- * Configura el botón para cargar imágenes y la respuesta del proceso principal.
+ * Configura la carga de assets, la visualización de la lista,
+ * la eliminación y el filtrado por categoría de forma correcta y robusta.
  */
 function inicializarCargadorDeAssetsMapaEditor() {
   const botonCargar = document.getElementById('btn-load-image');
-  const botonBorrar = document.getElementById('btn-delete-asset'); // El ID de tu botón de borrar 
-  const filtroCategoria = document.getElementById('asset-category-select');
-  const assetList = document.getElementById('asset-list');
+  const botonBorrar = document.getElementById('btn-delete-asset');
+  const filtroCategoria = document.getElementById('asset-category-filter');
+  const assetListContainer = document.getElementById('asset-list');
 
-  if (!botonCargar || !botonBorrar) return;
+  if (!botonCargar || !botonBorrar || !filtroCategoria) return;
 
+  let todosLosAssets = []; // Un caché para guardar la lista completa de assets
 
-    // --- ¡NUEVA LÓGICA PARA EL BOTÓN DE BORRAR! ---
-  botonBorrar.addEventListener('click', () => {
-      const uuidsParaBorrar = [];
-      // Busca todos los checkboxes que estén marcados dentro de la lista
-      const checkboxesMarcados = assetList.querySelectorAll('.asset-checkbox:checked');
+  /**
+   * Dibuja la lista de assets en la cuadrícula, aplicando el filtro actual.
+   */
+  const renderizarLista = () => {
+      const filtroActual = filtroCategoria.value;
+      assetListContainer.innerHTML = ''; 
 
-      if (checkboxesMarcados.length === 0) {
-          alert('No 11has seleccionado ninguna imagen para eliminar.');
+      const assetsFiltrados = (filtroActual && filtroActual !== "")
+          ? todosLosAssets.filter(asset => {
+              let categoriaDelAsset = asset.categoria;
+              if (typeof categoriaDelAsset === 'object' && categoriaDelAsset !== null) {
+                  categoriaDelAsset = categoriaDelAsset.categoria;
+              }
+              return (categoriaDelAsset || '').toString() === filtroActual;
+          })
+          : todosLosAssets;
+
+      if (!assetsFiltrados || assetsFiltrados.length === 0) {
+          assetListContainer.innerHTML = '<p class="empty-list-message">No hay imágenes en esta categoría.</p>';
           return;
       }
 
-      if (confirm(`¿Estás seguro de que quieres eliminar ${checkboxesMarcados.length} imagen(es)? Esta acción no se puede deshacer.`)) {
-          checkboxesMarcados.forEach(checkbox => {
-              // Obtenemos el uuid de la tarjeta padre del checkbox
-              uuidsParaBorrar.push(checkbox.closest('.asset-card').dataset.uuid);
+      const gridContainer = document.createElement('div');
+      gridContainer.className = 'asset-grid';
+
+      assetsFiltrados.forEach(asset => {
+          if (!asset || !asset.url) return;
+          const card = document.createElement('div');
+          card.className = 'asset-card';
+          card.dataset.uuid = asset.uuid;
+          const nombreSinExtension = (asset.nombre || '').includes('.') ? asset.nombre.split('.').slice(0, -1).join('') : (asset.nombre || '');
+          
+          card.innerHTML = `
+              <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
+              <label for="check-${asset.uuid}" class="asset-image-label">
+                  <img src="${asset.url}" class="asset-thumbnail" alt="${nombreSinExtension}" draggable="true">
+              </label>
+              <span class="asset-name">${nombreSinExtension}</span>
+              <span class="asset-category">${asset.categoria || 'N/A'}</span>
+          `;
+          
+          const img = card.querySelector('.asset-thumbnail');
+          img.addEventListener('dragstart', (event) => {
+              event.dataTransfer.setData('text/plain', asset.url);
           });
           
-          // Enviamos la lista de UUIDs a borrar al proceso principal
+          gridContainer.appendChild(card);
+      });
+      assetListContainer.appendChild(gridContainer);
+  };
+  
+  /**
+   * Pide la lista completa de assets al proceso principal y la renderiza.
+   */
+  const actualizarListaCompleta = async () => {
+      try {
+          const assetsRecibidos = await ipcRenderer.invoke('get-asset-list');
+          todosLosAssets = assetsRecibidos.flat();
+          renderizarLista();
+      } catch (error) {
+          console.error("Error al obtener la lista de assets:", error);
+      }
+  };
+  
+  // --- LÓGICA DE EVENTOS ---
+  
+  filtroCategoria.addEventListener('change', renderizarLista);
+
+  botonCargar.addEventListener('click', () => {
+      const categoriaSeleccionada = filtroCategoria.value;
+      if (!categoriaSeleccionada || categoriaSeleccionada === "") {
+          alert('Por favor, selecciona una categoría específica para la nueva imagen.');
+          return;
+      }
+      ipcRenderer.send('abrir-dialogo-imagen', { categoria: categoriaSeleccionada });
+  });
+
+  // --- LÓGICA DEL BOTÓN DE BORRAR (RESTAURADA) ---
+  botonBorrar.addEventListener('click', () => {
+      const uuidsParaBorrar = [];
+      const checkboxesMarcados = assetListContainer.querySelectorAll('.asset-checkbox:checked');
+      if (checkboxesMarcados.length === 0) return alert('No has seleccionado ninguna imagen para eliminar.');
+      if (confirm(`¿Seguro que quieres eliminar ${checkboxesMarcados.length} imagen(es)?`)) {
+          checkboxesMarcados.forEach(cb => uuidsParaBorrar.push(cb.closest('.asset-card').dataset.uuid));
           ipcRenderer.send('delete-assets', uuidsParaBorrar);
       }
   });
 
-  // Cuando se hace clic en el botón...
-  botonCargar.addEventListener('click', () => {
-      const categoriaSeleccionada = filtroCategoria.value;
-      if (!categoriaSeleccionada) {
-          alert('Por favor, selecciona una categoría antes de subir una imagen.');
-          return;
-      }
-
-      // Aquí necesitarás una forma de obtener el nombre de usuario actual.
-      // Por ahora, usaremos un valor de ejemplo.
-      const username = userConfig.dm; 
-
-      // ...enviamos un mensaje al proceso principal para que abra el diálogo.
-      ipcRenderer.send('abrir-dialogo-imagen', { categoria: categoriaSeleccionada, username: username });
-  });
-
-  // Escuchamos la respuesta de éxito del proceso principal
-  ipcRenderer.on('imagen-cargada-exito', (event, nuevoRegistro) => {
-      console.log('Imagen cargada con éxito:', nuevoRegistro);
-      // Aquí puedes añadir el código para mostrar la nueva imagen en la lista de assets.
-      actualizarYRenderizarAssetList();
-      alert(`¡Imagen "${nuevoRegistro.nombre}" cargada con éxito!`);
-  });
-
-  // Cuando los assets se borran con éxito, refrescamos la lista y el mapa
+  ipcRenderer.on('imagen-cargada-exito', () => actualizarListaCompleta());
   ipcRenderer.on('assets-deleted-success', () => {
-      console.log("Assets eliminados. Refrescando lista y reseteando mapa...");
-      actualizarYRenderizarAssetList(); // Actualizamos la lista de assets
-      if (mapCanvas) {
-          mapCanvas.clearMap(); // Reseteamos el canvas del mapa
-      }
+      actualizarListaCompleta();
+      if (mapCanvas) mapCanvas.clearMap();
   });
-  // Escuchamos si hubo un error
-  ipcRenderer.on('imagen-cargada-error', (event, mensajeError) => {
-      console.error(mensajeError);
-      alert(`Error: ${mensajeError}`);
-  });
+  
+  // --- CARGA INICIAL ---
+  filtroCategoria.value = ""; 
+  actualizarListaCompleta();
 }
+
+
+
+
+
+
+
+
 
 /**
  * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.
