@@ -95,7 +95,7 @@ function inicializarComponentes() {
   });
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
-
+  inicializarBotonImportar();
 
 }
 
@@ -247,8 +247,6 @@ ipcRenderer.on('map-saved-success', (event, message) => {
   actualizarYRenderizarAssetList();
 }
 
-
-
 /**
  * Rellena el select de categorías del gestor de recursos.
  */
@@ -277,7 +275,6 @@ function poblarFiltroDeCategoriasMapaEditor() {
   // Selecciona la primera opción ("Todas")
   selectorFilter.selectedIndex = 0; 
 }
-
 /**
  * Pide la lista de assets, la renderiza como una cuadrícula de tarjetas
  * y hace que las imágenes sean arrastrables.
@@ -341,9 +338,6 @@ async function actualizarYRenderizarAssetList() {
         console.error("Error al renderizar la lista de assets:", error);
     }
 }
-
-
-
 
 /**
  * Configura la carga de assets, la visualización de la lista,
@@ -465,6 +459,59 @@ function inicializarCargadorDeAssetsMapaEditor() {
 
 
 
+/**
+ * Añade el event listener al botón de importar.
+ */
+function inicializarBotonImportar() {
+  const botonImportar = document.getElementById('btn_import_crea');
+  if (botonImportar) {
+    botonImportar.addEventListener('click', async () => {
+      // 1. Llama al proceso principal para que abra el diálogo y lea el archivo
+      const datosCriatura = await ipcRenderer.invoke('import-creature');
+
+      // 2. Si se recibieron datos, los muestra en la vista de detalles
+      if (datosCriatura) {
+        mostrarDetallesCriatura(datosCriatura);
+      }
+    });
+  }
+}
+
+/**
+ * Rellena la vista de detalles de la criatura con los datos de un objeto.
+ * @param {Object} criatura - El objeto con los datos de la criatura.
+ */
+function mostrarDetallesCriatura(criatura) {
+  // Panel General
+  document.getElementById('detail-nombre').textContent = criatura.nombre || 'Sin nombre';
+  document.getElementById('detail-sublinea').textContent = `${criatura.tamanio || ''} ${criatura.tipo || ''}, ${criatura.alineamiento || 'sin alineamiento'}`;
+  document.getElementById('detail-ac').textContent = criatura.claseArmadura || '10';
+  document.getElementById('detail-hp').textContent = `${criatura.puntosGolpe || '0'} (${criatura.dadosGolpe || ''})`;
+  document.getElementById('detail-velocidad').textContent = `${criatura.velocidadCaminar || 30} pies`;
+
+  // Puntuaciones de Característica
+  document.getElementById('detail-fue').textContent = `${criatura.fuerza || 10} (+${criatura.bonificadorFuerza || 0})`;
+  document.getElementById('detail-des').textContent = `${criatura.destreza || 10} (+${criatura.bonificadorDestreza || 0})`;
+  document.getElementById('detail-con').textContent = `${criatura.constitucion || 10} (+${criatura.bonificadorConstitucion || 0})`;
+  document.getElementById('detail-int').textContent = `${criatura.inteligencia || 10} (+${criatura.bonificadorInteligencia || 0})`;
+  document.getElementById('detail-sab').textContent = `${criatura.sabiduria || 10} (+${criatura.bonificadorSabiduria || 0})`;
+  document.getElementById('detail-car').textContent = `${criatura.carisma || 10} (+${criatura.bonificadorCarisma || 0})`;
+
+  // Pie de la vista
+  document.getElementById('detail-cr').textContent = criatura.cr || '0';
+  document.getElementById('detail-notas').value = criatura.notas || '';
+  
+  const imagenDetalle = document.getElementById('detail-imagen');
+  if (criatura.imagen) {
+    imagenDetalle.src = criatura.imagen;
+    imagenDetalle.style.display = 'block';
+  } else {
+    imagenDetalle.src = '';
+    imagenDetalle.style.display = 'none';
+  }
+
+  // Puedes expandir esto para rellenar las otras pestañas (Habilidades, Acciones, etc.)
+}
 
 /**
  * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.

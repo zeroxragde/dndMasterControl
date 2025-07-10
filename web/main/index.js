@@ -273,6 +273,28 @@ ipcMain.handle('load-map-dialog', async (event) => {
   }
   return null; // Devuelve null si el usuario cancela
 });
+// --- Lógica para importar una criatura desde un archivo .crea ---
+ipcMain.handle('import-creature', async (event) => {
+  const result = await dialog.showOpenDialog(dashboardWindow, {
+    title: 'Importar Creatura',
+    filters: [{ name: 'Archivos de Creatura', extensions: ['crea', 'json'] }],
+    properties: ['openFile']
+  });
+
+  if (!result.canceled && result.filePaths.length > 0) {
+    try {
+      const filePath = result.filePaths[0];
+      const jsonData = fs.readFileSync(filePath, 'utf-8');
+      // Devolvemos el contenido del archivo parseado como JSON
+      return JSON.parse(jsonData);
+    } catch (error) {
+      console.error('Error al leer o parsear el archivo de la criatura:', error);
+      dialog.showErrorBox('Error de Importación', 'El archivo seleccionado no es un JSON válido o está corrupto.');
+      return null;
+    }
+  }
+  return null; // El usuario canceló el diálogo
+});
 // ===================================================================
 // --- CICLO DE VIDA DE LA APLICACIÓN ---
 // ===================================================================
