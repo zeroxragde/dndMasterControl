@@ -56,7 +56,7 @@ ipcMain.on('configuracion-inicial', (event, datos) => {
     fullscreen: true,
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false }
   });
-  mapaWindow.webContents.openDevTools();
+  //mapaWindow.webContents.openDevTools();
   mapaWindow.loadFile(path.join(__dirname, '../views/mapa.html'));
 
   dashboardWindow = new BrowserWindow({

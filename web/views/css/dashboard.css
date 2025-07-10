@@ -133,8 +133,9 @@
   background-image: url('../../assets/img/fondoStab.png'); /* Ruta a tu imagen de fondo */
   background-size: cover;
   background-repeat: no-repeat;
-  color: #58180D; /* Color de texto oscuro para el pergamino */
+  color: #58180D; 
   border-radius: 8px;
+  width: 100%;
   border: 2px solid #58180D;
 }
 #stat-block-tabs {
@@ -149,6 +150,8 @@
   border-right: 2px solid #58180D;
   padding-right: 15px;
   margin-right: 15px;
+  background: #081f41e0!important;
+  padding: 8px!important;
 }
 .stat-block-nav .stat-tab-button {
   background: none;
@@ -183,6 +186,7 @@
   display: flex;
   justify-content: space-between;
   text-align: center;
+  width: 82%;
 }
 .ability-scores .score {
   display: flex;
@@ -206,6 +210,7 @@
   border: 1px solid #58180D;
   object-fit: cover;
 }
+
 /* ======================================================= */
 /* ====== ESTILO PARA EL LAYOUT DE LISTA Y DETALLES ====== */
 /* ======================================================= */
@@ -223,28 +228,7 @@
   flex-shrink: 0; /* Evita que se encoja */
 }
 
-/* Hacemos que la vista de detalles ocupe el resto del espacio */
-.creature-stat-block {
-  flex-grow: 1; /* Crecerá para rellenar el espacio sobrante */
-}
 
-/* --- Y aquí los estilos visuales que querías --- */
-#tab2.tab-content.active {
-    border: 1px solid #ff0000;
-    padding: 15px;
-}
-.data-table th {
-    background-color: #008080;
-}
-.data-table tr.selected {
-    background-color: #8B0000;
-}
-/* Le da un fondo y espaciado al menú de navegación del stat block */
-.stat-block-nav {
-  background-color: #3e3e3e; /* Fondo gris oscuro */
-  padding: 10px;
-  border-radius: 6px;
-}
 
 /* --- Map Editor Styles --- */
 .map-editor-container {

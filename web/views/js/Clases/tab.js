@@ -82,7 +82,19 @@ class Tabs {
       contentArea.prepend(header);
     }
   }*/
-
+/**
+   * (Público) Activa una pestaña específica por su índice numérico (empezando en 0).
+   * @param {number} index - El índice de la pestaña a activar.
+   */
+activateTab(index) {
+  // Validamos que el índice sea un número válido y esté dentro del rango de pestañas disponibles.
+  if (typeof index !== 'number' || index < 0 || index >= this.tabs.length) {
+    console.error(`Índice de pestaña inválido: ${index}.`);
+    return;
+  }
+  // Llamamos al método interno con el botón de la pestaña correspondiente.
+  this._switchTab(this.tabs[index]);
+}
   /**
    * (Privado) Busca un elemento del título y reemplaza su contenido.
    */

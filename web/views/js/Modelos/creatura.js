@@ -1,109 +1,105 @@
-/**
- * Modelo de datos para una criatura de D&D, traducido de C#.
- * Contiene todas las propiedades necesarias para un stat-block completo.
- */
-// Importa las clases que necesita
-// 1. "Importamos" las clases que necesita usando require
-// 1. "Importamos" las clases que necesita usando require
+// web/views/js/Modelos/creatura.js
+
 import { Accion } from './accion.js';
 import { AccionLegendaria } from './accionlegendaria.js';
+
 export class Creatura {
   constructor() {
     // --- Identificación básica ---
-    this.nombre = "";
-    this.campania = "";
-    this.imagen = "";
-    this.tamanio = "";
-    this.tipo = "";
-    this.alineamiento = "";
+    this.Nombre = "";
+    this.Campania = "";
+    this.Imagen = "";
+    this.Tamanio = "";
+    this.Tipo = "";
+    this.Alineamiento = "";
 
     // --- Clase de Armadura, Puntos de Golpe y Velocidades ---
-    this.claseArmadura = 10;
-    this.descripcionArmadura = "";
-    this.puntosGolpe = 0;
-    this.dadosGolpe = "";
+    this.ClaseArmadura = 10;
+    this.DescripcionArmadura = "";
+    this.PuntosGolpe = 0;
+    this.DadosGolpe = "";
 
-    this.velocidadCaminar = 30;
-    this.velocidadVolar = 0;
-    this.velocidadNadar = 0;
-    this.velocidadCavar = 0;
-    this.velocidadEscalado = 0;
+    this.VelocidadCaminar = 30;
+    this.VelocidadVolar = 0;
+    this.VelocidadNadar = 0;
+    this.VelocidadCavar = 0;
+    this.VelocidadEscalado = 0;
 
     // --- Características de habilidad (Ability Scores) ---
-    this.fuerza = 10;
-    this.destreza = 10;
-    this.constitucion = 10;
-    this.inteligencia = 10;
-    this.sabiduria = 10;
-    this.carisma = 10;
+    this.Fuerza = 10;
+    this.Destreza = 10;
+    this.Constitucion = 10;
+    this.Inteligencia = 10;
+    this.Sabiduria = 10;
+    this.Carisma = 10;
 
     // Los bonificadores normalmente se calculan, pero se pueden almacenar si es necesario
-    this.bonificadorFuerza = 0;
-    this.bonificadorDestreza = 0;
-    this.bonificadorConstitucion = 0;
-    this.bonificadorInteligencia = 0;
-    this.bonificadorSabiduria = 0;
-    this.bonificadorCarisma = 0;
+    this.BonificadorFuerza = 0;
+    this.BonificadorDestreza = 0;
+    this.BonificadorConstitucion = 0;
+    this.BonificadorInteligencia = 0;
+    this.BonificadorSabiduria = 0;
+    this.BonificadorCarisma = 0;
     
     // Tiradas de salvación con competencia
-    this.salvacion = []; // Ej: ["fuerza", "constitucion"]
+    this.Salvacion = []; // Ej: ["fuerza", "constitucion"]
 
     // Habilidades con competencia o pericia
-    this.habilidades = {}; // Ej: { "sigilo": "competente", "percepcion": "experto" }
+    this.Habilidades = {}; // Ej: { "sigilo": "competente", "percepcion": "experto" }
 
     // --- Vulnerabilidades, resistencias, inmunidades ---
-    this.vulnerabilidadesDano = [];
-    this.resistenciasDano = [];
-    this.inmunidadesDano = [];
-    this.inmunidadesCondicion = [];
+    this.VulnerabilidadesDano = [];
+    this.ResistenciasDano = [];
+    this.InmunidadesDano = [];
+    this.InmunidadesCondicion = [];
 
     // --- Sentidos ---
-    this.sentidos = []; // Ej: "Visión en la Oscuridad 60 ft.", "Percepción pasiva 14"
+    this.Sentidos = []; // Ej: "Visión en la Oscuridad 60 ft.", "Percepción pasiva 14"
 
     // --- Idiomas ---
-    this.idiomas = {}; // Ej: { "comun": "habla", "draconico": "entiende" }
+    this.Idiomas = {}; // Ej: { "comun": "habla", "draconico": "entiende" }
 
     // --- Challenge Rating (CR) y experiencia ---
-    this.cr = "0";
-    this.xp = 10;
+    this.Cr = "0";
+    this.Xp = 10;
 
     /** @type {Accion[]} */
-    this.acciones = [];
+    this.Acciones = [];
     /** @type {Accion[]} */
-    this.accionesHabilidad = [];
+    this.AccionesHabilidad = [];
     /** @type {Accion[]} */
-    this.accionesAdicionales = []; // Bonus Actions
+    this.AccionesAdicionales = []; // Bonus Actions
     /** @type {Accion[]} */
-    this.reacciones = [];
+    this.Reacciones = [];
     /** @type {Accion[]} */
-    this.hechizosOEspeciales = [];
+    this.HechizosOEspeciales = [];
 
     // --- Legendaria ---
-    this.esLegendaria = false;
-    this.cantidadResistenciasLegendarias = 0;
+    this.EsLegendaria = false;
+    this.CantidadResistenciasLegendarias = 0;
     /** @type {AccionLegendaria[]} */
-    this.accionesLegendarias = [];
+    this.AccionesLegendarias = [];
 
     // --- Mítica ---
-    this.esMitica = false;
-    this.descripcionMitica = "";
+    this.EsMitica = false;
+    this.DescripcionMitica = "";
     /** @type {Accion[]} */
-    this.accionesMiticas = [];
+    this.AccionesMiticas = [];
 
     // --- Guarida ---
-    this.tieneGuarida = false;
+    this.TieneGuarida = false;
     /** @type {Accion[]} */
-    this.accionesGuarida = [];
-    this.descripcionGuarida = "";
+    this.AccionesGuarida = [];
+    this.DescripcionGuarida = "";
 
     // --- Efectos Regionales ---
-    this.tieneEfectosRegionales = false;
+    this.TieneEfectosRegionales = false;
     /** @type {Accion[]} */
-    this.efectosRegionales = [];
-    this.descripcionRegional = "";
+    this.EfectosRegionales = [];
+    this.DescripcionRegional = "";
 
     // --- Notas adicionales ---
-    this.notas = "";
+    this.Notas = "";
   }
 }
 // Al final de creatura.js

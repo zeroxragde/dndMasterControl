@@ -4,11 +4,11 @@
  */
 export class Accion {
   /**
-   * @param {string} nombre - El nombre de la acción. Ej: "Garras".
-   * @param {string} descripcion - La descripción de la acción.
+   * @param {string} Nombre - El nombre de la acción. Ej: "Garras".
+   * @param {string} Descripcion - La descripción de la acción.
    */
-  constructor(nombre = "", descripcion = "") {
-    this.nombre = nombre;
-    this.descripcion = descripcion;
+  constructor(Nombre = "", Descripcion = "") {
+    this.Nombre = nombre;
+    this.Descripcion = descripcion;
   }
 }

@@ -16,7 +16,7 @@ let userConfig = {};
 // Al principio de dashboard.js
 let mapCanvas = null;
 let fondoMapa = new Image();
-
+let  stabsCreature;
 const criaturasData = [
   { nombre: "Sothrax, el Devorador", cr: 2 },
   { nombre: "Guardian", cr: 1 },
@@ -81,6 +81,8 @@ function inicializarComponentes() {
       }
     }
   ];
+  stabsCreature = new Tabs({ id: 'creature-detail-view', orientation: 'vertical' });
+
   modalConfigs.forEach(config => new Modal(config));
   new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Creamos la instancia de la nueva clase ListView
@@ -470,47 +472,89 @@ function inicializarBotonImportar() {
       const datosCriatura = await ipcRenderer.invoke('import-creature');
 
       // 2. Si se recibieron datos, los muestra en la vista de detalles
+      console.log("Datos de criatura importados:", datosCriatura);
       if (datosCriatura) {
         mostrarDetallesCriatura(datosCriatura);
+        stabsCreature.activateTab(0);
       }
     });
+  }
+}
+/**
+ * Función de ayuda para cambiar programáticamente a una pestaña específica.
+ * @param {string} tabId El ID del panel de la pestaña a activar (ej: 'web-tab-creaturas').
+ */
+function activarPestana(tabId) {
+  // 1. Oculta todas las pestañas y paneles
+  document.querySelectorAll('.web-tab-button').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.web-tab-content').forEach(panel => panel.classList.remove('active'));
+
+  // 2. Encuentra el botón y el panel correctos
+  const botonActivar = document.querySelector(`.web-tab-button[aria-controls="${tabId}"]`);
+  const panelActivar = document.getElementById(tabId);
+
+  // 3. Los activa
+  if (botonActivar) {
+    botonActivar.classList.add('active');
+    botonActivar.ariaSelected = "true";
+  }
+  if (panelActivar) {
+    panelActivar.classList.add('active');
   }
 }
 
 /**
  * Rellena la vista de detalles de la criatura con los datos de un objeto.
- * @param {Object} criatura - El objeto con los datos de la criatura.
+ * @param {Creatura} criatura - El objeto con los datos de la criatura importada.
  */
-function mostrarDetallesCriatura(criatura) {
-  // Panel General
-  document.getElementById('detail-nombre').textContent = criatura.nombre || 'Sin nombre';
-  document.getElementById('detail-sublinea').textContent = `${criatura.tamanio || ''} ${criatura.tipo || ''}, ${criatura.alineamiento || 'sin alineamiento'}`;
-  document.getElementById('detail-ac').textContent = criatura.claseArmadura || '10';
-  document.getElementById('detail-hp').textContent = `${criatura.puntosGolpe || '0'} (${criatura.dadosGolpe || ''})`;
-  document.getElementById('detail-velocidad').textContent = `${criatura.velocidadCaminar || 30} pies`;
+function mostrarDetallesCriatura(datosCriaturaJSON) {
+  // --- ¡CAMBIO CLAVE! ---
+  // Antes de hacer nada, nos aseguramos de que la pestaña de criaturas esté visible.
+  activarPestana('creature-detail-view');
 
-  // Puntuaciones de Característica
-  document.getElementById('detail-fue').textContent = `${criatura.fuerza || 10} (+${criatura.bonificadorFuerza || 0})`;
-  document.getElementById('detail-des').textContent = `${criatura.destreza || 10} (+${criatura.bonificadorDestreza || 0})`;
-  document.getElementById('detail-con').textContent = `${criatura.constitucion || 10} (+${criatura.bonificadorConstitucion || 0})`;
-  document.getElementById('detail-int').textContent = `${criatura.inteligencia || 10} (+${criatura.bonificadorInteligencia || 0})`;
-  document.getElementById('detail-sab').textContent = `${criatura.sabiduria || 10} (+${criatura.bonificadorSabiduria || 0})`;
-  document.getElementById('detail-car').textContent = `${criatura.carisma || 10} (+${criatura.bonificadorCarisma || 0})`;
+    // 1. Crea una nueva instancia de la clase Creatura.
+    const criatura = new Creatura();
 
-  // Pie de la vista
-  document.getElementById('detail-cr').textContent = criatura.cr || '0';
-  document.getElementById('detail-notas').value = criatura.notas || '';
+    // 2. Copia todas las propiedades del objeto JSON a nuestra nueva instancia de Creatura.
+    // Object.assign() es una forma rápida y eficiente de hacer este mapeo.
+    Object.assign(criatura, datosCriaturaJSON);
+
+  // Ahora, el resto del código funcionará porque los elementos son visibles.
+  console.log("Mostrando detalles de la criatura:", criatura);
   
-  const imagenDetalle = document.getElementById('detail-imagen');
-  if (criatura.imagen) {
-    imagenDetalle.src = criatura.imagen;
-    imagenDetalle.style.display = 'block';
-  } else {
-    imagenDetalle.src = '';
-    imagenDetalle.style.display = 'none';
-  }
-
-  // Puedes expandir esto para rellenar las otras pestañas (Habilidades, Acciones, etc.)
+  // Panel General
+   // Usa las nuevas propiedades con la primera letra en mayúscula
+   document.getElementById('detail-nombre').textContent = criatura.Nombre || 'Sin nombre';
+   document.getElementById('detail-sublinea').textContent = `${criatura.Tamanio || ''} ${criatura.Tipo || ''}, ${criatura.Alineamiento || 'sin alineamiento'}`;
+   document.getElementById('detail-ac').textContent = criatura.ClaseArmadura || '10';
+   document.getElementById('detail-hp').textContent = `${criatura.PuntosGolpe || '0'} (${criatura.DadosGolpe || ''})`;
+   document.getElementById('detail-velocidad').textContent = `${criatura.VelocidadCaminar || 30} pies`;
+ 
+   // Puntuaciones de Característica
+   document.getElementById('detail-fue').textContent = `${criatura.Fuerza || 10} (+${criatura.BonificadorFuerza || 0})`;
+   document.getElementById('detail-des').textContent = `${criatura.Destreza || 10} (+${criatura.BonificadorDestreza || 0})`;
+   document.getElementById('detail-con').textContent = `${criatura.Constitucion || 10} (+${criatura.BonificadorConstitucion || 0})`;
+   document.getElementById('detail-int').textContent = `${criatura.Inteligencia || 10} (+${criatura.BonificadorInteligencia || 0})`;
+   document.getElementById('detail-sab').textContent = `${criatura.Sabiduria || 10} (+${criatura.BonificadorSabiduria || 0})`;
+   document.getElementById('detail-car').textContent = `${criatura.Carisma || 10} (+${criatura.BonificadorCarisma || 0})`;
+ 
+   // Pie de la vista
+   document.getElementById('detail-cr').textContent = criatura.Cr || '0';
+   document.getElementById('detail-notas').value = criatura.Notas || '';
+   
+   const imagenDetalle = document.getElementById('detail-imagen');
+   if (criatura.Imagen && criatura.Imagen.startsWith('data:image')) {
+     imagenDetalle.src = criatura.Imagen;
+     imagenDetalle.style.display = 'block';
+   } else {
+     imagenDetalle.src = '';
+     imagenDetalle.style.display = 'none';
+   }
+ 
+   const detailView = document.getElementById('creature-detail-view');
+   if (detailView) {
+       detailView.style.display = 'block';
+   }
 }
 
 /**

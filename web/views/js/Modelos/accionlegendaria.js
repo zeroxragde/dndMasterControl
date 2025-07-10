@@ -10,8 +10,8 @@ export class AccionLegendaria extends Accion {
    * @param {string} descripcion - La descripción de la acción.
    * @param {number} costoAccion - El costo para usar esta acción legendaria.
    */
-  constructor(nombre = "", descripcion = "", costoAccion = 1) {
-    super(nombre, descripcion); // Llama al constructor de la clase padre (Accion)
-    this.costoAccion = costoAccion;
+  constructor(Nombre = "", Descripcion = "", CostoAccion = 1) {
+    super(Nombre, Descripcion); // Llama al constructor de la clase padre (Accion)
+    this.CostoAccion = CostoAccion;
   }
 }
