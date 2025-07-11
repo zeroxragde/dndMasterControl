@@ -551,6 +551,7 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
      imagenDetalle.src = '';
      imagenDetalle.style.display = 'block';
    }
+   
  
    const detailView = document.getElementById('creature-detail-view');
    if (detailView) {
