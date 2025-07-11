@@ -60,8 +60,8 @@ export class Creatura {
     this.Idiomas = {}; // Ej: { "comun": "habla", "draconico": "entiende" }
 
     // --- Challenge Rating (CR) y experiencia ---
-    this.Cr = "0";
-    this.Xp = 10;
+    this.CR = "0";
+    this.XP = 10;
 
     /** @type {Accion[]} */
     this.Acciones = [];

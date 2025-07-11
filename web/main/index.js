@@ -273,6 +273,7 @@ ipcMain.handle('load-map-dialog', async (event) => {
   }
   return null; // Devuelve null si el usuario cancela
 });
+////////////////CREATURAS
 // --- Lógica para importar una criatura desde un archivo .crea ---
 ipcMain.handle('import-creature', async (event) => {
   const result = await dialog.showOpenDialog(dashboardWindow, {

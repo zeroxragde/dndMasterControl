@@ -540,7 +540,7 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
    document.getElementById('detail-car').textContent = `${criatura.Carisma || 10} (+${criatura.BonificadorCarisma || 0})`;
  
    // Pie de la vista
-   document.getElementById('detail-cr').textContent = criatura.Cr || '0';
+   document.getElementById('detail-cr').textContent = criatura.CR+"/"+criatura.XP || '0';
    document.getElementById('detail-notas').value = criatura.Notas || '';
    
    const imagenDetalle = document.getElementById('detail-imagen');
@@ -551,8 +551,128 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
      imagenDetalle.src = '';
      imagenDetalle.style.display = 'block';
    }
-   
+
  
+   // =====  PANEL DE HABILIDADES =====
+    
+    // Formatea y muestra las tiradas de salvación
+    document.getElementById('detail-salvacion').textContent = criatura.Salvacion.join(', ') || 'Ninguna';
+
+    // Formatea y muestra las habilidades (ej: "Sigilo +5, Percepción +7")
+    const habilidadesStr = Object.entries(criatura.Habilidades)
+        .map(([habilidad, valor]) => `${habilidad} ${valor}`)
+        .join(', ');
+    document.getElementById('detail-habilidades').textContent = habilidadesStr || 'Ninguna';
+
+    // Formatea y muestra las inmunidades
+    document.getElementById('detail-inmunidades-dano').textContent = criatura.InmunidadesDano.join(', ') || 'Ninguna';
+    document.getElementById('detail-inmunidades-condicion').textContent = criatura.InmunidadesCondicion.join(', ') || 'Ninguna';
+
+    // Formatea y muestra los sentidos
+    document.getElementById('detail-sentidos').textContent = criatura.Sentidos.join(', ') || 'Ninguno';
+    // FN DEL PANEL DE HABILIDADES
+
+    // ===== PESTAÑA DE ACCIONES =====
+
+    const contenedorAcciones = document.getElementById('detail-acciones-lista');
+    const contenedorBonus = document.getElementById('detail-acciones-adicionales-lista');
+
+    // Si los contenedores no existen, detenemos la función para evitar más errores.
+    if (!contenedorAcciones || !contenedorBonus) return;
+    // Limpiamos cualquier contenido que hubiera antes
+    contenedorAcciones.innerHTML = '';
+    contenedorBonus.innerHTML = '';
+
+    // Función de ayuda para no repetir código
+    const crearTarjetaDeAccion = (accion) => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'action-card';
+
+        const nombre = document.createElement('strong');
+        nombre.textContent = `${accion.Nombre}.`; // El nombre de la acción en cursiva
+
+        const desc = document.createElement('p');
+        desc.textContent = accion.Descripcion; // La descripción
+
+        tarjeta.appendChild(nombre);
+        tarjeta.appendChild(desc);
+        return tarjeta;
+    };
+
+    // 1. Rellenar las Acciones normales
+    if (criatura.Acciones && criatura.Acciones.length > 0) {
+        criatura.Acciones.forEach(accion => {
+            contenedorAcciones.appendChild(crearTarjetaDeAccion(accion));
+        });
+    } else {
+        contenedorAcciones.innerHTML = '<p>Esta criatura no tiene acciones especiales.</p>';
+    }
+
+    // 2. Rellenar las Acciones Bonus
+    if (criatura.AccionesAdicionales && criatura.AccionesAdicionales.length > 0) {
+        criatura.AccionesAdicionales.forEach(accion => {
+            contenedorBonus.appendChild(crearTarjetaDeAccion(accion));
+        });
+    } else {
+        contenedorBonus.innerHTML = '<p>Esta criatura no tiene acciones adicionales.</p>';
+    }
+    //fn PESTAÑA DE ACCIONES
+
+    // ===== AÑADE ESTE NUEVO BLOQUE PARA LAS PESTAÑAS RESTANTES =====
+
+        // --- Función de ayuda genérica ---
+        const rellenarPanel = (idContenedor, listaItems, mensajeVacio) => {
+          const contenedor = document.getElementById(idContenedor);
+          if (!contenedor) return;
+
+          contenedor.innerHTML = ''; // Limpiar contenido anterior
+
+          if (listaItems && listaItems.length > 0) {
+              listaItems.forEach(item => {
+                  const tarjeta = document.createElement('div');
+                  tarjeta.className = 'action-card';
+
+                  let nombreHtml = `<strong>${item.Nombre || item.nombre}.</strong>`;
+                  // Caso especial para el costo de las acciones legendarias
+                  if (item.CostoAccion) {
+                      const costo = item.CostoAccion > 1 ? ` (Cuesta ${item.CostoAccion} Acciones)` : '';
+                      nombreHtml = `<strong>${item.Nombre || item.nombre}.${costo}</strong>`;
+                  }
+                  
+                  tarjeta.innerHTML = `${nombreHtml}<p>${item.Descripcion || item.descripcion}</p>`;
+                  contenedor.appendChild(tarjeta);
+              });
+          } else {
+              contenedor.innerHTML = `<p>${mensajeVacio}</p>`;
+          }
+      };
+
+      // --- Rellenar cada panel usando la función de ayuda ---
+
+      // 1. Acciones Legendarias
+      rellenarPanel('detail-legendarias-lista', criatura.AccionesLegendarias, 'Esta criatura no tiene acciones legendarias.');
+
+      // 2. Acciones de Guarida
+      rellenarPanel('detail-guarida-lista', criatura.AccionesGuarida, 'Esta criatura no tiene acciones de guarida.');
+
+      // 3. Acciones Míticas
+      rellenarPanel('detail-miticas-lista', criatura.AccionesMiticas, 'Esta criatura no tiene acciones míticas.');
+
+      // 4. Efectos Regionales
+      rellenarPanel('detail-regional-lista', criatura.EfectosRegionales, 'No hay efectos regionales asociados a esta criatura.');
+
+      // 5. Hechizos
+      rellenarPanel('detail-hechizos-lista', criatura.HechizosOEspeciales, 'Esta criatura no tiene hechizos.');
+
+
+////////////////////////////////////////////////////////////////////////////
+    // Formatea y muestra los idiomas
+    const idiomasStr = Object.entries(criatura.Idiomas)
+        .map(([idioma, tipo]) => `${idioma} (${tipo})`)
+        .join(', ');
+    document.getElementById('detail-idiomas').textContent = idiomasStr || 'Ninguno';
+
+
    const detailView = document.getElementById('creature-detail-view');
    if (detailView) {
       detailView.style.display = 'block';

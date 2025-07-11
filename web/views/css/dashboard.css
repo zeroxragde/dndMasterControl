@@ -168,6 +168,7 @@
 .stat-block-content {
   flex-grow: 1;
   overflow-y: auto;
+  width: 616px;
 }
 .stat-header h2 {
   font-size: 28px;
@@ -402,4 +403,92 @@
   padding: 6px 10px;
   height: 38px; /* Ajusta esta altura para que coincida con tus .btn */
   box-sizing: border-box;
+}
+/* ===== AÑADE ESTAS NUEVAS REGLAS ===== */
+
+/* Estilo para cada propiedad en el panel de detalles */
+.stat-property {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #7a3d34; /* Línea separadora sutil */
+  padding-bottom: 10px;
+}
+
+.stat-property strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #7d1500;
+}
+
+/* Regla clave para el texto que se desborda */
+.stat-property p {
+  margin: 0;
+  padding-left: 10px;
+  
+  /* Permite que el texto se ajuste a la siguiente línea */
+  white-space: normal; 
+  
+  /* Fuerza el corte de palabras largas que no caben */
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* Para compatibilidad con navegadores antiguos */
+
+  /* Mejora la legibilidad del texto ajustado */
+  line-height: 1.4; 
+}
+
+  /* Contenedor para las listas de acciones */
+.action-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre cada tarjeta de acción */
+}
+
+/* Estilo para cada tarjeta individual */
+.action-card {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #7a3d34; /* Línea separadora */
+}
+
+.action-card:last-child {
+  border-bottom: none; /* La última tarjeta no necesita separador */
+}
+
+/* Estilo para el nombre de la acción (ej. "Garras.") */
+.action-card strong {
+  font-style: italic;
+  color: #0034cd
+}
+
+/* Estilo para la descripción de la acción */
+.action-card p {
+  margin: 5px 0 0 15px; /* Pequeña sangría para la descripción */
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Estilo para el separador "Accion Bonus" */
+.action-divider {
+  color: #560e00;
+  font-size: 1.1em;
+  border-top: 2px solid #7a3d34;
+  border-bottom: 2px solid #7a3d34;
+  padding: 5px 0;
+  margin: 25px 0;
+  text-align: center;
+}
+
+.action-list-container{
+  overflow: scroll;
+  height: 198px;
+  overflow-x: hidden;
+  border: dashed;
+  padding: 11px;
+}
+/* web/views/css/dashboard.css */
+
+.panel-title {
+  font-size: 1.5em;
+  color: #a35e52; /* Un tono naranja/rojo oscuro */
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #7a3d34; /* Línea separadora */
 }
