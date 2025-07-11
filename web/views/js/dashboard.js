@@ -98,6 +98,7 @@ function inicializarComponentes() {
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
   inicializarBotonImportar();
+  inicializarClickEnImagenDetalle();
 
 }
 
@@ -543,20 +544,54 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
    document.getElementById('detail-notas').value = criatura.Notas || '';
    
    const imagenDetalle = document.getElementById('detail-imagen');
-   if (criatura.Imagen && criatura.Imagen.startsWith('data:image')) {
-     imagenDetalle.src = criatura.Imagen;
+   if (criatura.Imagen) {
+     imagenDetalle.src = "data:image/png;base64,"+criatura.Imagen;
      imagenDetalle.style.display = 'block';
    } else {
      imagenDetalle.src = '';
-     imagenDetalle.style.display = 'none';
+     imagenDetalle.style.display = 'block';
    }
  
    const detailView = document.getElementById('creature-detail-view');
    if (detailView) {
-       detailView.style.display = 'block';
+      detailView.style.display = 'block';
    }
 }
+/**
+ * Añade el event listener a la imagen de la criatura en el panel de detalles.
+ */
+function inicializarClickEnImagenDetalle() {
+  const imagenDetalle = document.getElementById('detail-imagen');
+  if (imagenDetalle) {
+    // Usamos un atributo para rastrear si la imagen está en el mapa.
+    imagenDetalle.dataset.enMapa = 'false';
 
+    imagenDetalle.addEventListener('click', () => {
+      // Si la imagen no tiene una fuente válida, no hacemos nada.
+      if (!imagenDetalle.src || !imagenDetalle.src.startsWith('data:image')) {
+        return;
+      }
+
+      if (imagenDetalle.dataset.enMapa === 'false') {
+        // --- Si no está en el mapa, la enviamos ---
+        console.log('Enviando imagen al mapa...');
+        // Enviamos la URL completa de la imagen (en base64) al proceso principal.
+        ipcRenderer.send('show-creature-on-map', imagenDetalle.src);
+        imagenDetalle.dataset.enMapa = 'true';
+        // (Opcional) Añadimos un borde para indicar que está activa.
+        imagenDetalle.style.border = '3px solid #00bcd4';
+
+      } else {
+        // --- Si ya está en el mapa, la quitamos ---
+        console.log('Quitando imagen del mapa...');
+        ipcRenderer.send('hide-creature-on-map');
+        imagenDetalle.dataset.enMapa = 'false';
+        // (Opcional) Quitamos el borde.
+        imagenDetalle.style.border = '1px solid #58180D';
+      }
+    });
+  }
+}
 /**
  * Configura los checkboxes de la pestaña "Datos 3" para mostrar/ocultar las etiquetas de información.
  */

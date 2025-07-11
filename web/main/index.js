@@ -295,6 +295,22 @@ ipcMain.handle('import-creature', async (event) => {
   }
   return null; // El usuario canceló el diálogo
 });
+
+// Escucha la orden para mostrar la imagen y la reenvía a la ventana del mapa.
+ipcMain.on('show-creature-on-map', (event, imgSrc) => {
+  if (mapaWindow) {
+    mapaWindow.webContents.send('display-creature-image', imgSrc);
+  }
+});
+
+// Escucha la orden para ocultar la imagen y la reenvía a la ventana del mapa.
+ipcMain.on('hide-creature-on-map', (event) => {
+  if (mapaWindow) {
+    mapaWindow.webContents.send('clear-creature-image');
+  }
+});
+
+
 // ===================================================================
 // --- CICLO DE VIDA DE LA APLICACIÓN ---
 // ===================================================================
