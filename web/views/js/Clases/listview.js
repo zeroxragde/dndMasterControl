@@ -6,8 +6,9 @@ class ListView {
   /**
    * @param {Object} config - Objeto de configuración.
    * @param {string} config.containerId - El ID del div que contiene la tabla.
-   * @param {Array<Object>} config.data - El array de datos a mostrar.
+   * @param {Array<Object>} config.data - El array de datos inicial.
    * @param {Array<{header: string, key: string}>} config.columns - La configuración de las columnas.
+   * @param {Function} [config.onRowClick] - Callback que se ejecuta al hacer clic en una fila. Recibe el objeto de datos completo del item.
    */
   constructor(config) {
     this.container = document.getElementById(config.containerId);
@@ -16,19 +17,30 @@ class ListView {
       return;
     }
     
+    // Evita la doble inicialización
     if (this.container.dataset.listInitialized) return;
 
-    this.data = config.data || [];
-    this.columns = config.columns || []; // Guardamos la configuración de las columnas
+    this.columns = config.columns || [];
+    // Guarda la función que se ejecutará al hacer clic. Si no se proporciona, no hace nada.
+    this.onRowClick = config.onRowClick || function() {}; 
     this.tbody = this.container.querySelector('tbody');
 
-    if (!this.tbody || this.columns.length === 0) {
-      console.error(`Estructura de lista incompleta o sin columnas definidas para "${config.containerId}".`);
+    if (!this.tbody) {
+      console.error(`La tabla dentro de "${config.containerId}" debe tener un <tbody>.`);
       return;
     }
 
-    this.render();
+    this.updateData(config.data || []);
     this.container.dataset.listInitialized = 'true';
+  }
+
+  /**
+   * Actualiza los datos de la lista y la vuelve a renderizar.
+   * @param {Array<Object>} newData - El nuevo array de datos para mostrar.
+   */
+  updateData(newData) {
+    this.data = newData;
+    this.render();
   }
 
   /**
@@ -37,30 +49,29 @@ class ListView {
   render() {
     this.tbody.innerHTML = ''; 
 
-    this.data.forEach((item, index) => {
+    this.data.forEach((item) => {
       const fila = document.createElement('tr');
 
-      // --- LÓGICA GENÉRICA ---
-      // Itera sobre la configuración de columnas para crear cada celda.
       this.columns.forEach(columna => {
         const celda = document.createElement('td');
-        // Usa la 'key' de la columna para obtener el dato correcto del objeto 'item'.
-        celda.textContent = item[columna.key] || ''; // Muestra el dato o un string vacío si no existe
+        celda.textContent = item[columna.key] || '';
         fila.appendChild(celda);
       });
 
-      // El resto de la lógica (selección) se mantiene igual.
+      // --- LÓGICA CLAVE DEL EVENTO ---
       fila.addEventListener('click', () => {
+        // Deselecciona cualquier otra fila que estuviera seleccionada
         const filaSeleccionada = this.tbody.querySelector('.selected');
         if (filaSeleccionada) {
           filaSeleccionada.classList.remove('selected');
         }
+        // Selecciona la fila actual
         fila.classList.add('selected');
+        
+        // Ejecuta la función callback que pasamos en la configuración,
+        // enviándole los datos completos del item en el que se hizo clic.
+        this.onRowClick(item);
       });
-/*
-      if (index === 0) {
-        fila.classList.add('selected');
-      }*/
       
       this.tbody.appendChild(fila);
     });

@@ -297,6 +297,101 @@ ipcMain.handle('import-creature', async (event) => {
   return null; // El usuario canceló el diálogo
 });
 
+
+// CARGA INICIAL: Lee todos los archivos .crea del directorio del usuario.
+ipcMain.handle('load-creatures-from-app-folder', async () => {
+  
+  // --- Lógica para obtener la ruta de la carpeta (ahora dentro del handler) ---
+  let folderPath = null;
+  try {
+    if (fs.existsSync(configPath)) {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+        const username = config.dm;
+        if (username) {
+            const userFolderPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_creaturas`);
+            // Crea el directorio si no existe
+            if (!fs.existsSync(userFolderPath)) {
+                fs.mkdirSync(userFolderPath, { recursive: true });
+            }
+            folderPath = userFolderPath;
+        }
+    }
+  } catch (error) {
+    console.error("Error obteniendo la carpeta de criaturas:", error);
+    return []; // Devuelve un array vacío si hay un error
+  }
+  // --- Fin de la lógica de la carpeta ---
+
+  if (!folderPath) return []; // Si no se pudo determinar la carpeta, no continuamos
+
+  const creatureFiles = fs.readdirSync(folderPath).filter(file => file.endsWith('.crea'));
+  const creaturesData = [];
+
+  for (const file of creatureFiles) {
+    try {
+      const filePath = path.join(folderPath, file);
+      const data = fs.readFileSync(filePath, 'utf-8');
+      const creature = JSON.parse(data);
+      // Guardamos los datos para la lista y el objeto completo para después.
+      creaturesData.push({ 
+          nombre: creature.Nombre, 
+          cr: creature.Cr, 
+          fullData: creature 
+        });
+    } catch (e) {
+      console.error(`Error al leer o parsear el archivo de criatura ${file}:`, e);
+    }
+  }
+  return creaturesData;
+});
+// IMPORTAR: Busca un archivo .crea en el disco y lo copia a la carpeta de la app.
+ipcMain.handle('import-creature-file', async () => {
+  // Función auxiliar interna para obtener la ruta y mantener el código limpio.
+  const getCreatureFolderPath = () => {
+      try {
+          if (!fs.existsSync(configPath)) return null;
+          const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+          const username = config.dm;
+          if (!username) return null;
+          const folderPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_creaturas`);
+          if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, { recursive: true });
+          return folderPath;
+      } catch (error) { 
+          console.error("Error obteniendo la carpeta de criaturas al importar:", error);
+          return null; 
+      }
+  };
+  
+  const folderPath = getCreatureFolderPath();
+  if (!folderPath) {
+      dialog.showErrorBox('Error', 'No se ha podido determinar la carpeta de destino del usuario.');
+      return { success: false };
+  }
+
+  const result = await dialog.showOpenDialog(dashboardWindow, {
+      title: 'Importar archivo .crea',
+      filters: [{ name: 'Archivos de Creatura', extensions: ['crea'] }],
+      properties: ['openFile']
+  });
+
+  if (result.canceled || result.filePaths.length === 0) {
+      return { success: false };
+  }
+
+  const sourcePath = result.filePaths[0];
+  const fileName = path.basename(sourcePath);
+  const destPath = path.join(folderPath, fileName);
+
+  try {
+      fs.copyFileSync(sourcePath, destPath);
+      return { success: true };
+  } catch (error) {
+      console.error("Error al copiar el archivo de criatura:", error);
+      dialog.showErrorBox('Error de Importación', `No se pudo copiar el archivo.\n${error.message}`);
+      return { success: false };
+  }
+});
+
 // Escucha la orden para mostrar la imagen y la reenvía a la ventana del mapa.
 ipcMain.on('show-creature-on-map', (event, imgSrc) => {
   if (mapaWindow) {

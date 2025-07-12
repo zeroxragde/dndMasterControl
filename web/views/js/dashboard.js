@@ -17,14 +17,10 @@ let userConfig = {};
 let mapCanvas = null;
 let fondoMapa = new Image();
 let  stabsCreature;
-const criaturasData = [
-  { nombre: "Sothrax, el Devorador", cr: 2 },
-  { nombre: "Guardian", cr: 1 },
-  { nombre: "Tempestus (Elemental)", cr: 2 },
-  { nombre: "Arpías", cr: 2 },
-  { nombre: "Sombras Errantes", cr: 2 },
-  { nombre: "Espectros de la Cripta", cr: 3 },
+let criaturasData = [
+  
 ];
+let litsViewCreaturas;
 
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
@@ -86,19 +82,28 @@ function inicializarComponentes() {
   modalConfigs.forEach(config => new Modal(config));
   new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Creamos la instancia de la nueva clase ListView
-  new ListView({
+  litsViewCreaturas=new ListView({
     containerId: 'creature-list-container',
     data: criaturasData,
     // Le decimos qué columnas crear y de dónde sacar los datos
     columns: [
       { header: 'Nombre', key: 'nombre' },
       { header: 'CR',     key: 'cr' }
-    ]
+    ],
+      // Pásale a la función los datos completos del elemento de esa fila".
+    onRowClick: (criaturaItem) => {
+        if (criaturaItem.fullData) {
+            mostrarDetallesCriatura(criaturaItem.fullData);
+        }
+    }
   });
+  console.log("ListView de criaturas inicializado con datos:", criaturasData);
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
-  inicializarBotonImportar();
+  //inicializarBotonAbrirCrea();
   inicializarClickEnImagenDetalle();
+  actualizarArrayDeCriaturas();
+  inicializarBotonImportarCrea();
 
 }
 
@@ -249,7 +254,24 @@ ipcRenderer.on('map-saved-success', (event, message) => {
   poblarFiltroDeCategoriasMapaEditor();
   actualizarYRenderizarAssetList();
 }
-
+/**
+ * Añade el evento de clic al botón para importar archivos .crea.
+ */
+function inicializarBotonImportarCrea() {
+  const boton = document.getElementById('btn_import_crea');
+  if (boton) {
+      boton.title = "Importar archivo .crea";
+      boton.addEventListener('click', async () => {
+          const resultado = await ipcRenderer.invoke('import-creature-file');
+          
+          if (resultado.success) {
+              alert('¡Criatura importada con éxito!');
+              // Después de importar, vuelve a llenar el array para incluir el nuevo archivo.
+              actualizarArrayDeCriaturas();
+          }
+      });
+  }
+}
 /**
  * Rellena el select de categorías del gestor de recursos.
  */
@@ -456,17 +478,24 @@ function inicializarCargadorDeAssetsMapaEditor() {
 }
 
 
-
-
-
-
-
+/**
+ * Llama al handler del backend para obtener la lista de criaturas
+ * y la asigna directamente a la variable global 'criaturasData'.
+ */
+async function actualizarArrayDeCriaturas() {
+  console.log("Actualizando el array de criaturas...");
+  // 1. Llama al handler y espera la respuesta.
+  const datosRecibidos = await ipcRenderer.invoke('load-creatures-from-app-folder');
+  // 2. Asigna el resultado directamente al array.
+  criaturasData = datosRecibidos;
+  litsViewCreaturas.updateData(criaturasData);
+}
 
 /**
  * Añade el event listener al botón de importar.
  */
-function inicializarBotonImportar() {
-  const botonImportar = document.getElementById('btn_import_crea');
+/*function inicializarBotonAbrirCrea() {
+  const botonImportar = document.getElementById('btn_open_crea');
   if (botonImportar) {
     botonImportar.addEventListener('click', async () => {
       // 1. Llama al proceso principal para que abra el diálogo y lea el archivo
@@ -480,7 +509,7 @@ function inicializarBotonImportar() {
       }
     });
   }
-}
+}*/
 /**
  * Función de ayuda para cambiar programáticamente a una pestaña específica.
  * @param {string} tabId El ID del panel de la pestaña a activar (ej: 'web-tab-creaturas').
