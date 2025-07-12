@@ -160,7 +160,7 @@
                         <button class="btn" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                         <button class="btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
                         <button class="btn" id="btn_import_crea" title="Importar/Exportar"><i class="fa-solid fa-file-import"></i></button>
-                        <button class="btn" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btn" id="btn_refresh_crea" title="Refrescar"><i class="fa-solid fa-arrows-rotate"></i></button>
                       </div>
                   
                   </div>
@@ -292,18 +292,6 @@
               </div>
           
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
             <!-- Modales -->
             <div id="modalEditor" class="modal-panel" style="display: none;">
@@ -664,13 +652,16 @@
                   <button id="btn-load-map" class="btn" title="Cargar Mapa Guardado">
                     <i class="fa-solid fa-folder-open"></i>
                   </button> 
+
                   <div class="toolbar-spacer"></div>
           
                   <div class="layer-controls">
                       <input type="text" id="new-layer-name" placeholder="Nombre de capa...">
                       <button id="btn-add-layer" class="btn">Añadir</button>
+                      <button id="btn_toggle_layer" class="btn"><i id="icon_toggle_layer" class="fa fa-eye"></i></button>
                   </div>
                   <select id="layer-selector" title="Seleccionar capa activa"></select>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
               </div>
           </div>
           </div>

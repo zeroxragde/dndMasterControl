@@ -335,7 +335,7 @@ ipcMain.handle('load-creatures-from-app-folder', async () => {
       // Guardamos los datos para la lista y el objeto completo para después.
       creaturesData.push({ 
           nombre: creature.Nombre, 
-          cr: creature.Cr, 
+          cr: creature.CR, 
           fullData: creature 
         });
     } catch (e) {

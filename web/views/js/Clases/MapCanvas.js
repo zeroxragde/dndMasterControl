@@ -20,6 +20,12 @@ class MapCanvas {
       this.layerOrder = ['base']; // El orden en que se dibujan las capas
       this.activeLayer = 'base';  // La capa donde se añaden nuevos tokens
 
+      this.layerVisibility = {};
+      this.layerOrder.forEach(layerName => {
+        this.layerVisibility[layerName] = true;
+      });
+
+
       this.selectedToken = null;
       this.isDragging = false;
 
@@ -79,6 +85,7 @@ class MapCanvas {
       this.layers[layerName] = []; // Crea el array vacío para la nueva capa
       this.layerOrder.push(layerName); // La añade al final del orden de dibujado
       console.log(`Capa añadida: ${layerName}`);
+      this.layerVisibility[layerName] = true; 
       return true;
     }
     /**
@@ -187,12 +194,9 @@ class MapCanvas {
       if (this.backgroundImage) {
         this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
       }
-      /*
-      this.tokens.forEach(token => {
-        this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
-      });*/
-          // Dibuja los tokens de cada capa en orden
+      // Dibuja los tokens de cada capa en orden
       this.layerOrder.forEach(layerName => {
+        if (!this.layerVisibility[layerName]) return;
         this.layers[layerName].forEach(token => {
           this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
         });
@@ -203,9 +207,7 @@ class MapCanvas {
         this.ctx.strokeRect(this.selectedToken.x, this.selectedToken.y, this.selectedToken.width, this.selectedToken.height);
         this._drawResizeHandles(this.selectedToken);
       }
-       // --- ¡LÍNEA CLAVE AÑADIDA! ---
-        // --- ¡AQUÍ ESTÁ EL CAMBIO! ---
-        // Convertimos los tokens a un formato simple antes de enviarlos.
+      // Convertimos los tokens a un formato simple antes de enviarlos.
 
         // Dibuja los tokens de cada capa en orden
         const serializableLayers = {};
@@ -213,6 +215,7 @@ class MapCanvas {
           serializableLayers[layerName] = []; // Prepara la capa en el objeto a enviar
 
           this.layers[layerName].forEach(token => {
+             if (!this.layerVisibility[layerName]) return;
             // Dibuja en el canvas local
             this.ctx.drawImage(token.img, token.x, token.y, token.width, token.height);
             
@@ -226,18 +229,6 @@ class MapCanvas {
             });
           });
         });
-
-
-        /*
-        const serializableTokens = this.tokens.map(token => ({
-            src: token.img.src, // Solo enviamos la URL de la imagen
-            x: token.x,
-            y: token.y,
-            width: token.width,
-            height: token.height
-        }));*/
-    
-        // Enviamos el estado con los datos simples.
         
     }
     updateMap(){
@@ -251,6 +242,7 @@ class MapCanvas {
       };
   
       this.layerOrder.forEach(layerName => {
+        if (!this.layerVisibility[layerName]) return;
         serializableState.layers[layerName] = this.layers[layerName].map(token => ({
           src: token.img.src,
           x: token.x,
@@ -372,39 +364,7 @@ class MapCanvas {
         }
       }
 
-
-
        // Iteramos sobre las capas en orden inverso (de la más alta a la más baja)
-    /*for (const layerName of [...this.layerOrder].reverse()) {
-      const layerTokens = this.layers[layerName];
-      // Iteramos sobre los tokens de esa capa en orden inverso
-      for (let i = layerTokens.length - 1; i >= 0; i--) {
-        const token = layerTokens[i];
-        if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
-          this.selectedToken = token;
-          this.isDragging = true;
-          this.dragOffsetX = mouseX - token.x;
-          this.dragOffsetY = mouseY - token.y;
-          // Movemos el token al final de su PROPIA capa para que se dibuje encima
-          layerTokens.splice(i, 1);
-          layerTokens.push(token);
-          this.draw();
-          return; // Salimos en cuanto encontramos el primer token
-        }
-      }
-    }*/
-     /* for (let i = this.tokens.length - 1; i >= 0; i--) {
-        const token = this.tokens[i];
-        if (mouseX > token.x && mouseX < token.x + token.width && mouseY > token.y && mouseY < token.y + token.height) {
-          this.selectedToken = token;
-          this.isDragging = true;
-          this.dragOffsetX = mouseX - token.x;
-          this.dragOffsetY = mouseY - token.y;
-          this.tokens.splice(i, 1);
-          this.tokens.push(token);
-          break;
-        }
-      }*/
       this.draw();
     }
   
@@ -460,5 +420,22 @@ class MapCanvas {
       this.isResizing = false;
       this.resizeHandle = null;
       this.draw();
+    }
+    /**
+     * Alterna la visibilidad de la capa activa y redibuja.
+     */
+    toggleActiveLayer() {
+      const layer = this.activeLayer;
+      this.layerVisibility[layer] = !this.layerVisibility[layer];
+      this.draw();
+    }
+
+    /**
+     * (Opcional) Cambia la capa activa.
+     */
+    setActiveLayer(layerName) {
+      if (this.layers[layerName]) {
+        this.activeLayer = layerName;
+      }
     }
   }

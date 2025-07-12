@@ -92,7 +92,8 @@ function inicializarComponentes() {
     ],
       // Pásale a la función los datos completos del elemento de esa fila".
     onRowClick: (criaturaItem) => {
-        if (criaturaItem.fullData) {
+         console.log("Clic en criatura:", criaturaItem);
+        if (criaturaItem) {
             mostrarDetallesCriatura(criaturaItem.fullData);
         }
     }
@@ -104,10 +105,29 @@ function inicializarComponentes() {
   inicializarClickEnImagenDetalle();
   actualizarArrayDeCriaturas();
   inicializarBotonImportarCrea();
-
+  inicializarBotonRefreshCrea();
+  inicializarBotonToggleLayer(mapCanvas);
 }
-
-
+function inicializarBotonToggleLayer(mapCanvas) {
+  const btn = document.getElementById('btn_toggle_layer');
+  const icon = document.getElementById('icon_toggle_layer');
+  if (btn && icon) {
+    btn.addEventListener('click', () => {
+      mapCanvas.toggleActiveLayer();
+      // Alterna entre "ojo abierto" y "ojo tachado"
+      //icon.classList.toggle('fa-eye');
+      //icon.classList.toggle('fa-eye-slash');
+    });
+  }
+}
+function inicializarBotonRefreshCrea() {
+  const btn = document.getElementById('btn_refresh_crea');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      await actualizarArrayDeCriaturas();
+    });
+  }
+}
 /**
  * Inicializa el editor de mapas: espera la resolución, ajusta el tamaño del canvas,
  * dibuja el fondo y activa la funcionalidad de arrastrar y soltar.
@@ -483,33 +503,16 @@ function inicializarCargadorDeAssetsMapaEditor() {
  * y la asigna directamente a la variable global 'criaturasData'.
  */
 async function actualizarArrayDeCriaturas() {
-  console.log("Actualizando el array de criaturas...");
   // 1. Llama al handler y espera la respuesta.
   const datosRecibidos = await ipcRenderer.invoke('load-creatures-from-app-folder');
   // 2. Asigna el resultado directamente al array.
   criaturasData = datosRecibidos;
   litsViewCreaturas.updateData(criaturasData);
+  
+  console.log("Actualizando el array de criaturas...",criaturasData);
 }
 
-/**
- * Añade el event listener al botón de importar.
- */
-/*function inicializarBotonAbrirCrea() {
-  const botonImportar = document.getElementById('btn_open_crea');
-  if (botonImportar) {
-    botonImportar.addEventListener('click', async () => {
-      // 1. Llama al proceso principal para que abra el diálogo y lea el archivo
-      const datosCriatura = await ipcRenderer.invoke('import-creature');
 
-      // 2. Si se recibieron datos, los muestra en la vista de detalles
-      console.log("Datos de criatura importados:", datosCriatura);
-      if (datosCriatura) {
-        mostrarDetallesCriatura(datosCriatura);
-        stabsCreature.activateTab(0);
-      }
-    });
-  }
-}*/
 /**
  * Función de ayuda para cambiar programáticamente a una pestaña específica.
  * @param {string} tabId El ID del panel de la pestaña a activar (ej: 'web-tab-creaturas').
@@ -541,7 +544,7 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
   // --- ¡CAMBIO CLAVE! ---
   // Antes de hacer nada, nos aseguramos de que la pestaña de criaturas esté visible.
   activarPestana('creature-detail-view');
-
+  console.log("Detalles de la ed:", datosCriaturaJSON);
     // 1. Crea una nueva instancia de la clase Creatura.
     const criatura = new Creatura();
 
@@ -706,6 +709,7 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
    if (detailView) {
       detailView.style.display = 'block';
    }
+    stabsCreature.activateTab(0);
 }
 /**
  * Añade el event listener a la imagen de la criatura en el panel de detalles.

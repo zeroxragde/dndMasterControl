@@ -1,11 +1,27 @@
 {
-    "configurations": [
-        {
-            "type": "node-terminal",
-            "name": "Run Script: start",
-            "request": "launch",
-            "command": "npm run start",
-            "cwd": "${workspaceFolder}"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🔨 Debug Main Process",
+      "type": "pwa-node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/web",                         
+      "runtimeExecutable": "${workspaceFolder}/web/node_modules/.bin/electron",  
+      "runtimeArgs": [
+        "."                                                   
+      ],
+      "windows": {                                             
+        "runtimeExecutable": "${workspaceFolder}/web/node_modules/.bin/electron.cmd"
+      },
+      "outputCapture": "std"                                   
+    },
+    {
+      "name": "🌐 Debug Renderer Process",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",                          
+      "webRoot": "${workspaceFolder}/web/src",                 
+      "userDataDir": "${workspaceFolder}/.vscode/chrome"       
+    }
+  ]
 }

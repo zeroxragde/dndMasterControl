@@ -289,12 +289,13 @@ body {
 
 /* Efecto al pasar el ratón por una fila */
 .data-table tbody tr:hover {
-  background-color: #2a2a2a;
+  background-color: #f2ff02;
+  color: black;
 }
 
 /* Estilo para la fila seleccionada */
 .data-table tr.selected {
-  background-color: #9d0208;
+  background-color: #8b8b8b;
   color: white;
   font-weight: bold;
 }
