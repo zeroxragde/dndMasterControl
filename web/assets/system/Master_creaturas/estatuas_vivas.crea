@@ -1,0 +1,53 @@
+{
+  "Nombre": "Estatuas Vivas",
+  "Campania": "El Legado del Abismo",
+  "Imagen": null,
+  "CR": 2,
+  "XP": 450,
+  "Tipo": "Constructo",
+  "Tamanio": "Mediano",
+  "Alineamiento": "Neutral",
+  "ClaseArmadura": 16,
+  "PuntosGolpe": 33,
+  "DadosGolpe": "6d8+6",
+  "VelocidadCaminar": 25,
+  "Fuerza": 17,
+  "BonificadorFuerza": 3,
+  "Destreza": 9,
+  "BonificadorDestreza": -1,
+  "Constitucion": 14,
+  "BonificadorConstitucion": 2,
+  "Inteligencia": 3,
+  "BonificadorInteligencia": -4,
+  "Sabiduria": 10,
+  "BonificadorSabiduria": 0,
+  "Carisma": 5,
+  "BonificadorCarisma": -3,
+  "Salvacion": [],
+  "Habilidades": {},
+  "InmunidadesDano": [
+    "Veneno",
+    "Ps\u00edquico"
+  ],
+  "InmunidadesCondicion": [],
+  "Resistencias": [],
+  "Vulnerabilidades": [],
+  "Sentidos": [
+    "Visi\u00f3n en la oscuridad 60 pies",
+    "Percepci\u00f3n pasiva 10"
+  ],
+  "Idiomas": {},
+  "Acciones": [
+    {
+      "Nombre": "Pu\u00f1etazo",
+      "Descripcion": "Ataque cuerpo a cuerpo: +5 al ataque, 1d6+3 de da\u00f1o contundente."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "AccionesLegendarias": [],
+  "AccionesGuarida": [],
+  "AccionesMiticas": [],
+  "HechizosOEspeciales": [],
+  "EfectosRegionales": [],
+  "Notas": "Estatuas ceremoniales que cobran vida si se activa un mecanismo arcano equivocado."
+}

@@ -1,0 +1,62 @@
+{
+  "Nombre": "Guardi\u00e1n Espectral",
+  "Campania": "El Legado del Abismo",
+  "Imagen": null,
+  "CR": 3,
+  "XP": 700,
+  "Tipo": "No-muerto",
+  "Tamanio": "Mediano",
+  "Alineamiento": "Ca\u00f3tico Neutral",
+  "ClaseArmadura": 14,
+  "PuntosGolpe": 45,
+  "DadosGolpe": "6d8+18",
+  "VelocidadCaminar": 0,
+  "VelocidadAerea": 40,
+  "Fuerza": 6,
+  "BonificadorFuerza": -2,
+  "Destreza": 14,
+  "BonificadorDestreza": 2,
+  "Constitucion": 12,
+  "BonificadorConstitucion": 1,
+  "Inteligencia": 10,
+  "BonificadorInteligencia": 0,
+  "Sabiduria": 13,
+  "BonificadorSabiduria": 1,
+  "Carisma": 15,
+  "BonificadorCarisma": 2,
+  "Salvacion": [
+    "Carisma +4"
+  ],
+  "Habilidades": {
+    "Sigilo": "+6"
+  },
+  "InmunidadesDano": [
+    "Necr\u00f3tico",
+    "Ps\u00edquico"
+  ],
+  "InmunidadesCondicion": [],
+  "Resistencias": [
+    "F\u00edsico (no m\u00e1gico)"
+  ],
+  "Vulnerabilidades": [],
+  "Sentidos": [
+    "Visi\u00f3n en la oscuridad 60 pies",
+    "Percepci\u00f3n pasiva 11"
+  ],
+  "Idiomas": {
+    "Comun": "Entiende"
+  },
+  "Acciones": [
+    {
+      "Nombre": "Toque del Eco",
+      "Descripcion": "Ataque cuerpo a cuerpo: +5 al ataque, 2d6+3 de da\u00f1o ps\u00edquico. La criatura golpeada tiene desventaja en su siguiente tirada de ataque."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "AccionesLegendarias": [],
+  "AccionesGuarida": [],
+  "AccionesMiticas": [],
+  "HechizosOEspeciales": [],
+  "EfectosRegionales": [],
+  "Notas": "Sombra poderosa ligada al eco del templo. Se manifiesta al unir la piedra con el cristal."
+}

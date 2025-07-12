@@ -1,0 +1,54 @@
+{
+  "Nombre": "Serpientes de Eco",
+  "Campania": "El Legado del Abismo",
+  "Imagen": null,
+  "CR": 0.5,
+  "XP": 100,
+  "Tipo": "Sombra",
+  "Tamanio": "Peque\u00f1o",
+  "Alineamiento": "Neutral",
+  "ClaseArmadura": 13,
+  "PuntosGolpe": 11,
+  "DadosGolpe": "2d8+2",
+  "VelocidadCaminar": 30,
+  "Fuerza": 8,
+  "BonificadorFuerza": -1,
+  "Destreza": 16,
+  "BonificadorDestreza": 3,
+  "Constitucion": 12,
+  "BonificadorConstitucion": 1,
+  "Inteligencia": 2,
+  "BonificadorInteligencia": -4,
+  "Sabiduria": 12,
+  "BonificadorSabiduria": 1,
+  "Carisma": 6,
+  "BonificadorCarisma": -2,
+  "Salvacion": [],
+  "Habilidades": {
+    "Sigilo": "+5"
+  },
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Resistencias": [
+    "Necr\u00f3tico"
+  ],
+  "Vulnerabilidades": [],
+  "Sentidos": [
+    "Visi\u00f3n en la oscuridad 60 pies",
+    "Percepci\u00f3n pasiva 11"
+  ],
+  "Idiomas": {},
+  "Acciones": [
+    {
+      "Nombre": "Mordida Silenciosa",
+      "Descripcion": "Ataque cuerpo a cuerpo: +4 al ataque, 1d6+2 de da\u00f1o necr\u00f3tico. CD 11 Constituci\u00f3n o queda aturdido 1 turno."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "AccionesLegendarias": [],
+  "AccionesGuarida": [],
+  "AccionesMiticas": [],
+  "HechizosOEspeciales": [],
+  "EfectosRegionales": [],
+  "Notas": "Formas serpentinas de eco. Sus mordidas paralizan el pensamiento m\u00e1s que la carne."
+}

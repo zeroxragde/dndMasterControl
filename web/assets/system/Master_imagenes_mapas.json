@@ -1,11 +1,26 @@
 [
   {
-    "nombre": "feedback.png",
-    "uuid": "011fb9ae-f7c8-4f09-8859-8ac20d0e491f",
+    "nombre": "ref_bosquealasruinas.png",
+    "uuid": "3b2b162a-b38d-4f29-b835-6fd74c496481",
     "extension": "png",
     "categoria": {
-      "categoria": "personaje",
-      "username": "Master"
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_bosque.png",
+    "uuid": "7bef003f-a604-472c-9ac8-f9cf12e950f5",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "ciudad.png",
+    "uuid": "b6c32a1b-c502-4c83-86aa-07348fbefa72",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
     }
   }
 ]

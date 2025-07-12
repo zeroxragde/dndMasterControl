@@ -306,15 +306,17 @@ function poblarFiltroDeCategoriasMapaEditor() {
       "tile",
       "mapa"
   ];
-  
+    
   selectorFilter.add(new Option("Todas", -1));
-
+  var id = 0;
   categorias.forEach(cat => {
       // Crea una nueva opción para cada select (NO reuses objetos Option)
-      const opcionSelector = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
-      const opcionFilter = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), cat);
+      const opcionSelector = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), id);
+      const opcionFilter = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), id);
       selector.add(opcionSelector);
       selectorFilter.add(opcionFilter);
+      id++; // Incrementa el ID para la siguiente categoría
+   
   });
 
   // Selecciona la primera opción ("Todas")
@@ -391,6 +393,7 @@ async function actualizarYRenderizarAssetList() {
 function inicializarCargadorDeAssetsMapaEditor() {
   const botonCargar = document.getElementById('btn-load-image');
   const botonBorrar = document.getElementById('btn-delete-asset');
+  const selectCategoria = document.getElementById('asset-category-select');
   const filtroCategoria = document.getElementById('asset-category-filter');
   const assetListContainer = document.getElementById('asset-list');
 
@@ -425,6 +428,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
 
       assetsFiltrados.forEach(asset => {
           if (!asset || !asset.url) return;
+          console.log("Assest cat  :", asset.categoria);
           const card = document.createElement('div');
           card.className = 'asset-card';
           card.dataset.uuid = asset.uuid;
@@ -456,6 +460,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
       try {
           const assetsRecibidos = await ipcRenderer.invoke('get-asset-list');
           todosLosAssets = assetsRecibidos.flat();
+          console.log("Lista de assets recibida:", todosLosAssets);
           renderizarLista();
       } catch (error) {
           console.error("Error al obtener la lista de assets:", error);
@@ -463,11 +468,11 @@ function inicializarCargadorDeAssetsMapaEditor() {
   };
   
   // --- LÓGICA DE EVENTOS ---
-  
-  filtroCategoria.addEventListener('change', renderizarLista);
+  // Carga de imagen al seleccionar una categoría
+  selectCategoria.addEventListener('change', renderizarLista);
 
   botonCargar.addEventListener('click', () => {
-      const categoriaSeleccionada = filtroCategoria.value;
+      const categoriaSeleccionada = selectCategoria.value;
       if (!categoriaSeleccionada || categoriaSeleccionada === "") {
           alert('Por favor, selecciona una categoría específica para la nueva imagen.');
           return;
@@ -487,6 +492,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
   });
 
   ipcRenderer.on('imagen-cargada-exito', () => actualizarListaCompleta());
+  
   ipcRenderer.on('assets-deleted-success', () => {
       actualizarListaCompleta();
       if (mapCanvas) mapCanvas.clearMap();

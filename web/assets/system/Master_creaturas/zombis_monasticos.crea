@@ -1,0 +1,52 @@
+{
+  "Nombre": "Zombis Mon\u00e1sticos",
+  "Campania": "El Legado del Abismo",
+  "Imagen": null,
+  "CR": 1,
+  "XP": 200,
+  "Tipo": "No-muerto",
+  "Tamanio": "Mediano",
+  "Alineamiento": "Ca\u00f3tico Neutral",
+  "ClaseArmadura": 9,
+  "PuntosGolpe": 30,
+  "DadosGolpe": "4d8+12",
+  "VelocidadCaminar": 20,
+  "Fuerza": 13,
+  "BonificadorFuerza": 1,
+  "Destreza": 6,
+  "BonificadorDestreza": -2,
+  "Constitucion": 16,
+  "BonificadorConstitucion": 3,
+  "Inteligencia": 3,
+  "BonificadorInteligencia": -4,
+  "Sabiduria": 6,
+  "BonificadorSabiduria": -2,
+  "Carisma": 5,
+  "BonificadorCarisma": -3,
+  "Salvacion": [],
+  "Habilidades": {},
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Resistencias": [
+    "Contundente (no m\u00e1gico)"
+  ],
+  "Vulnerabilidades": [],
+  "Sentidos": [
+    "Visi\u00f3n en la oscuridad 60 pies",
+    "Percepci\u00f3n pasiva 8"
+  ],
+  "Idiomas": {},
+  "Acciones": [
+    {
+      "Nombre": "Golpe",
+      "Descripcion": "Ataque cuerpo a cuerpo: +3 al ataque, alcance 5 pies, 1d6+1 de da\u00f1o contundente."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "AccionesLegendarias": [],
+  "AccionesGuarida": [],
+  "AccionesMiticas": [],
+  "HechizosOEspeciales": [],
+  "EfectosRegionales": [],
+  "Notas": "Cad\u00e1veres de monjes, ahora animados por un eco oscuro. Atacan sin raz\u00f3n aparente."
+}
