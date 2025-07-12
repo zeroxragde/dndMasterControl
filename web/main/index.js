@@ -4,9 +4,18 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 // Habilita la recarga en vivo durante el desarrollo
-require('electron-reload')(__dirname, {
+/*require('electron-reload')(__dirname, {
   electron: require('path').join(__dirname, '..', 'node_modules', '.bin', 'electron.cmd')
-});
+});*/
+if (!app.isPackaged) {                     // <-- true en desarrollo, false en un build
+  try {
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+  } catch (err) {
+    console.warn('No puedo cargar electron-reload en producción.');
+  }
+}
 
 // --- Variables Globales ---
 let mapaWindow = null;
@@ -65,7 +74,7 @@ ipcMain.on('configuracion-inicial', (event, datos) => {
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false }
   });
   dashboardWindow.maximize();
-  dashboardWindow.webContents.openDevTools();
+  if (!app.isPackaged) dashboardWindow.webContents.openDevTools();
   dashboardWindow.loadFile(path.join(__dirname, '../views/dashboard.html'));
 
   dashboardWindow.webContents.once('did-finish-load', () => {
