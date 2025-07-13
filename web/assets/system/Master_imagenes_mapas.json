@@ -22,5 +22,13 @@
     "categoria": {
       "categoria": "3"
     }
+  },
+  {
+    "nombre": "dentro_templo.png",
+    "uuid": "0725cc87-61c7-4038-b219-d865eeec7ec5",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
   }
 ]
