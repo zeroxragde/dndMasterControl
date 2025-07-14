@@ -7,6 +7,12 @@ import { Creatura } from './Modelos/creatura.js';
 const { ipcRenderer } = require('electron');
 const audio = document.getElementById('audioPlayer');
 const nombreCancion = document.getElementById('nombreCancion');
+ const categorias_assets = [
+      "personaje",
+      "imagen",
+      "tile",
+      "mapa"
+];
 let canciones = [];
 let indiceCancion = 0;
 // --- Variable Global para la Configuración ---
@@ -56,7 +62,6 @@ function inicializarUI() {
   poblarDropdownsEditor();
 }
 
-
 /**
  * Crea las instancias de las clases Modal y Tabs para la página.
  */
@@ -101,7 +106,6 @@ function inicializarComponentes() {
   console.log("ListView de criaturas inicializado con datos:", criaturasData);
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
-  //inicializarBotonAbrirCrea();
   inicializarClickEnImagenDetalle();
   actualizarArrayDeCriaturas();
   inicializarBotonImportarCrea();
@@ -153,34 +157,20 @@ function inicializarMapaEditor() {
     }
  
   // Función para actualizar el menú desplegable de capas
- /*function actualizarDropdownCapas() {
+  function actualizarDropdownCapas() {
     if (!layerSelector || !mapCanvas) return;
     
+    const capaActivaGuardada = layerSelector.value;
     layerSelector.innerHTML = ''; // Limpiamos el select
-    // Añadimos cada capa del objeto mapCanvas.layers
+    
     mapCanvas.layerOrder.forEach(layerName => {
         const option = new Option(layerName, layerName);
         layerSelector.add(option);
     });
-    // Nos aseguramos de que el valor seleccionado coincida con la capa activa
-    layerSelector.value = mapCanvas.activeLayer;
- }*/
-
- // Función para actualizar el menú desplegable de capas
- function actualizarDropdownCapas() {
-  if (!layerSelector || !mapCanvas) return;
-  
-  const capaActivaGuardada = layerSelector.value;
-  layerSelector.innerHTML = ''; // Limpiamos el select
-  
-  mapCanvas.layerOrder.forEach(layerName => {
-      const option = new Option(layerName, layerName);
-      layerSelector.add(option);
-  });
-  
-  // Nos aseguramos de que el valor seleccionado se mantenga
-  layerSelector.value = capaActivaGuardada || mapCanvas.activeLayer;
-}
+    
+    // Nos aseguramos de que el valor seleccionado se mantenga
+    layerSelector.value = capaActivaGuardada || mapCanvas.activeLayer;
+  }
 
   // Evento para el botón de "Añadir Capa"
   addLayerButton.addEventListener('click', () => {
@@ -209,17 +199,17 @@ function inicializarMapaEditor() {
           mapCanvas.setBackground(fondoMapa);
       };
   });
-    // --- ¡AQUÍ ESTÁ LA NUEVA LÓGICA! ---
-    const refreshButton = document.getElementById('btn-refresh-map');
-    if (refreshButton) {
-        refreshButton.addEventListener('click', () => {
-            // Simplemente llamamos a draw(), que ya se encarga de enviar la actualización
-            console.log("Actualizando el mapa ed...");
-            if (mapCanvas) {
-                mapCanvas.updateMap();
-            }
-        });
-    }
+  // --- ¡AQUÍ ESTÁ LA NUEVA LÓGICA! ---
+  const refreshButton = document.getElementById('btn-refresh-map');
+  if (refreshButton) {
+      refreshButton.addEventListener('click', () => {
+          // Simplemente llamamos a draw(), que ya se encarga de enviar la actualización
+          console.log("Actualizando el mapa ed...");
+          if (mapCanvas) {
+              mapCanvas.updateMap();
+          }
+      });
+  }
   // La lógica de 'drop' se mantiene igual
   const viewport = document.getElementById('map-viewport');
   if(viewport) {
@@ -234,42 +224,39 @@ function inicializarMapaEditor() {
       });
   }
 
+  // Dentro de la función inicializarMapaEditor en dashboard.js
+  const loadMapButton = document.getElementById('btn-load-map');
+  if (loadMapButton) {
+      loadMapButton.addEventListener('click', async () => {
+          if (mapCanvas) {
+              // 1. Pedimos al proceso principal que nos devuelva los datos del archivo JSON
+              const mapState = await ipcRenderer.invoke('load-map-dialog');
 
-  // --- El resto de tus inicializaciones para el editor de mapas ---
-  
-// Dentro de la función inicializarMapaEditor en dashboard.js
-const loadMapButton = document.getElementById('btn-load-map');
-if (loadMapButton) {
-    loadMapButton.addEventListener('click', async () => {
-        if (mapCanvas) {
-            // 1. Pedimos al proceso principal que nos devuelva los datos del archivo JSON
-            const mapState = await ipcRenderer.invoke('load-map-dialog');
+              // 2. Si el usuario seleccionó un archivo válido, cargamos el estado
+              if (mapState) {
+                  mapCanvas.loadMapState(mapState);
+                  actualizarDropdownCapas();
+              }
+          }
+      });
+  }
+  const saveMapButton = document.getElementById('btn-save-map');
+  if (saveMapButton) {
+      saveMapButton.addEventListener('click', () => {
+          if (mapCanvas) {
+              // 1. Obtenemos el estado actual del mapa usando el nuevo método
+              const mapState = mapCanvas.getMapState();
 
-            // 2. Si el usuario seleccionó un archivo válido, cargamos el estado
-            if (mapState) {
-                mapCanvas.loadMapState(mapState);
-                actualizarDropdownCapas();
-            }
-        }
-    });
-}
-const saveMapButton = document.getElementById('btn-save-map');
-if (saveMapButton) {
-    saveMapButton.addEventListener('click', () => {
-        if (mapCanvas) {
-            // 1. Obtenemos el estado actual del mapa usando el nuevo método
-            const mapState = mapCanvas.getMapState();
+              // 2. Enviamos los datos al proceso principal para que abra el diálogo y los guarde
+              ipcRenderer.send('save-map-dialog', mapState);
+          }
+      });
+  }
 
-            // 2. Enviamos los datos al proceso principal para que abra el diálogo y los guarde
-            ipcRenderer.send('save-map-dialog', mapState);
-        }
-    });
-}
-
-// (Opcional) Escucha la confirmación de guardado para mostrar una alerta
-ipcRenderer.on('map-saved-success', (event, message) => {
-    alert(message);
-});
+  // (Opcional) Escucha la confirmación de guardado para mostrar una alerta
+  ipcRenderer.on('map-saved-success', (event, message) => {
+      alert(message);
+  });
   inicializarCargadorDeAssetsMapaEditor();
   poblarFiltroDeCategoriasMapaEditor();
   actualizarYRenderizarAssetList();
@@ -299,17 +286,10 @@ function poblarFiltroDeCategoriasMapaEditor() {
   const selector = document.getElementById('asset-category-select');
   const selectorFilter = document.getElementById('asset-category-filter');
   if (!selector || !selectorFilter) return;
-
-  const categorias = [
-      "personaje",
-      "imagen",
-      "tile",
-      "mapa"
-  ];
     
   selectorFilter.add(new Option("Todas", -1));
   var id = 0;
-  categorias.forEach(cat => {
+  categorias_assets.forEach(cat => {
       // Crea una nueva opción para cada select (NO reuses objetos Option)
       const opcionSelector = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), id);
       const opcionFilter = new Option(cat.charAt(0).toUpperCase() + cat.slice(1), id);
@@ -361,14 +341,30 @@ async function actualizarYRenderizarAssetList() {
             // --- HTML COMPLETO DE LA TARJETA ---
             console.log("Añadiendo asset:", nombreSinExtension, asset.categoria);
             // Añadimos de nuevo los <span> para el nombre y la categoría
+var realCatName = "";
+const idx = Number(asset?.categoria?.categoria);
+
+if (
+  Array.isArray(categorias_assets) &&
+  !isNaN(idx) &&
+  categorias_assets[idx]
+) {
+  var cat = categorias_assets[idx];
+  realCatName = cat.charAt(0).toUpperCase() + cat.slice(1);
+}
+
+console.log("Real cat name:", realCatName);
+
+
             card.innerHTML = `
                 <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
                 <label for="check-${asset.uuid}" class="asset-image-label">
                     <img src="${asset.url}" class="asset-thumbnail" alt="${nombreSinExtension}" draggable="true">
                 </label>
                 <span class="asset-name">${nombreSinExtension}</span>
-                <span class="asset-category">${categoriaTexto || 'N/A'}</span>
+                <span class="asset-category">${realCatName || 'N/A'}</span>
             `;
+            // --- AÑADIMOS EL EVENTO DRAGSTART ---  
 
             // Hacemos la imagen arrastrable
             const img = card.querySelector('.asset-thumbnail');
@@ -408,7 +404,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
       const filtroActual = filtroCategoria.value;
       assetListContainer.innerHTML = ''; 
 
-      const assetsFiltrados = (filtroActual && filtroActual !== "")
+      const assetsFiltrados = (filtroActual && (filtroActual !== "") && (filtroActual !== "-1"))
           ? todosLosAssets.filter(asset => {
               let categoriaDelAsset = asset.categoria;
               if (typeof categoriaDelAsset === 'object' && categoriaDelAsset !== null) {
@@ -433,14 +429,21 @@ function inicializarCargadorDeAssetsMapaEditor() {
           card.className = 'asset-card';
           card.dataset.uuid = asset.uuid;
           const nombreSinExtension = (asset.nombre || '').includes('.') ? asset.nombre.split('.').slice(0, -1).join('') : (asset.nombre || '');
-          
+          var realCatName = "";
+          categorias_assets.forEach((cat, indice)  => {
+            if (asset.categoria.categoria === indice) {
+                var catName = cat.charAt(0).toUpperCase() + cat.slice(1);
+                realCatName = catName; // Aseguramos que la categoría esté en el formato correcto
+            }
+          });
+
           card.innerHTML = `
               <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
               <label for="check-${asset.uuid}" class="asset-image-label">
                   <img src="${asset.url}" class="asset-thumbnail" alt="${nombreSinExtension}" draggable="true">
               </label>
               <span class="asset-name">${nombreSinExtension}</span>
-              <span class="asset-category">${asset.categoria || 'N/A'}</span>
+              <span class="asset-category">${realCatName || 'N/A'}</span>
           `;
           
           const img = card.querySelector('.asset-thumbnail');
@@ -449,9 +452,9 @@ function inicializarCargadorDeAssetsMapaEditor() {
           });
           
           gridContainer.appendChild(card);
-      });
+    });
       assetListContainer.appendChild(gridContainer);
-  };
+  };//fin del renderizarLista
   
   /**
    * Pide la lista completa de assets al proceso principal y la renderiza.
@@ -469,7 +472,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
   
   // --- LÓGICA DE EVENTOS ---
   // Carga de imagen al seleccionar una categoría
-  selectCategoria.addEventListener('change', renderizarLista);
+  filtroCategoria.addEventListener('change', renderizarLista);
 
   botonCargar.addEventListener('click', () => {
       const categoriaSeleccionada = selectCategoria.value;
