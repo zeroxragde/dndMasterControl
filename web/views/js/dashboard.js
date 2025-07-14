@@ -341,20 +341,19 @@ async function actualizarYRenderizarAssetList() {
             // --- HTML COMPLETO DE LA TARJETA ---
             console.log("Añadiendo asset:", nombreSinExtension, asset.categoria);
             // Añadimos de nuevo los <span> para el nombre y la categoría
-var realCatName = "";
-const idx = Number(asset?.categoria?.categoria);
+            var realCatName = "";
+            const idx = Number(asset?.categoria?.categoria);
 
-if (
-  Array.isArray(categorias_assets) &&
-  !isNaN(idx) &&
-  categorias_assets[idx]
-) {
-  var cat = categorias_assets[idx];
-  realCatName = cat.charAt(0).toUpperCase() + cat.slice(1);
-}
+            if (
+              Array.isArray(categorias_assets) &&
+              !isNaN(idx) &&
+              categorias_assets[idx]
+            ) {
+              var cat = categorias_assets[idx];
+              realCatName = cat.charAt(0).toUpperCase() + cat.slice(1);
+            }
 
-console.log("Real cat name:", realCatName);
-
+            console.log("Real cat name:", realCatName);
 
             card.innerHTML = `
                 <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
