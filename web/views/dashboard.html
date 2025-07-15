@@ -13,6 +13,7 @@
     <script src="js/Clases/tab.js"></script>
     <script src="js/Clases/listview.js"></script>
     <script src="js/Clases/MapCanvas.js"></script>
+    <script src="js/Clases/SpriteSheetEditorModal.js"></script>
     <script type="module" src="js/dashboard.js"></script>
 
   </head>
@@ -25,6 +26,10 @@
         <button class="web-tab-button" role="tab" aria-controls="web-tab-creaturas" aria-selected="false">🧙 Creaturas </button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-editor-map" aria-selected="false">🗺️ Mapa Editor</button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-libro" aria-selected="false"> Libros de Historias</button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-players" aria-selected="false">Jugadores</button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-magia" aria-selected="false">Magia</button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-shops" aria-selected="false">Tiendas</button>
+        <button class="web-tab-button" role="tab" aria-controls="web-tab-other" aria-selected="false">Otros datos</button>
       
       </nav>
 
@@ -665,9 +670,11 @@
                   <select id="layer-selector" title="Seleccionar capa activa"></select>
                   &nbsp;&nbsp;&nbsp;&nbsp;
               </div>
+            </div>
           </div>
-          </div>
-        
+
+
+
           <div id="spritesheet-modal" class="modal-panel" style="display: none;">
               <div class="modal-header">
                   <h3>Editor de Spritesheet</h3>
@@ -690,8 +697,10 @@
                   </div>
                   <div id="spritesheet-preview" class="spritesheet-preview"></div>
                   <button id="btn-process-sprite" class="btn">Procesar</button>
+                  <div id="sprite-capture-viewer" style="margin-top:10px; min-width: 50px; min-height: 50px; border: 1px dashed #999;"></div>
               </div>
           </div>
+        
         </div>
 
       </main>

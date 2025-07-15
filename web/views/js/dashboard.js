@@ -27,6 +27,7 @@ let criaturasData = [
   
 ];
 let litsViewCreaturas;
+let spriteModal = null;
 
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
@@ -103,7 +104,25 @@ function inicializarComponentes() {
         }
     }
   });
-  console.log("ListView de criaturas inicializado con datos:", criaturasData);
+  var select = document.getElementById('asset-category-select');
+  spriteModal = new SpriteSheetEditorModal({
+    id: 'spritesheet-modal',
+    triggerId: 'btn-open-spritesheet',
+    movable: true,
+    onCloseEditor: () => {
+      console.log("Editor cerrado, actualizando lista de assets...");
+       inicializarCargadorDeAssetsMapaEditor();
+    },
+    onOpenEditor: (t) => {
+      const categoriaSeleccionada = select.value;
+      if (!categoriaSeleccionada || categoriaSeleccionada === "") {
+          alert('Por favor, selecciona una categoría específica para la nueva imagen.');
+          return;
+      }
+      t.setCategoria(categoriaSeleccionada);
+    }
+  });
+
   inicializarOpcionesEspeciales();
   inicializarMapaEditor();
   inicializarClickEnImagenDetalle();
@@ -422,6 +441,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
       gridContainer.className = 'asset-grid';
 
       assetsFiltrados.forEach(asset => {
+        
           if (!asset || !asset.url) return;
           console.log("Assest cat  :", asset.categoria);
           const card = document.createElement('div');
@@ -429,12 +449,16 @@ function inicializarCargadorDeAssetsMapaEditor() {
           card.dataset.uuid = asset.uuid;
           const nombreSinExtension = (asset.nombre || '').includes('.') ? asset.nombre.split('.').slice(0, -1).join('') : (asset.nombre || '');
           var realCatName = "";
-          categorias_assets.forEach((cat, indice)  => {
-            if (asset.categoria.categoria === indice) {
-                var catName = cat.charAt(0).toUpperCase() + cat.slice(1);
-                realCatName = catName; // Aseguramos que la categoría esté en el formato correcto
-            }
-          });
+          const idx = Number(asset?.categoria?.categoria);
+
+          if (
+            Array.isArray(categorias_assets) &&
+            !isNaN(idx) &&
+            categorias_assets[idx]
+          ) {
+            var cat = categorias_assets[idx];
+            realCatName = cat.charAt(0).toUpperCase() + cat.slice(1);
+          }
 
           card.innerHTML = `
               <input type="checkbox" id="check-${asset.uuid}" class="asset-checkbox">
@@ -473,6 +497,7 @@ function inicializarCargadorDeAssetsMapaEditor() {
   // Carga de imagen al seleccionar una categoría
   filtroCategoria.addEventListener('change', renderizarLista);
 
+  
   botonCargar.addEventListener('click', () => {
       const categoriaSeleccionada = selectCategoria.value;
       if (!categoriaSeleccionada || categoriaSeleccionada === "") {
@@ -505,7 +530,6 @@ function inicializarCargadorDeAssetsMapaEditor() {
   actualizarListaCompleta();
 }
 
-
 /**
  * Llama al handler del backend para obtener la lista de criaturas
  * y la asigna directamente a la variable global 'criaturasData'.
@@ -519,7 +543,6 @@ async function actualizarArrayDeCriaturas() {
   
   console.log("Actualizando el array de criaturas...",criaturasData);
 }
-
 
 /**
  * Función de ayuda para cambiar programáticamente a una pestaña específica.
@@ -824,38 +847,4 @@ function poblarDropdownsEditor() {
 
   rellenarSelect('editor-idiomas', datosDelJuego.idiomas, "Idiomas");
   rellenarSelect('editor-cr', datosDelJuego.cr, "Seleccionar CR");
-}
-/**
- * Dibuja la lista de criaturas en la tabla.
- * @param {Array<Object>} criaturas - El array con los datos de las criaturas.
- * @param {HTMLElement} tbody - El elemento <tbody> de la tabla.
- */
-function renderizarCriaturas(criaturas, tbody) {
-  tbody.innerHTML = ''; // Limpiamos la tabla
-
-  criaturas.forEach((criatura, index) => {
-    const fila = document.createElement('tr');
-
-    const celdaNombre = document.createElement('td');
-    celdaNombre.textContent = criatura.nombre;
-    fila.appendChild(celdaNombre);
-
-    const celdaCr = document.createElement('td');
-    celdaCr.textContent = criatura.cr;
-    fila.appendChild(celdaCr);
-
-    fila.addEventListener('click', () => {
-      const filaSeleccionada = tbody.querySelector('.selected');
-      if (filaSeleccionada) {
-        filaSeleccionada.classList.remove('selected');
-      }
-      fila.classList.add('selected');
-    });
-
-    if (index === 0) {
-      fila.classList.add('selected');
-    }
-    
-    tbody.appendChild(fila);
-  });
 }

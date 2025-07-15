@@ -154,6 +154,61 @@ ipcMain.on('abrir-dialogo-imagen', (event, categoria) => {
   }).catch(err => console.error('Error en el diálogo:', err));
 });
 
+
+
+
+ipcMain.on('guardar-sprite', (event, data) => {
+  try {
+    const { imagen, nombreBase, categoria } = data; // categoria opcional si la envías
+
+    // Extraer base64 sin el encabezado data:image/png;base64,
+    const base64Data = imagen.replace(/^data:image\/png;base64,/, '');
+
+    // Leer config para obtener username (dm)
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    const username = config.dm;
+    if (!username) throw new Error("Nombre de DM no encontrado en la configuración.");
+
+    // Carpetas y paths
+    const userFolder = path.join(app.getAppPath(), 'assets', username, 'imgMapas');
+    const jsonPath = path.join(app.getAppPath(), 'assets', 'system', `${username}_imagenes_mapas.json`);
+    fs.mkdirSync(userFolder, { recursive: true });
+    fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
+
+    // Generar nombre con UUID o incremental
+    // Aquí uso UUID para evitar colisiones
+    const uuid = uuidv4();
+    const filename = `${uuid}.png`;
+    const destinoPath = path.join(userFolder, filename);
+
+    // Guardar archivo PNG
+    fs.writeFileSync(destinoPath, base64Data, 'base64');
+
+    // Leer JSON existente o iniciar arreglo
+    let jsonData = fs.existsSync(jsonPath) ? JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) : [];
+
+    // Agregar registro
+    const nuevoRegistro = {
+      nombre: filename, // nombre con sufijo
+      uuid: uuid,
+      extension: 'png',
+      categoria: { categoria: categoria || 'sin categoria' }
+    };
+    jsonData.push(nuevoRegistro);
+
+    // Guardar JSON actualizado
+    fs.writeFileSync(jsonPath, JSON.stringify(jsonData, null, 2));
+
+    // Enviar éxito y registro al renderer
+    event.sender.send('guardar-sprite-respuesta', { success: true, registro: nuevoRegistro });
+
+  } catch (error) {
+    console.error('Error al guardar sprite:', error);
+    event.sender.send('guardar-sprite-respuesta', { success: false, error: error.message });
+  }
+});
+
+
 // Escucha la petición de la lista de assets
 ipcMain.handle('get-asset-list', async () => {
   try {
@@ -282,6 +337,8 @@ ipcMain.handle('load-map-dialog', async (event) => {
   }
   return null; // Devuelve null si el usuario cancela
 });
+
+
 ////////////////CREATURAS
 // --- Lógica para importar una criatura desde un archivo .crea ---
 ipcMain.handle('import-creature', async (event) => {
@@ -305,8 +362,6 @@ ipcMain.handle('import-creature', async (event) => {
   }
   return null; // El usuario canceló el diálogo
 });
-
-
 // CARGA INICIAL: Lee todos los archivos .crea del directorio del usuario.
 ipcMain.handle('load-creatures-from-app-folder', async () => {
   
