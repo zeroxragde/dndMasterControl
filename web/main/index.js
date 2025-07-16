@@ -1,7 +1,9 @@
 const { app, BrowserWindow, screen, ipcMain, protocol, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid'); 
+const mammoth = require('mammoth'); // Para convertir docx a HTML, instalar con npm install mammoth
+const userDocsFolder = (username) => path.join(__dirname, 'assets', 'system', `${username}_docs`);
 
 // Habilita la recarga en vivo durante el desarrollo
 /*require('electron-reload')(__dirname, {
@@ -337,6 +339,39 @@ ipcMain.handle('load-map-dialog', async (event) => {
   }
   return null; // Devuelve null si el usuario cancela
 });
+
+///////////////DOCUMENTOS DE USUARIO
+// --- Lógica para manejar documentos de usuario ---
+ipcMain.handle('get-doc-list', async (event, username) => {
+  const folder = userDocsFolder(username);
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+  return fs.readdirSync(folder).filter(f => f.endsWith('.docx'));
+});
+
+ipcMain.handle('load-doc-content', async (event, username, filename) => {
+  const filePath = path.join(userDocsFolder(username), filename);
+  if (!fs.existsSync(filePath)) return null;
+
+  const data = fs.readFileSync(filePath);
+  try {
+    const result = await mammoth.convertToHtml({ buffer: data });
+    return result.value;
+  } catch (error) {
+    console.error('Error convirtiendo docx:', error);
+    return null;
+  }
+});
+
+ipcMain.handle('save-doc-file', async (event, username, file) => {
+  const folder = userDocsFolder(username);
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+  const savePath = path.join(folder, file.name);
+  fs.writeFileSync(savePath, file.data, 'binary');
+  return true;
+});
+
+
+
 
 
 ////////////////CREATURAS

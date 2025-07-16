@@ -27,7 +27,7 @@ let criaturasData = [
   
 ];
 let litsViewCreaturas;
-let spriteModal = null;
+let spriteModal;
 
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
@@ -130,7 +130,11 @@ function inicializarComponentes() {
   inicializarBotonImportarCrea();
   inicializarBotonRefreshCrea();
   inicializarBotonToggleLayer(mapCanvas);
+  inicializarDocs();
+
+
 }
+
 function inicializarBotonToggleLayer(mapCanvas) {
   const btn = document.getElementById('btn_toggle_layer');
   const icon = document.getElementById('icon_toggle_layer');
@@ -847,4 +851,135 @@ function poblarDropdownsEditor() {
 
   rellenarSelect('editor-idiomas', datosDelJuego.idiomas, "Idiomas");
   rellenarSelect('editor-cr', datosDelJuego.cr, "Seleccionar CR");
+}
+ 
+
+//FUncion
+
+async function inicializarDocs() {
+  // 1. Obtener los elementos del DOM
+  const docListContainer = document.getElementById('doc-list');
+  const docContentContainer = document.getElementById('doc-content');
+  const btnUploadDoc = document.getElementById('btn-upload-doc');
+  const btnRefreshList = document.getElementById('btn-refresh-list');
+  let username = userConfig.dm; // Usuario actual
+
+  // 2. Verificar que todos existen ANTES de seguir
+  if (!docListContainer || !docContentContainer || !btnUploadDoc || !btnRefreshList) {
+    console.error('[inicializarDocs] Faltan elementos en el HTML. Revisa que los IDs existan: "doc-list", "doc-content", "btn-upload-doc", "btn-refresh-list"');
+    return;
+  }
+
+  // 3. Input oculto para seleccionar archivos
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.doc,.docx';
+  fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+
+  // 4. Función para cargar la lista de documentos
+  async function loadDocList() {
+    if (!username) return;
+    const docs = await ipcRenderer.invoke('get-doc-list', username);
+    docListContainer.innerHTML = '';
+    docContentContainer.innerHTML = '';
+    if (!docs || docs.length === 0) {
+      docListContainer.innerHTML = '<p style="color: white;">No hay documentos.</p>';
+      return;
+    }
+    docs.forEach(doc => {
+      const btn = document.createElement('button');
+      btn.textContent = doc;
+      btn.className = 'btn-doc-list-item';
+      btn.style.display = 'block';
+      btn.style.width = '100%';
+      btn.style.marginBottom = '6px';
+      btn.style.padding = '8px';
+      btn.style.background = '#222b7b';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+      btn.style.textAlign = 'left';
+      btn.style.cursor = 'pointer';
+      btn.addEventListener('click', () => openDoc(doc));
+      docListContainer.appendChild(btn);
+    });
+  }
+
+  // 5. Función para abrir y mostrar el contenido del documento
+  async function openDoc(filename) {
+    if (!username) return;
+    const contentHtml = await ipcRenderer.invoke('load-doc-content', username, filename);
+    if (contentHtml) {
+      renderDocPages(contentHtml);
+    } else {
+      docContentContainer.innerHTML = '<p style="color: red;">Error al cargar documento.</p>';
+    }
+  }
+
+  // 6. Divide el contenido HTML en páginas tipo Word
+function renderDocPages(htmlContent) {
+  docContentContainer.innerHTML = ''; // limpiar
+
+  // Divide por los saltos de página (puede ser <hr>, <hr class="pageBreak"> o <hr ...>)
+  // Ajusta el regex según cómo aparezcan los saltos de página en tu HTML
+  const pages = htmlContent.split(/<hr\b[^>]*>/i);
+
+  pages.forEach(pageHtml => {
+    const pageDiv = document.createElement('div');
+    pageDiv.className = 'doc-page';
+    pageDiv.style.width = '794px';
+    pageDiv.style.minHeight = '1122px';
+    pageDiv.style.margin = '20px auto';
+    pageDiv.style.padding = '20px';
+    pageDiv.style.background = 'white';
+   // pageDiv.style.boxShadow = '0 0 8px rgba(0,0,0,0.1)';
+    pageDiv.style.color = 'rgba(0,0,0,0.1)';
+    pageDiv.style.overflow = 'hidden';
+    pageDiv.innerHTML = pageHtml;
+    docContentContainer.appendChild(pageDiv);
+  });
+}
+
+
+  // 7. Eventos para subir y refrescar docs
+  btnUploadDoc.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    await ipcRenderer.invoke('save-doc-file', username, { name: file.name, data: buffer });
+    await loadDocList();
+    fileInput.value = '';
+  });
+
+  btnRefreshList.addEventListener('click', () => loadDocList());
+const btnDeleteDoc = document.getElementById('btn-delete-doc');
+let selectedDoc = null;
+
+// Actualiza openDoc para recordar el doc seleccionado:
+async function openDoc(filename) {
+  if (!username) return;
+  selectedDoc = filename;
+  const contentHtml = await ipcRenderer.invoke('load-doc-content', username, filename);
+  if (contentHtml) {
+    renderDocPages(contentHtml);
+  } else {
+    docContentContainer.innerHTML = '<p style="color: red;">Error al cargar documento.</p>';
+  }
+}
+
+// Lógica para borrar doc:
+btnDeleteDoc.addEventListener('click', async () => {
+  if (!selectedDoc) {
+    alert('Selecciona un documento primero');
+    return;
+  }
+  if (!confirm(`¿Seguro que quieres eliminar "${selectedDoc}"?`)) return;
+  await ipcRenderer.invoke('delete-doc-file', username, selectedDoc);
+  selectedDoc = null;
+  await loadDocList();
+});
+  // 8. Cargar la lista al iniciar el tab
+  loadDocList();
 }

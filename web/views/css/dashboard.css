@@ -492,3 +492,25 @@
   padding-bottom: 5px;
   border-bottom: 2px solid #7a3d34; /* Línea separadora */
 }
+
+#doc-content {
+  background: #888;
+  padding: 15px;
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doc-page {
+  width: 794px; /* ancho A4 en px */
+  height: 1122px; /* alto A4 en px */
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  page-break-after: always;
+  position: relative;
+}

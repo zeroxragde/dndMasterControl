@@ -12,6 +12,7 @@
     "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
+    "mammoth": "^1.9.1",
     "uuid": "^11.1.0"
   }
 }
