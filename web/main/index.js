@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid'); 
 const mammoth = require('mammoth'); // Para convertir docx a HTML, instalar con npm install mammoth
-const userDocsFolder = (username) => path.join(__dirname, 'assets', 'system', `${username}_docs`);
+
 
 // Habilita la recarga en vivo durante el desarrollo
 /*require('electron-reload')(__dirname, {
@@ -22,7 +22,14 @@ if (!app.isPackaged) {                     // <-- true en desarrollo, false en u
 // --- Variables Globales ---
 let mapaWindow = null;
 let dashboardWindow = null;
+const userFolderGlobal = path.join(app.getAppPath(), 'assets', 'system');
 const configPath = path.join(__dirname, '..', 'config.json');
+
+function userDocsFolder(){
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+  const username = config.dm;
+   return path.join(userFolderGlobal, username+'_docs');
+}
 
 // --- Función para crear la ventana de login ---
 function createLoginWindow() {
@@ -155,9 +162,6 @@ ipcMain.on('abrir-dialogo-imagen', (event, categoria) => {
     }
   }).catch(err => console.error('Error en el diálogo:', err));
 });
-
-
-
 
 ipcMain.on('guardar-sprite', (event, data) => {
   try {
@@ -339,7 +343,41 @@ ipcMain.handle('load-map-dialog', async (event) => {
   }
   return null; // Devuelve null si el usuario cancela
 });
+//tab players
+ipcMain.on('save-players-data', (event, { data }) => {
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+  const username = config.dm;
+  var filePath = path.join(userFolderGlobal, username+'_players_data.json');
 
+  fs.writeFile(filePath, JSON.stringify(data, null, 2), (err) => {
+    if (err) {
+      console.error('Error guardando datos:', err);
+      event.reply('save-players-data-reply', { success: false, error: err.message });
+      return;
+    }
+    event.reply('save-players-data-reply', { success: true });
+  });
+});
+// Método para cargar datos de jugadores
+ipcMain.handle('load-players-data', async (event) => {
+  try {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    const username = config.dm;
+    const filePath = path.join(userFolderGlobal, username + '_players_data.json');
+
+    if (!fs.existsSync(filePath)) {
+      // Si no existe el archivo, regresar estructura vacía
+      return { iniciativa: [], runas: [] };
+    }
+
+    const dataRaw = fs.readFileSync(filePath, 'utf-8');
+    const data = JSON.parse(dataRaw);
+    return data;
+  } catch (error) {
+    console.error('Error cargando datos de jugadores:', error);
+    return { iniciativa: [], runas: [] };
+  }
+});
 ///////////////DOCUMENTOS DE USUARIO
 // --- Lógica para manejar documentos de usuario ---
 ipcMain.handle('get-doc-list', async (event, username) => {
@@ -354,6 +392,7 @@ ipcMain.handle('load-doc-content', async (event, username, filename) => {
 
   const data = fs.readFileSync(filePath);
   try {
+
     const result = await mammoth.convertToHtml({ buffer: data });
     return result.value;
   } catch (error) {

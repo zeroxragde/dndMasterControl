@@ -29,6 +29,11 @@ let criaturasData = [
 let litsViewCreaturas;
 let spriteModal;
 
+const initiativeList = document.getElementById('initiative-list');
+const addCharBtn = document.getElementById('add-char-btn');
+const newCharInput = document.getElementById('new-char-name');
+let characters = [];
+
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
 document.addEventListener("DOMContentLoaded", async () => {
@@ -131,6 +136,7 @@ function inicializarComponentes() {
   inicializarBotonRefreshCrea();
   inicializarBotonToggleLayer(mapCanvas);
   inicializarDocs();
+  renderInitiative();
 
 
 }
@@ -911,6 +917,7 @@ async function inicializarDocs() {
     const contentHtml = await ipcRenderer.invoke('load-doc-content', username, filename);
     if (contentHtml) {
       renderDocPages(contentHtml);
+     // docContentContainer.innerHTML = contentHtml;
     } else {
       docContentContainer.innerHTML = '<p style="color: red;">Error al cargar documento.</p>';
     }
@@ -922,22 +929,23 @@ function renderDocPages(htmlContent) {
 
   // Divide por los saltos de página (puede ser <hr>, <hr class="pageBreak"> o <hr ...>)
   // Ajusta el regex según cómo aparezcan los saltos de página en tu HTML
-  const pages = htmlContent.split(/<hr\b[^>]*>/i);
+ // const pages = htmlContent.split(/(?=<h1[^>]*><a id="[^"]*"><\/a><strong>)/i);
+  //const pages = htmlContent.split(/(?=<h[12][^>]*><a id="[^"]*"><\/a><strong>)/i);
 
-  pages.forEach(pageHtml => {
+ // pages.forEach(pageHtml => {
     const pageDiv = document.createElement('div');
-    pageDiv.className = 'doc-page';
+   // pageDiv.className = 'doc-page';
     pageDiv.style.width = '794px';
-    pageDiv.style.minHeight = '1122px';
+    //pageDiv.style.minHeight = '1122px';
     pageDiv.style.margin = '20px auto';
     pageDiv.style.padding = '20px';
     pageDiv.style.background = 'white';
    // pageDiv.style.boxShadow = '0 0 8px rgba(0,0,0,0.1)';
-    pageDiv.style.color = 'rgba(0,0,0,0.1)';
-    pageDiv.style.overflow = 'hidden';
-    pageDiv.innerHTML = pageHtml;
+    pageDiv.style.color = 'rgba(0, 0, 0)';
+    pageDiv.style.overflow = 'auto';
+    pageDiv.innerHTML = htmlContent;
     docContentContainer.appendChild(pageDiv);
-  });
+ // });
 }
 
 
@@ -964,6 +972,7 @@ async function openDoc(filename) {
   const contentHtml = await ipcRenderer.invoke('load-doc-content', username, filename);
   if (contentHtml) {
     renderDocPages(contentHtml);
+   // docContentContainer.innerHTML = contentHtml;
   } else {
     docContentContainer.innerHTML = '<p style="color: red;">Error al cargar documento.</p>';
   }
@@ -982,4 +991,119 @@ btnDeleteDoc.addEventListener('click', async () => {
 });
   // 8. Cargar la lista al iniciar el tab
   loadDocList();
+}
+
+///////////////////////
+// Función para renderizar la lista según el array characters
+function renderInitiative() {
+  initiativeList.innerHTML = '';
+  loadPlayersData();
+
+  // Drag and drop handlers
+  let dragSrcEl = null;
+
+  function dragStart(e) {
+    dragSrcEl = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', this.dataset.index);
+  }
+
+  function dragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.currentTarget;
+    if (target && target !== dragSrcEl) {
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top) / rect.height > 0.5;
+      initiativeList.insertBefore(dragSrcEl, next ? target.nextSibling : target);
+    }
+  }
+
+  function drop(e) {
+    e.stopPropagation();
+    const draggedIndex = Number(e.dataTransfer.getData('text/plain'));
+    const droppedIndex = Number(this.dataset.index);
+    if (draggedIndex === droppedIndex) return;
+
+    const draggedItem = characters[draggedIndex];
+    characters.splice(draggedIndex, 1);
+    characters.splice(droppedIndex, 0, draggedItem);
+    renderInitiative();
+    savePlayersData();
+  }
+
+  function dragEnd() {
+    this.classList.remove('dragging');
+  }
+
+  function savePlayersData() {
+    const iniciativa = Array.from(document.querySelectorAll('#initiative-list .player-card')).map(card => card.dataset.name);
+    const runas = []; // Completa según tu estructura actual
+    console.log("Guardando datos de jugadores:", { iniciativa, runas });
+    ipcRenderer.send('save-players-data', { data: { iniciativa, runas } });
+  }
+
+  characters.forEach((char, idx) => {
+    const li = document.createElement('li');
+    li.classList.add('player-card');
+    li.dataset.name = char.name;
+    li.setAttribute('draggable', true);
+    li.dataset.index = idx;
+    li.textContent = char.name;
+
+    // Botón para borrar
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = '×';
+    removeBtn.classList.add('remove-btn');
+    removeBtn.title = 'Eliminar personaje';
+    removeBtn.onclick = e => {
+      e.stopPropagation();
+      // Buscar el índice actual por nombre (o id si tienes)
+      const indexToRemove = characters.findIndex(c => c.name === char.name);
+      if (indexToRemove > -1) {
+        characters.splice(indexToRemove, 1);
+        renderInitiative();
+        savePlayersData();
+      }
+    };
+
+    li.appendChild(removeBtn);
+
+    // Drag and drop events
+    li.addEventListener('dragstart', dragStart);
+    li.addEventListener('dragover', dragOver);
+    li.addEventListener('drop', drop);
+    li.addEventListener('dragend', dragEnd);
+
+    initiativeList.appendChild(li);
+  });
+
+  // Remover y agregar listener para evitar duplicados
+  addCharBtn.removeEventListener('click', addCharHandler);
+  addCharBtn.addEventListener('click', addCharHandler);
+
+  function addCharHandler() {
+    const name = newCharInput.value.trim();
+    if (!name) return;
+    characters.push({ name });
+    newCharInput.value = '';
+    renderInitiative();
+    newCharInput.focus();
+    savePlayersData();
+  }
+  async function loadPlayersData() {
+    try {
+      const data = await ipcRenderer.invoke('load-players-data');
+      if (data && Array.isArray(data.iniciativa)) {
+        // Mapear la lista guardada a characters para renderizarla
+        characters = data.iniciativa.map(name => ({ name }));
+      } else {
+        characters = [];
+      }
+      renderInitiative(); // Re-renderizar con los datos cargados
+    } catch (err) {
+      console.error('Error cargando datos de jugadores:', err);
+    }
+  }
 }

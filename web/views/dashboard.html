@@ -22,7 +22,7 @@
     <div id="web-container" class="web-container">
     
       <nav class="web-nav" role="tablist">
-        <button class="web-tab-button active" role="tab" aria-controls="web-tab-ambiente" aria-selected="true">🎵 Ambientación musical</button>
+        <!--button class="web-tab-button active" role="tab" aria-controls="web-tab-ambiente" aria-selected="true">🎵 Ambientación musical</button-->
         <button class="web-tab-button" role="tab" aria-controls="web-tab-creaturas" aria-selected="false">🧙 Creaturas </button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-editor-map" aria-selected="false">🗺️ Mapa Editor</button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-libro" aria-selected="false">📚 Libros de Historias</button>
@@ -752,6 +752,23 @@
 </div>
 
 
+        </div>
+
+        <div id="web-tab-players" class="web-tab-content" role="tabpanel">
+          
+          <div id="initiative-board" class="initiative-board">
+            <h2>Tablero de Iniciativa</h2>
+            <div class="input-add">
+              <input type="text" id="new-char-name" placeholder="Nombre del personaje" />
+              <button id="add-char-btn" title="Agregar personaje">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <ul id="initiative-list" class="initiative-list">
+              <!-- Tarjetas de personajes -->
+            </ul>
+          </div>
+          
         </div>
       </main>
   </div>

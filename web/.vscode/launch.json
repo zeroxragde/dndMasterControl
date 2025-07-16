@@ -5,13 +5,13 @@
       "name": "🔨 Debug Main Process",
       "type": "pwa-node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/web",                         
-      "runtimeExecutable": "${workspaceFolder}/web/node_modules/.bin/electron",  
+      "cwd": "${workspaceFolder}",                         
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",  
       "runtimeArgs": [
         "."                                                   
       ],
       "windows": {                                             
-        "runtimeExecutable": "${workspaceFolder}/web/node_modules/.bin/electron.cmd"
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "outputCapture": "std"                                   
     },
