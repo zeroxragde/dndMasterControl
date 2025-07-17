@@ -598,3 +598,45 @@
   width: 22%;
   padding: 15px;
 }
+
+/*magia*/
+/* --- Layout horizontal sin tocar el HTML --- */
+.spellbook-container {
+  float: left;
+  width: 320px;            /* mism ancho que tenías en tu diseño */
+  box-sizing: border-box;  /* que padding/border no rompan el ancho */
+}
+
+.spell-detail-container {
+  float: left;
+  margin-left: 20px;                                  /* separación entre paneles */
+  width: calc(100% - 320px - 20px);                   /* ocupa todo lo que queda */
+  box-sizing: border-box;                             /* idem arriba */
+  /* tu position:sticky, top, background, etc. ya quedan intactos */
+}
+
+/* clearfix automático para quien sea el padre de ambos */
+.spellbook-container::after,
+.spell-detail-container::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* opcional: que ambos scrolldeen internamente si exceden alto */
+.spellbook-container,
+.spell-detail-container {
+  height: calc(100vh - 40px);  /* ajusta “-40px” si tienes header fijo arriba */
+  overflow-y: auto;
+}
+
+/* 2) Glow en items de la lista al hover */
+.spell-list .spell-item:hover {
+  color: #fff174;
+  cursor: pointer;
+  text-shadow: 
+    0 0 4px #fff174,
+    0 0 8px #fff174,
+    0 0 12px #ffcf44;
+  background: rgba(255,255,255,0.05);
+}

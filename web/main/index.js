@@ -317,6 +317,12 @@ ipcMain.on('update-map-state', (event, mapState) => {
     mapaWindow.webContents.send('render-map-state', mapState);
   }
 });
+// --- Lógica para leer hechizos desde un archivo JSON ---
+ipcMain.handle('leer-hechizos-json', async (event) => {
+  const jsonPath = path.join(app.getAppPath(), 'assets',  `hechizos.json`);
+  const contenido = fs.readFileSync(jsonPath, 'utf-8');
+  return JSON.parse(contenido);
+});
 // --- Lógica para cargar un mapa desde un archivo ---
 ipcMain.handle('load-map-dialog', async (event) => {
   // Abre el diálogo para que el usuario elija un archivo JSON

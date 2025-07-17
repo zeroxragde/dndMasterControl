@@ -137,6 +137,7 @@ function inicializarComponentes() {
   inicializarBotonToggleLayer(mapCanvas);
   inicializarDocs();
   renderInitiative();
+   renderizarHechizos();
 
 
 }
@@ -995,9 +996,17 @@ btnDeleteDoc.addEventListener('click', async () => {
 
 ///////////////////////
 // Función para renderizar la lista según el array characters
+
 function renderInitiative() {
-  initiativeList.innerHTML = '';
-  loadPlayersData();
+  // Obtener elementos
+  const initiativeList = document.getElementById('initiative-list');
+  const addCharBtn = document.getElementById('add-char-btn');
+  const newCharInput = document.getElementById('new-char-input');
+
+  // Variables internas
+  let characters = [];
+
+  // --- Funciones internas ---
 
   // Drag and drop handlers
   let dragSrcEl = null;
@@ -1029,7 +1038,7 @@ function renderInitiative() {
     const draggedItem = characters[draggedIndex];
     characters.splice(draggedIndex, 1);
     characters.splice(droppedIndex, 0, draggedItem);
-    renderInitiative();
+    renderList();
     savePlayersData();
   }
 
@@ -1040,70 +1049,163 @@ function renderInitiative() {
   function savePlayersData() {
     const iniciativa = Array.from(document.querySelectorAll('#initiative-list .player-card')).map(card => card.dataset.name);
     const runas = []; // Completa según tu estructura actual
-    console.log("Guardando datos de jugadores:", { iniciativa, runas });
     ipcRenderer.send('save-players-data', { data: { iniciativa, runas } });
   }
 
-  characters.forEach((char, idx) => {
-    const li = document.createElement('li');
-    li.classList.add('player-card');
-    li.dataset.name = char.name;
-    li.setAttribute('draggable', true);
-    li.dataset.index = idx;
-    li.textContent = char.name;
+  function renderList() {
+    initiativeList.innerHTML = '';
+    characters.forEach((char, idx) => {
+      const li = document.createElement('li');
+      li.classList.add('player-card');
+      li.dataset.name = char.name;
+      li.setAttribute('draggable', true);
+      li.dataset.index = idx;
+      li.textContent = char.name;
 
-    // Botón para borrar
-    const removeBtn = document.createElement('button');
-    removeBtn.textContent = '×';
-    removeBtn.classList.add('remove-btn');
-    removeBtn.title = 'Eliminar personaje';
-    removeBtn.onclick = e => {
-      e.stopPropagation();
-      // Buscar el índice actual por nombre (o id si tienes)
-      const indexToRemove = characters.findIndex(c => c.name === char.name);
-      if (indexToRemove > -1) {
-        characters.splice(indexToRemove, 1);
-        renderInitiative();
-        savePlayersData();
-      }
-    };
+      // Botón para borrar
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = '×';
+      removeBtn.classList.add('remove-btn');
+      removeBtn.title = 'Eliminar personaje';
+      removeBtn.onclick = e => {
+        e.stopPropagation();
+        const indexToRemove = characters.findIndex(c => c.name === char.name);
+        if (indexToRemove > -1) {
+          characters.splice(indexToRemove, 1);
+          renderList();
+          savePlayersData();
+        }
+      };
 
-    li.appendChild(removeBtn);
+      li.appendChild(removeBtn);
 
-    // Drag and drop events
-    li.addEventListener('dragstart', dragStart);
-    li.addEventListener('dragover', dragOver);
-    li.addEventListener('drop', drop);
-    li.addEventListener('dragend', dragEnd);
+      // Drag and drop events
+      li.addEventListener('dragstart', dragStart);
+      li.addEventListener('dragover', dragOver);
+      li.addEventListener('drop', drop);
+      li.addEventListener('dragend', dragEnd);
 
-    initiativeList.appendChild(li);
-  });
+      initiativeList.appendChild(li);
+    });
+  }
 
-  // Remover y agregar listener para evitar duplicados
-  addCharBtn.removeEventListener('click', addCharHandler);
-  addCharBtn.addEventListener('click', addCharHandler);
-
+  // Añadir personaje
   function addCharHandler() {
     const name = newCharInput.value.trim();
     if (!name) return;
     characters.push({ name });
     newCharInput.value = '';
-    renderInitiative();
-    newCharInput.focus();
+    renderList();
     savePlayersData();
+    newCharInput.focus();
   }
+
+  // Cargar jugadores
   async function loadPlayersData() {
     try {
       const data = await ipcRenderer.invoke('load-players-data');
       if (data && Array.isArray(data.iniciativa)) {
-        // Mapear la lista guardada a characters para renderizarla
         characters = data.iniciativa.map(name => ({ name }));
       } else {
         characters = [];
       }
-      renderInitiative(); // Re-renderizar con los datos cargados
+      renderList();
     } catch (err) {
       console.error('Error cargando datos de jugadores:', err);
+      characters = [];
+      renderList();
     }
   }
+
+  // Limpiar listeners antes de agregar (evita duplicados)
+  if (addCharBtn) {
+    const newAddCharBtn = addCharBtn.cloneNode(true);
+    addCharBtn.parentNode.replaceChild(newAddCharBtn, addCharBtn);
+    newAddCharBtn.addEventListener('click', addCharHandler);
+  }
+
+  // Inicialización: cargar jugadores y renderizar
+  loadPlayersData();
 }
+
+/////////
+async function renderizarHechizos() {
+  const spellList = document.getElementById('spell-list');
+  const searchInput = document.getElementById('search-spell');
+  const spellDetail = document.getElementById('spell-detail-container');
+  let allSpells = [];
+
+  async function cargarHechizos() {
+    allSpells = Object.values(await ipcRenderer.invoke('leer-hechizos-json')).flat();
+    renderSpellList();
+  }
+
+  // Renderizar la lista de hechizos
+  function renderSpellList(filtro = '') {
+    spellList.innerHTML = '';
+    const listaFiltrada = allSpells.filter(spell =>
+      spell.nombre.toLowerCase().includes(filtro.toLowerCase())
+    );
+    if (!listaFiltrada.length) {
+      spellList.innerHTML = '<li style="color:#999;">No hay hechizos.</li>';
+      spellDetail.innerHTML = '';
+      return;
+    }
+    listaFiltrada.forEach(spell => {
+      const li = document.createElement('li');
+      li.className = 'spell-item';
+      li.innerHTML = `
+        <img src="${spell.icono}" style="width:28px;height:28px;margin-right:10px;vertical-align:middle;">
+        <span>${spell.nombre}</span>
+      `;
+      li.onclick = () => renderSpellDetail(spell);
+      spellList.appendChild(li);
+    });
+    // Selecciona el primero por default al buscar
+    if (listaFiltrada.length) renderSpellDetail(listaFiltrada[0]);
+  }
+
+function renderSpellDetail(spell) {
+  // Busca cada elemento por su ID
+  const img = document.getElementById('spell-detail-img');
+  const name = document.getElementById('spell-detail-name');
+  const type = document.getElementById('spell-detail-type');
+  const comps = document.getElementById('spell-detail-components');
+  const time = document.getElementById('spell-detail-time');
+  const range = document.getElementById('spell-detail-range');
+  const duration = document.getElementById('spell-detail-duration');
+  const action = document.getElementById('spell-detail-action');
+  const save = document.getElementById('spell-detail-save');
+  const attack = document.getElementById('spell-detail-attack');
+  const desc = document.getElementById('spell-detail-desc');
+
+  if (!img || !name || !type || !comps || !time || !range || !duration || !action || !save || !attack || !desc) {
+    console.error('[renderSpellDetail] Faltan elementos en el HTML. Verifica los IDs.');
+    return;
+  }
+
+  // Rellenar campos, usando dark colors en CSS, no aquí
+  img.src = spell.icono || '';
+  img.alt = spell.nombre || 'hechizo';
+  name.textContent = spell.nombre || '';
+  type.textContent = `Tipo: ${spell.tipo || '-'}`;
+  comps.textContent = `Componentes: ${spell.componentes || '-'}`;
+  time.textContent = `Tiempo: ${spell.tiempo || '-'}`;
+  range.textContent = `Alcance: ${spell.alcance || '-'}`;
+  duration.textContent = `Duración: ${spell.duracion || '-'}`;
+  action.textContent = `Acción: ${spell.accion || '-'}`;
+  save.textContent = `TS: ${spell.ts || '-'}`;
+  attack.textContent = `Ataque: ${spell.ataque || '-'}`;
+  desc.textContent = spell.descripcion || '-';
+}
+
+  // Evento búsqueda
+  searchInput.addEventListener('input', e => {
+    renderSpellList(e.target.value);
+  });
+
+  // Inicia todo
+  await cargarHechizos();
+}
+
+
