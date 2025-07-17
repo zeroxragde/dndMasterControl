@@ -29,7 +29,7 @@
         <button class="web-tab-button" role="tab" aria-controls="web-tab-players" aria-selected="false">🧑 Jugadores</button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-magia" aria-selected="false">✨ Magia</button>
         <button class="web-tab-button" role="tab" aria-controls="web-tab-shops" aria-selected="false">🏪 Tiendas</button>
-        <button class="web-tab-button" role="tab" aria-controls="web-tab-other" aria-selected="false">📚 Otros datos</button>
+        <!--button class="web-tab-button" role="tab" aria-controls="web-tab-other" aria-selected="false">📚 Otros datos</button-->
 
       
       </nav>
@@ -808,6 +808,31 @@
 </div>
 
         </div>
+
+        <div id="web-tab-shop" class="web-tab-content" role="tabpanel">
+            <div id="shop-generator" style="display:flex; height:100%;">
+              <!-- Panel objetos -->
+              <div class="shop-panel shop-panel--items">
+                <div class="shop-header">
+                  <button id="dec-items">－</button>
+                  <span id="num-items">5</span>
+                  <button id="inc-items">＋</button>
+                  <button id="rnd-items" title="Generar al azar 🎲">🎲</button>
+                  <input type="text" id="shop-name" placeholder="Nombre de Tienda…" />
+                  <button id="btn-load-shop">📂</button>
+                  <button id="btn-save-shop">💾</button>
+                </div>
+                <ul id="items-list" class="items-list"></ul>
+              </div>
+
+              <!-- Panel tienda -->
+              <div class="shop-panel shop-panel--cart">
+                <h3>Elementos en la tienda</h3>
+                <ul id="cart-list" class="cart-list"></ul>
+              </div>
+            </div>
+        </div>
+
       </main>
   </div>
   </body>
