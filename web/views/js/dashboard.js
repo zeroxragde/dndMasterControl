@@ -168,6 +168,7 @@ function inicializarBotonRefreshCrea() {
  */
 function inicializarMapaEditor() {
   mapCanvas = new MapCanvas('map-canvas');
+
   // --- LÓGICA DE CAPAS ---
   const newLayerInput = document.getElementById('new-layer-name');
   const addLayerButton = document.getElementById('btn-add-layer');

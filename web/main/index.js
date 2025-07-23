@@ -74,7 +74,8 @@ ipcMain.on('configuracion-inicial', (event, datos) => {
     fullscreen: true,
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false }
   });
-  //mapaWindow.webContents.openDevTools();
+ 
+  if (!app.isPackaged) mapaWindow.webContents.openDevTools();
   mapaWindow.loadFile(path.join(__dirname, '../views/mapa.html'));
 
   dashboardWindow = new BrowserWindow({
@@ -323,6 +324,13 @@ ipcMain.handle('leer-hechizos-json', async (event) => {
   const contenido = fs.readFileSync(jsonPath, 'utf-8');
   return JSON.parse(contenido);
 });
+// --- Lógica para manejar clics en el canvas del mapa ---
+ipcMain.on('canvas-click', (event, coords) => {
+  if (mapaWindow) {
+    mapaWindow.webContents.send('canvas-click', coords);
+  }
+});
+
 // --- Lógica para cargar un mapa desde un archivo ---
 ipcMain.handle('load-map-dialog', async (event) => {
   // Abre el diálogo para que el usuario elija un archivo JSON

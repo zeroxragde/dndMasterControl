@@ -5,6 +5,7 @@
 const { ipcRenderer } = require('electron');
 class MapCanvas {
     constructor(canvasId) {
+
       this.canvas = document.getElementById(canvasId);
       if (!this.canvas) return;
       
@@ -43,6 +44,7 @@ class MapCanvas {
       this.canvas.addEventListener('mouseup', this._onMouseUp.bind(this));
       this.canvas.addEventListener('mouseleave', this._onMouseUp.bind(this));
       this.canvas.addEventListener('contextmenu', this._onRightClick.bind(this));
+      this.canvas.addEventListener('click', this._onCanvasClick.bind(this));
     }
   
     // --- MÉTODOS PÚBLICOS ---
@@ -159,6 +161,17 @@ class MapCanvas {
           height: this.canvas.height
       };
     }
+    _onCanvasClick(event) {
+      const rect = this.canvas.getBoundingClientRect();
+      const scaleX = this.canvas.width / rect.width;
+      const scaleY = this.canvas.height / rect.height;
+
+      const x = (event.clientX - rect.left) * scaleX;
+      const y = (event.clientY - rect.top) * scaleY;
+      // Envía la posición al proceso principal
+      ipcRenderer.send('canvas-click', { x, y });
+    }
+
     /**
      * Limpia por completo el mapa, eliminando todos los tokens y capas,
      * y dejando únicamente la capa "base" vacía.

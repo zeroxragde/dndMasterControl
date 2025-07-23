@@ -1,3 +1,4 @@
+//map.js - Script para manejar el canvas del mapa en la vista del dashboard
 const { ipcRenderer } = require('electron');
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -54,6 +55,82 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- Listeners de IPC ---
+
+    let tempMarker = null;
+    let markerTimeout = null;
+
+
+
+    ipcRenderer.on('canvas-click', (event, coords) => {
+        console.log('Clic recibido en mapa:', coords);
+
+        const startTime = performance.now();
+        const duration = 1500; // Duración total de la animación (1.5 segundos)
+        const baseVisibleDuration = 1000; // Tiempo que el punto base estará visible (1 segundo)
+        const maxRadius = 80;  
+        const baseRadius = 10; 
+
+        function animate(time) {
+            const elapsed = time - startTime;
+            if (elapsed > duration) {
+            // Termina la animación limpiando y dibujando fondo y tokens sin círculo
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackgroundAndTokens();
+            return;
+            }
+
+            const progress = elapsed / duration;
+            const radius = baseRadius + progress * (maxRadius - baseRadius);
+            const opacity = 0.6 * (1 - progress);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackgroundAndTokens();
+
+            // Círculo pulsante
+            ctx.beginPath();
+            ctx.arc(coords.x, coords.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 0, 0, ${opacity.toFixed(2)})`;
+            ctx.fill();
+
+            // Círculo base visible solo si no ha pasado 1 segundo
+            if (elapsed < baseVisibleDuration) {
+            ctx.beginPath();
+            ctx.arc(coords.x, coords.y, baseRadius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+            ctx.fill();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function drawBackgroundAndTokens() {
+            if (imageCache['background'] && imageCache['background'].complete) {
+            ctx.drawImage(imageCache['background'], 0, 0, canvas.width, canvas.height);
+            }
+            if (currentMapState && currentMapState.layers && currentMapState.layerOrder) {
+            currentMapState.layerOrder.forEach(layerName => {
+                if(currentMapState.layers[layerName]) {
+                currentMapState.layers[layerName].forEach(tokenData => {
+                    if (imageCache[tokenData.src] && imageCache[tokenData.src].complete) {
+                    ctx.drawImage(imageCache[tokenData.src], tokenData.x, tokenData.y, tokenData.width, tokenData.height);
+                    }
+                });
+                }
+            });
+            }
+            if (creatureToken && creatureToken.complete) {
+            const w = creatureToken.width;
+            const h = creatureToken.height;
+            const x = (canvas.width - w) / 2;
+            const y = (canvas.height - h) / 2;
+            ctx.drawImage(creatureToken, x, y, w, h);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    });
+
+
 
     // Escucha el estado completo del mapa para dibujarlo.
     ipcRenderer.on('render-map-state', (event, mapState) => {
