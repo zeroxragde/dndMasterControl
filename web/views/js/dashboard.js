@@ -23,11 +23,13 @@ let userConfig = {};
 let mapCanvas = null;
 let fondoMapa = new Image();
 let  stabsCreature;
+let  editorModal;
 let criaturasData = [
   
 ];
 let litsViewCreaturas;
 let spriteModal;
+let editCrea=null;
 
 const initiativeList = document.getElementById('initiative-list');
 const addCharBtn = document.getElementById('add-char-btn');
@@ -63,35 +65,69 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // --- Función de Inicialización del Dashboard ---
 function inicializarUI() {
-  inicializarComponentes();
-  const tbodyCriaturas = document.getElementById('listaCriaturasBody');
-  poblarDropdownsEditor();
+    inicializarComponentes();
 }
 
 /**
  * Crea las instancias de las clases Modal y Tabs para la página.
  */
 function inicializarComponentes() {
+  
+  new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Configuración para todos los modales.
   const modalConfigs = [
     { id: 'listaPanel', triggerId: 'btnLista', closeClassName: 'modal-close-btn', movable: true,width: '20%', },
-    { id: 'modalSubida', triggerId: 'abrirSubida', closeClassName: 'modal-close-btn', movable: true,width: '40%',height: '300px' },
-    {
-       id: 'modalEditor', 
+    { id: 'modalSubida', triggerId: 'abrirSubida', closeClassName: 'modal-close-btn', movable: true,width: '40%',height: '300px' }
+  ];
+  // Creamos una instancia de Tabs para la view de criaturas
+  stabsCreature = new Tabs({ id: 'creature-detail-view', orientation: 'vertical' });
+  editorModal = new Modal(    {
+      id: 'modalEditor', 
       triggerId: 'btnOpenEditor', 
       closeClassName: 'editor-close-btn',
       movable: true, 
       width: '100%',
       height: '70vh',
       onOpen: () => {
-        new Tabs({ id: 'creature-editor-container', orientation: 'vertical', title: 'EDITOR DE CRIATURA' });
+
+        poblarDropdownsEditorCrea();
+        inicializarClickEnImagenDetalleCreatura();
+        inicializarOpcionesEspeciales();
+
+        var title = 'NUEVA CRIATURA';
+        if (editCrea) {
+          title = 'EDITOR DE CRIATURA';
+        }
+        new Tabs({ id: 'creature-editor-container', orientation: 'vertical', title: title });
+        if (editCrea) {
+          // Llama a llenarModalEditor con un pequeño retardo para asegurar que el DOM está listo
+          setTimeout(() => {
+            mostrarDetallesCriatura(editCrea.fullData);
+          }, 100);
+        }
+
       }
+  });
+
+  // --- Inicializamos el botón de edición de criaturas ---
+  document.getElementById('btn_edit_crea').addEventListener('click', () => {
+    // Obtenemos la criatura seleccionada del ListView (litsViewCreaturas)
+    const seleccion = litsViewCreaturas.getSelectedItem(); // O el método equivalente que tengas
+
+    if (!seleccion) {
+      alert('Por favor, selecciona una criatura para editar.');
+      return;
     }
-  ];
-  stabsCreature = new Tabs({ id: 'creature-detail-view', orientation: 'vertical' });
+
+
+    editCrea = seleccion;
+    editorModal.open();
+
+  });
+
 
   modalConfigs.forEach(config => new Modal(config));
-  new Tabs({ id: 'web-container', orientation: 'horizontal' });
+ 
   // Creamos la instancia de la nueva clase ListView
   litsViewCreaturas=new ListView({
     containerId: 'creature-list-container',
@@ -128,20 +164,82 @@ function inicializarComponentes() {
     }
   });
 
-  inicializarOpcionesEspeciales();
+  
+
   inicializarMapaEditor();
-  inicializarClickEnImagenDetalle();
   actualizarArrayDeCriaturas();
   inicializarBotonImportarCrea();
   inicializarBotonRefreshCrea();
   inicializarBotonToggleLayer(mapCanvas);
   inicializarDocs();
   renderInitiative();
-   renderizarHechizos();
-
+  renderizarHechizos();
 
 }
 
+function llenarModalEditor(c) {
+  var creatura = c.fullData || null;
+
+  if (!creatura) return;
+
+  // Ejemplo para nombre
+  document.getElementById('editor-nombre').value = creatura.Nombre || '';
+
+  // Tamaño (select)
+  document.getElementById('editor-tamaño').value = creatura.Tamanio ? creatura.Tamanio.toLowerCase() : '';
+
+  // Tipo (select)
+  document.getElementById('editor-tipo').value = creatura.Tipo ? creatura.Tipo.toLowerCase() : '';
+
+  // Alineamiento (select)
+  document.getElementById('editor-alineamiento').value = creatura.Alineamiento ? creatura.Alineamiento.toLowerCase() : '';
+
+  // Puntos de golpe y dados de golpe
+  document.getElementById('editor-hp-promedio').value = creatura.PuntosGolpe || '';
+  document.getElementById('editor-hp-dados').value = creatura.DadosGolpe || '';
+
+  // Clase de armadura
+  document.getElementById('editor-ac').value = creatura.ClaseArmadura || '';
+
+  // Armadura (select)
+  document.getElementById('editor-armadura').value = creatura.DescripcionArmadura ? creatura.DescripcionArmadura.toLowerCase() : '';
+
+  // Escudo (checkbox)
+  document.getElementById('editor-escudo').checked = creatura.Escudo || false; // si tienes ese campo
+
+  // Velocidades
+  document.getElementById('input-velocidad').value = creatura.VelocidadCaminar || '';
+  document.getElementById('input-vel-cavado').value = creatura.VelocidadCavar || '';
+  document.getElementById('input-vel-escalado').value = creatura.VelocidadEscalado || '';
+  document.getElementById('input-vel-vuelo').value = creatura.VelocidadVolar || '';
+  document.getElementById('input-vel-nado').value = creatura.VelocidadNadar || '';
+
+  // Características
+  document.getElementById('input-fuerza').value = creatura.Fuerza || '';
+  document.getElementById('input-destreza').value = creatura.Destreza || '';
+  document.getElementById('input-con').value = creatura.Constitucion || '';
+  document.getElementById('input-int').value = creatura.Inteligencia || '';
+  document.getElementById('input-sab').value = creatura.Sabiduria || '';
+  document.getElementById('input-car').value = creatura.Carisma || '';
+
+  // Notas
+  document.getElementById('editor-notas').value = creatura.Notas || '';
+
+  // CR
+  document.getElementById('editor-cr-tab2').value = creatura.CR || '';
+
+  // Imagen (preview)
+  const previewImg = document.getElementById('preview-imagen-criatura');
+  if (creatura.Imagen) {
+    previewImg.src = "data:image/png;base64," + creatura.Imagen;
+    previewImg.style.display = 'block';
+  } else {
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+  }
+
+  // Otros campos (salvaciones, habilidades, resistencias...) deberás adaptar el llenado similar a este patrón.
+}
 function inicializarBotonToggleLayer(mapCanvas) {
   const btn = document.getElementById('btn_toggle_layer');
   const icon = document.getElementById('icon_toggle_layer');
@@ -757,7 +855,7 @@ function mostrarDetallesCriatura(datosCriaturaJSON) {
 /**
  * Añade el event listener a la imagen de la criatura en el panel de detalles.
  */
-function inicializarClickEnImagenDetalle() {
+function inicializarClickEnImagenDetalleCreatura() {
   const imagenDetalle = document.getElementById('detail-imagen');
   if (imagenDetalle) {
     // Usamos un atributo para rastrear si la imagen está en el mapa.
@@ -813,54 +911,228 @@ function inicializarOpcionesEspeciales() {
 /**
  * Rellena todos los menús desplegables del editor de criaturas.
  */
-function poblarDropdownsEditor() {
-  // Un objeto que contiene todos los arrays de opciones para los menús.
+ function poblarDropdownsEditorCrea() {
   const datosDelJuego = {
-    tamaños: ["Diminuto", "Pequeño", "Mediano", "Grande", "Enorme", "Gargantuesco"],
-    tipos: ["Aberración", "Bestia", "Celestial", "Constructo", "Dragón", "Elemental", "Feérico", "Engendro", "Gigante", "Humanoide", "Monstruosidad", "Limo", "Planta", "No muerto", "Otro"],
-    alineamientos: ["Legal Bueno", "Neutral Bueno", "Caótico Bueno", "Legal Neutral", "Neutral", "Caótico Neutral", "Legal Malvado", "Neutral Malvado", "Caótico Malvado"],
-    armaduras: ["Ninguna", "Armadura Natural", "Armadura de Mago", "Acolchada", "Cuero", "Cuero Tachonado", "Oculta", "Camisa de Malla", "Armadura de Escamas", "Coraza", "Media Armadura", "Armadura de Anillos", "Cota de Malla", "Armadura Laminada", "Armadura Completa", "Otra"],
-    salvaciones: ["Fuerza", "Destreza", "Constitución", "Inteligencia", "Sabiduría", "Carisma"],
-    habilidades: ["Acrobacias", "Trato con Animales", "Arcanos", "Atletismo", "Engaño", "Historia", "Perspicacia", "Intimidación", "Investigación", "Medicina", "Naturaleza", "Percepción", "Interpretación", "Persuasión", "Religión", "Juego de Manos", "Sigilo", "Supervivencia"],
-    condiciones: ["Cegado", "Hechizado", "Ensordecido", "Agotamiento", "Aterrorizado", "Agarrado", "Incapacitado", "Invisible", "Paralizado", "Petrificado", "Envenenado", "Derribado", "Restringido", "Aturdido", "Inconsciente"],
-    tiposDeDaño: ["Ácido", "Contundente", "Frío", "Fuego", "Fuerza", "Relámpago", "Necrótico", "Perforante", "Veneno", "Psíquico", "Radiante", "Cortante", "Trueno", "Ataques no mágicos", "Ataques no plateados", "Ataques no adamantinos", "Otro"],
-    idiomas: ["Abisal", "Acuático", "Áurico", "Celestial", "Común", "Habla Profunda", "Dracónico", "Enano", "Élfico", "Gigante", "Goblin", "Gnómico", "Mediano", "Ígneo", "Infernal", "Orco", "Primordial", "Feérico", "Telúrico", "Subcomún", "Otro"],
-    cr: ["0 (10 XP)", "1/8 (25 XP)", "1/4 (50 XP)", "1/2 (100 XP)", "1 (200 XP)", "2 (450 XP)", "3 (700 XP)", "4 (1,100 XP)", "5 (1,800 XP)", "6 (2,300 XP)", "7 (2,900 XP)", "8 (3,900 XP)", "9 (5,000 XP)", "10 (5,900 XP)", "11 (7,200 XP)", "12 (8,400 XP)", "13 (10,000 XP)", "14 (11,500 XP)", "15 (13,000 XP)", "16 (15,000 XP)", "17 (18,000 XP)", "18 (20,000 XP)", "19 (22,000 XP)", "20 (25,000 XP)", "21 (33,000 XP)", "22 (41,000 XP)", "23 (50,000 XP)", "24 (62,000 XP)", "25 (75,000 XP)", "26 (90,000 XP)", "27 (105,000 XP)", "28 (120,000 XP)", "29 (135,000 XP)", "30 (155,000 XP)"]
+    tamanos: [
+      "Seleccionar Tamano",
+      "Diminuto",
+      "Pequeno",
+      "Mediano",
+      "Grande",
+      "Enorme",
+      "Gargantuesco"
+    ],
+    tipos: [
+      "Seleccionar Tipo",
+      "Aberracion",
+      "Bestia",
+      "Celestial",
+      "Constructo",
+      "Dragon",
+      "Elemental",
+      "Feerico",
+      "Engendro",
+      "Gigante",
+      "Humanoide",
+      "Monstruosidad",
+      "Limo",
+      "Planta",
+      "No muerto",
+      "Otro"
+    ],
+    armaduras: [
+      "Seleccionar Armadura",
+      "Ninguna",
+      "Armadura Natural",
+      "Armadura de Mago",
+      "Acolchada",
+      "Cuero",
+      "Cuero Tachonado",
+      "Oculta",
+      "Camisa de Malla",
+      "Armadura de Escamas",
+      "Coraza",
+      "Media Armadura",
+      "Armadura de Anillos",
+      "Cota de Malla",
+      "Armadura Laminada",
+      "Armadura Completa",
+      "Otra"
+    ],
+    salvaciones: [
+      "Tirada de Salvacion",
+      "Fuerza",
+      "Destreza",
+      "Constitucion",
+      "Inteligencia",
+      "Sabiduria",
+      "Carisma"
+    ],
+    habilidades: [
+      "Habilidades",
+      "Acrobacias",
+      "Trato con Animales",
+      "Arcanos",
+      "Atletismo",
+      "Engano",
+      "Historia",
+      "Perspicacia",
+      "Intimidacion",
+      "Investigacion",
+      "Medicina",
+      "Naturaleza",
+      "Percepcion",
+      "Interpretacion",
+      "Persuasion",
+      "Religion",
+      "Juego de Manos",
+      "Sigilo",
+      "Supervivencia"
+    ],
+    condiciones: [
+      "Seleccionar Estado",
+      "Cegado",
+      "Hechizado",
+      "Ensordecido",
+      "Agotamiento",
+      "Aterrorizado",
+      "Agarrado",
+      "Incapacitado",
+      "Invisible",
+      "Paralizado",
+      "Petrificado",
+      "Envenenado",
+      "Derribado",
+      "Restringido",
+      "Aturdido",
+      "Inconsciente"
+    ],
+    tiposDeDano: [
+      "Tipo de dano",
+      "Acido",
+      "Contundente",
+      "Frio",
+      "Fuego",
+      "Fuerza",
+      "Relampago",
+      "Necrotico",
+      "Perforante",
+      "Veneno",
+      "Psiquico",
+      "Radiante",
+      "Cortante",
+      "Trueno",
+      "Ataques no magicos",
+      "Ataques no plateados",
+      "Ataques no adamantinos",
+      "Otro"
+    ],
+    idiomas: [
+      "Todas",
+      "Abisal",
+      "Acuatico",
+      "Aurico",
+      "Celestial",
+      "Comun",
+      "Habla Profunda",
+      "Draconico",
+      "Enano",
+      "Elfco",
+      "Gigante",
+      "Goblin",
+      "Gnomico",
+      "Mediano",
+      "Igneo",
+      "Infernal",
+      "Orco",
+      "Primordial",
+      "Feerico",
+      "Telurico",
+      "Subcomun",
+      "Otro"
+    ],
+    cr: [
+      "Seleccionar CR",
+      "CR Personalizado",
+      "0 (10 XP)",
+      "1/8 (25 XP)",
+      "1/4 (50 XP)",
+      "1/2 (100 XP)",
+      "1 (200 XP)",
+      "2 (450 XP)",
+      "3 (700 XP)",
+      "4 (1,100 XP)",
+      "5 (1,800 XP)",
+      "6 (2,300 XP)",
+      "7 (2,900 XP)",
+      "8 (3,900 XP)",
+      "9 (5,000 XP)",
+      "10 (5,900 XP)",
+      "11 (7,200 XP)",
+      "12 (8,400 XP)",
+      "13 (10,000 XP)",
+      "14 (11,500 XP)",
+      "15 (13,000 XP)",
+      "16 (15,000 XP)",
+      "17 (18,000 XP)",
+      "18 (20,000 XP)",
+      "19 (22,000 XP)",
+      "20 (25,000 XP)",
+      "21 (33,000 XP)",
+      "22 (41,000 XP)",
+      "23 (50,000 XP)",
+      "24 (62,000 XP)",
+      "25 (75,000 XP)",
+      "26 (90,000 XP)",
+      "27 (105,000 XP)",
+      "28 (120,000 XP)",
+      "29 (135,000 XP)",
+      "30 (155,000 XP)"
+    ],
+  alineamientos:[
+      "Seleccionar Alineamiento",
+      "Legal Bueno",
+      "Neutral Bueno",
+      "Caotico Bueno",
+      "Legal Neutral",
+      "Neutral",
+      "Caotico Neutral",
+      "Legal Malvado",
+      "Neutral Malvado",
+      "Caotico Malvado"
+    ]
   };
 
-  // Función ayudante para rellenar un <select> con opciones
-  function rellenarSelect(idSelect, opciones, placeholder) {
-    const select = document.getElementById(idSelect);
-    if (!select) return; // Si no encuentra el select, no hace nada
-
-    select.innerHTML = ''; // Limpia opciones anteriores
-    if (placeholder) {
-      select.add(new Option(placeholder, "")); // Añade un texto inicial si se especifica
-    }
-    opciones.forEach(opcion => {
-      select.add(new Option(opcion, opcion.toLowerCase())); // Añade cada opción del array
-    });
+function rellenarSelect(id, opciones) {
+  const select = document.getElementById(id);
+  if (!select) return;
+  if (!Array.isArray(opciones)) {
+    console.error("No se encontró el array de opciones para:", id, opciones);
+    return;
   }
-
-  // Rellenamos cada menú desplegable
-  rellenarSelect('editor-tamaño', datosDelJuego.tamaños, "Seleccionar Tamaño");
-  rellenarSelect('editor-tipo', datosDelJuego.tipos, "Seleccionar Tipo");
-  rellenarSelect('editor-alineamiento', datosDelJuego.alineamientos, "Seleccionar Alineamiento");
-  rellenarSelect('editor-armadura', datosDelJuego.armaduras, "Seleccionar Armadura");
-  rellenarSelect('select-salvaciones', datosDelJuego.salvaciones, "Tiradas de Salvación");
-  rellenarSelect('select-habilidades', datosDelJuego.habilidades, "Habilidades");
-  rellenarSelect('select-condiciones', datosDelJuego.tiposDeDaño, "Resistencias");
-  rellenarSelect('editor-inmunidades-daño', datosDelJuego.tiposDeDaño, "Inmunidades al Daño");
-  rellenarSelect('select-inmunidad-condicion', datosDelJuego.condiciones, "Inmunidades a Condición");
-
-  rellenarSelect('select-tipos-daño', datosDelJuego.tiposDeDaño, "Seleccionar Tipo de Daño");
-
-  rellenarSelect('select-inmunidad-condicion', datosDelJuego.condiciones, "Seleccionar Condición");
-
-  rellenarSelect('editor-idiomas', datosDelJuego.idiomas, "Idiomas");
-  rellenarSelect('editor-cr', datosDelJuego.cr, "Seleccionar CR");
+  select.innerHTML = '';
+  opciones.forEach(opcion => {
+    select.add(new Option(opcion, opcion.toLowerCase()));
+  });
 }
- 
+  // OJO con los nombres, revisa que coincidan exactamente con tu HTML:
+  rellenarSelect('editor-tamaño', datosDelJuego.tamanos);           // <--- con ñ
+  rellenarSelect('editor-tipo', datosDelJuego.tipos);
+  rellenarSelect('editor-armadura', datosDelJuego.armaduras);
+  rellenarSelect('select-salvaciones', datosDelJuego.salvaciones);
+  rellenarSelect('select-habilidades', datosDelJuego.habilidades);
+  rellenarSelect('select-tipos-daño', datosDelJuego.tiposDeDano);   // <--- con ñ
+  rellenarSelect('select-tipos-dao', datosDelJuego.tiposDeDano);    // <--- sin ñ
+  rellenarSelect('select-inmunidad-condicion', datosDelJuego.condiciones);
+  rellenarSelect('select-idiomas', datosDelJuego.idiomas);
+  rellenarSelect('editor-cr-tab2', datosDelJuego.cr);               // Pestaña 2 (CR)
+  rellenarSelect('editor-alineamiento', datosDelJuego.alineamientos);
+
+  // Si decides agregar alineamiento, crea el <select id="editor-alineamiento"></select> y entonces activa esta línea:
+  // rellenarSelect('editor-alineamiento', datosDelJuego.alineamientos);
+
+}
+
 
 //FUncion
 

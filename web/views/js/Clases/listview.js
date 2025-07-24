@@ -43,6 +43,24 @@ class ListView {
     this.render();
   }
 
+
+  /**
+   * Devuelve el item seleccionado actualmente en la lista.
+   * @returns {Object|null} El objeto del item seleccionado, o null si no hay ninguno.
+   */
+  getSelectedItem() {
+  const filaSeleccionada = this.tbody.querySelector('.selected');
+  if (!filaSeleccionada) return null;
+
+  // Obtenemos el índice de la fila seleccionada
+  const filas = Array.from(this.tbody.querySelectorAll('tr'));
+  const indice = filas.indexOf(filaSeleccionada);
+
+  if (indice < 0 || !this.data || !this.data[indice]) return null;
+
+  return this.data[indice];
+}
+
   /**
    * Renderiza las filas de la tabla de forma genérica.
    */
