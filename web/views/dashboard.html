@@ -669,7 +669,7 @@
               <label for="editor-hp-dados">PUNTOS DE GOLPE</label>
               <div class="input-group">
                 <input type="text" id="editor-hp-dados" placeholder="Ej: 2d8+2">
-                <input type="text" id="editor-hp-promedio" style="width: 100px;" placeholder="promedio">
+                <input type="text" id="editor-hp-promedio" style="width: 100px;" placeholder="PuntosGolpe">
               </div>
             </div>
             <div class="form-group">
@@ -677,6 +677,7 @@
               <div class="input-group">
                 <input type="text" id="editor-ac" style="width: 80px;" placeholder="CA">
                 <select id="editor-armadura" class="flex-grow"></select>
+                <input type="text" id="editor-bonus" style="width: 60px; display: none;" placeholder="Bonus">
                 <div class="checkbox-container">
                   <input type="checkbox" id="editor-escudo">
                   <label for="editor-escudo">Escudo</label>
@@ -712,42 +713,49 @@
             <div class="stat-group">
               <label for="input-fuerza">FUERZA</label>
               <input type="text" id="input-fuerza" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-fuerza">+0</span>
             </div>
             <div class="stat-group">
               <label for="input-destreza">DESTREZA</label>
               <input type="text" id="input-destreza" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-destreza">+0</span>
             </div>
             <div class="stat-group">
               <label for="input-con">CON</label>
               <input type="text" id="input-con" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-con">+0</span>
             </div>
             <div class="stat-group">
               <label for="input-int">INTELIGENCIA</label>
               <input type="text" id="input-int" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-int">+0</span>
             </div>
             <div class="stat-group">
               <label for="input-sab">SABIDURÍA</label>
               <input type="text" id="input-sab" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-sab">+0</span>
             </div>
             <div class="stat-group">
               <label for="input-car">CARISMA</label>
               <input type="text" id="input-car" class="numeric-input" value="10">
+              <span class="stat-bonus" id="bonus-car">+0</span>
             </div>
           </div>
+          
 
           <div class="form-row">
             <div class="control-group">
               <label>TIRADAS DE SALVACIÓN</label>
               <select id="select-salvaciones"></select>
-              <button class="btn" data-target-panel="panel-salvaciones" data-source-select="select-salvaciones" data-type="competente">AÑADIR</button>
+              <button class="btn" data-target-panel="panel-salvaciones" data-source-select="select-salvaciones" data-type="competente">COMPETENTE</button>
               <div id="panel-salvaciones" class="display-panel"></div>
             </div>
             <div class="control-group">
               <label>HABILIDADES</label>
               <select id="select-habilidades"></select>
               <div class="input-group">
-                <button class="btn" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="competente">COMPETENTE</button>
-                <button class="btn" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="experto">EXPERTO</button>
+                <button class="btn" id="panel-habilidades-competente" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="competente">COMPETENTE</button>
+                <button class="btn" id="panel-habilidades-experto" data-target-panel="panel-habilidades" data-source-select="select-habilidades" data-type="experto">EXPERTO</button>
               </div>
               <div id="panel-habilidades" class="display-panel"></div>
             </div>

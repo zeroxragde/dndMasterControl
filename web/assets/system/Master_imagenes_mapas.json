@@ -30,5 +30,13 @@
     "categoria": {
       "categoria": "3"
     }
+  },
+  {
+    "nombre": "mapa_camino_a_vertex.png",
+    "uuid": "619c06e5-5bbc-4858-8eae-d28387b80167",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
   }
 ]

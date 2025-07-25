@@ -31,6 +31,7 @@ let litsViewCreaturas;
 let spriteModal;
 let editCrea=null;
 
+
 const initiativeList = document.getElementById('initiative-list');
 const addCharBtn = document.getElementById('add-char-btn');
 const newCharInput = document.getElementById('new-char-name');
@@ -86,23 +87,24 @@ function inicializarComponentes() {
       triggerId: 'btnOpenEditor', 
       closeClassName: 'editor-close-btn',
       movable: true, 
-      width: '100%',
-      height: '70vh',
+      width: '85%',
+      height: '76vh',
       onOpen: () => {
 
-        poblarDropdownsEditorCrea();
-        inicializarClickEnImagenDetalleCreatura();
-        inicializarOpcionesEspeciales();
+        iniciarModalEditor();
 
         var title = 'NUEVA CRIATURA';
+        
         if (editCrea) {
           title = 'EDITOR DE CRIATURA';
+        }else{
+          editCrea = new Creatura();
         }
         new Tabs({ id: 'creature-editor-container', orientation: 'vertical', title: title });
         if (editCrea) {
           // Llama a llenarModalEditor con un pequeño retardo para asegurar que el DOM está listo
           setTimeout(() => {
-            mostrarDetallesCriatura(editCrea.fullData);
+            llenarModalEditor();
           }, 100);
         }
 
@@ -120,7 +122,7 @@ function inicializarComponentes() {
     }
 
 
-    editCrea = seleccion;
+    editCrea = seleccion.fullData;
     editorModal.open();
 
   });
@@ -174,72 +176,345 @@ function inicializarComponentes() {
   inicializarDocs();
   renderInitiative();
   renderizarHechizos();
-
+  ['fuerza', 'destreza', 'con', 'int', 'sab', 'car'].forEach(stat => {
+    document.getElementById('input-' + stat).addEventListener('input', actualizarBonificador);
+  });
 }
 
-function llenarModalEditor(c) {
-  var creatura = c.fullData || null;
+// Helper para quitar tildes y pasar a minúsculas (normalización)
+function normaliza(str) {
+  if (!str) return "";
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // elimina tildes
+    .toLowerCase();
+}
+function calcularBonificador(valor) {
+  valor = parseInt(valor, 10);
+  if (isNaN(valor)) return '';
+  let bonus = Math.floor((valor - 10) / 2);
+  return (bonus >= 0 ? '+' : '') + bonus;
+}
 
+function iniciarModalEditor() {
+  poblarDropdownsEditorCrea();
+  inicializarClickEnImagenDetalleCreatura();
+  inicializarOpcionesEspeciales();
+
+document.getElementById('editor-nombre').addEventListener('input', function(e) {
+  editCrea.Nombre = e.target.value;
+});
+document.getElementById('editor-tamaño').addEventListener('change', function(e) {
+  editCrea.Tamanio = e.target.value;
+});
+document.getElementById('editor-tipo').addEventListener('change', function(e) {
+  editCrea.Tipo = e.target.value;
+});
+document.getElementById('editor-alineamiento').addEventListener('change', function(e) {
+  editCrea.Alineamiento = e.target.value;
+});
+
+const inputBonus = document.getElementById('editor-bonus');
+const selectArmadura = document.getElementById('editor-armadura');
+selectArmadura.addEventListener('change', function(e) {
+  const selected = e.target.value;
+  editCrea.DescripcionArmadura = selected;
+
+  if (selected === "armadura natural" || selected === "otra") {
+    inputBonus.style.display = '';
+  } else {
+    inputBonus.style.display = 'none';
+    inputBonus.value = ''; // Limpiar si se oculta
+  }
+});
+// Cuando cambie el bonus (si está visible)
+inputBonus.addEventListener('input', function(e) {
+  if (selectArmadura.value === "Armadura Natural" || selectArmadura.value === "Otra") {
+    // Puedes guardar como número o string según tu modelo
+    editCrea.ClaseArmadura = parseInt(e.target.value, 10) || 0;
+  }
+});
+
+// Puedes hacer que cuando cambie CA (input), también actualice la Creatura
+document.getElementById('editor-ac').addEventListener('input', function(e) {
+  editCrea.ClaseArmadura = parseInt(e.target.value, 10) || 0;
+});
+
+// Elementos
+const selectSalvacion = document.getElementById('select-salvaciones');
+const btnAddSalvacion = document.querySelector('button[data-target-panel="panel-salvaciones"]');
+const panelSalvaciones = document.getElementById('panel-salvaciones');
+
+if (btnAddSalvacion) {
+  btnAddSalvacion.addEventListener('click', function () {
+    const valorSeleccionado = selectSalvacion.value;
+    const textoSeleccionado = selectSalvacion.options[selectSalvacion.selectedIndex].text;
+
+    // Evitar "Seleccionar..." o duplicados
+    if (selectSalvacion.selectedIndex === 0 || !valorSeleccionado) return;
+    if (!Array.isArray(editCrea.Salvacion)) editCrea.Salvacion = [];
+    if (editCrea.Salvacion.includes(textoSeleccionado)) return;
+
+    // Crear contenedor
+    const contenedor = document.createElement('span');
+    contenedor.className = 'salvacion-badge';
+    contenedor.style.display = 'inline-flex';
+    contenedor.style.alignItems = 'center';
+    contenedor.style.margin = '2px 4px';
+    contenedor.style.background = '#1d342b';
+    contenedor.style.borderRadius = '5px';
+    contenedor.style.padding = '2px 8px';
+
+    // Label
+    const lbl = document.createElement('span');
+    lbl.textContent = textoSeleccionado;
+    lbl.style.color = 'white';
+    lbl.style.marginRight = '8px';
+
+    // Botón eliminar (puedes reemplazar el "×" por un icono SVG si lo prefieres)
+    const btnEliminar = document.createElement('button');
+    btnEliminar.textContent = '×';
+    btnEliminar.style.background = 'none';
+    btnEliminar.style.border = 'none';
+    btnEliminar.style.color = '#ffe6e6';
+    btnEliminar.style.fontWeight = 'bold';
+    btnEliminar.style.cursor = 'pointer';
+    btnEliminar.style.fontSize = '16px';
+    btnEliminar.style.padding = '0';
+
+    btnEliminar.onclick = function () {
+      // Elimina visualmente
+      panelSalvaciones.removeChild(contenedor);
+      // Elimina del objeto
+      const idx = editCrea.Salvacion.indexOf(textoSeleccionado);
+      if (idx > -1) editCrea.Salvacion.splice(idx, 1);
+    };
+
+    contenedor.appendChild(lbl);
+    contenedor.appendChild(btnEliminar);
+    panelSalvaciones.appendChild(contenedor);
+
+    // Añade al objeto
+    editCrea.Salvacion.push(textoSeleccionado);
+  });
+}
+
+
+
+// Sigue igual:
+const selectHabilidades = document.getElementById('select-habilidades');
+const panelHabilidades = document.getElementById('panel-habilidades');
+
+// Esta función agrega una habilidad y la muestra en el panel
+function agregarHabilidad(tipo) {
+  const habilidad = selectHabilidades.value;
+  const texto = selectHabilidades.options[selectHabilidades.selectedIndex].text;
+
+  // Evita "placeholder"
+  if (!habilidad || habilidad === "habilidades") return;
+  // Evita duplicados
+  if (editCrea.Habilidades[habilidad] && editCrea.Habilidades[habilidad] === tipo) return;
+
+  // Actualiza el objeto
+  editCrea.Habilidades[habilidad] = tipo;
+
+  // Crea el div visual
+  const tag = document.createElement('span');
+  tag.className = tipo === "experto" ? "skill-tag experto" : "skill-tag competente";
+  tag.textContent = texto + (tipo === "experto" ? " (Experto)" : " (Competente)");
+
+  // Botón para eliminar
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = "×";
+  removeBtn.className = "remove-skill-btn";
+  removeBtn.onclick = () => {
+    delete editCrea.Habilidades[habilidad];
+    panelHabilidades.removeChild(tag);
+  };
+
+  tag.appendChild(removeBtn);
+  panelHabilidades.appendChild(tag);
+}
+// Listeners para los botones COMPETENTE y EXPERTO
+document.getElementById('panel-habilidades-competente').addEventListener('click', function () {
+  agregarHabilidad('competente');
+});
+
+document.getElementById('panel-habilidades-experto').addEventListener('click', function () {
+  agregarHabilidad('experto');
+});
+
+
+}//fin 
+
+function llenarModalEditor() {
+  var creatura = editCrea || null;
   if (!creatura) return;
 
-  // Ejemplo para nombre
   document.getElementById('editor-nombre').value = creatura.Nombre || '';
 
-  // Tamaño (select)
-  document.getElementById('editor-tamaño').value = creatura.Tamanio ? creatura.Tamanio.toLowerCase() : '';
+  // TAMAÑO
+  const selTam = document.getElementById('editor-tamaño');
+  if (selTam) selTam.value = normaliza(creatura.Tamanio);
 
-  // Tipo (select)
-  document.getElementById('editor-tipo').value = creatura.Tipo ? creatura.Tipo.toLowerCase() : '';
+  // TIPO
+  const selTipo = document.getElementById('editor-tipo');
+  if (selTipo) selTipo.value = normaliza(creatura.Tipo);
 
-  // Alineamiento (select)
-  document.getElementById('editor-alineamiento').value = creatura.Alineamiento ? creatura.Alineamiento.toLowerCase() : '';
+  // ALINEAMIENTO
+  const selAli = document.getElementById('editor-alineamiento');
+  if (selAli) selAli.value = normaliza(creatura.Alineamiento);
 
-  // Puntos de golpe y dados de golpe
+  const selArm = document.getElementById('editor-armadura');
+  const inputBonus = document.getElementById('editor-bonus');
+  if (selArm) {
+    // Asigna el valor normalizado (¡puedes quitar normaliza si tus valores no están en minúsculas!)
+    selArm.value = creatura.DescripcionArmadura || '';
+  
+    // Si la armadura es especial, muestra el bonus y lo llena
+    if (
+      creatura.DescripcionArmadura === "Armadura Natural" ||
+      creatura.DescripcionArmadura === "Otra"
+    ) {
+      inputBonus.style.display = '';
+      inputBonus.value = creatura.ClaseArmadura || '';
+    } else {
+      inputBonus.style.display = 'none';
+      inputBonus.value = '';
+    }
+  
+    // Dispara el evento change para forzar que cualquier lógica asociada se aplique (por si tienes listeners adicionales)
+    selArm.dispatchEvent(new Event('change'));
+  }
+
+  // ESCUDO (checkbox)
+  const escudoChk = document.getElementById('editor-escudo');
+  if (escudoChk) escudoChk.checked = !!creatura.Escudo;
+
+  // PUNTOS DE GOLPE Y DADOS DE GOLPE
   document.getElementById('editor-hp-promedio').value = creatura.PuntosGolpe || '';
   document.getElementById('editor-hp-dados').value = creatura.DadosGolpe || '';
 
-  // Clase de armadura
+  // CLASE DE ARMADURA
   document.getElementById('editor-ac').value = creatura.ClaseArmadura || '';
 
-  // Armadura (select)
-  document.getElementById('editor-armadura').value = creatura.DescripcionArmadura ? creatura.DescripcionArmadura.toLowerCase() : '';
-
-  // Escudo (checkbox)
-  document.getElementById('editor-escudo').checked = creatura.Escudo || false; // si tienes ese campo
-
-  // Velocidades
+  // VELOCIDADES
   document.getElementById('input-velocidad').value = creatura.VelocidadCaminar || '';
   document.getElementById('input-vel-cavado').value = creatura.VelocidadCavar || '';
   document.getElementById('input-vel-escalado').value = creatura.VelocidadEscalado || '';
   document.getElementById('input-vel-vuelo').value = creatura.VelocidadVolar || '';
   document.getElementById('input-vel-nado').value = creatura.VelocidadNadar || '';
 
-  // Características
+  // CARACTERÍSTICAS
   document.getElementById('input-fuerza').value = creatura.Fuerza || '';
   document.getElementById('input-destreza').value = creatura.Destreza || '';
   document.getElementById('input-con').value = creatura.Constitucion || '';
   document.getElementById('input-int').value = creatura.Inteligencia || '';
   document.getElementById('input-sab').value = creatura.Sabiduria || '';
   document.getElementById('input-car').value = creatura.Carisma || '';
+  // Llenar y actualizar bonificadores al mismo tiempo
+  document.getElementById('bonus-fuerza').textContent      = calcularBonificador(creatura.Fuerza);
+  document.getElementById('bonus-destreza').textContent    = calcularBonificador(creatura.Destreza);
+  document.getElementById('bonus-con').textContent         = calcularBonificador(creatura.Constitucion);
+  document.getElementById('bonus-int').textContent         = calcularBonificador(creatura.Inteligencia);
+  document.getElementById('bonus-sab').textContent         = calcularBonificador(creatura.Sabiduria);
+  document.getElementById('bonus-car').textContent         = calcularBonificador(creatura.Carisma);
 
-  // Notas
+  const panelSalvaciones = document.getElementById('panel-salvaciones');
+  if (!panelSalvaciones) return;
+  panelSalvaciones.innerHTML = ''; // Limpiar todo antes de renderizar
+
+  // Asegúrate de que exista el array
+  if (!Array.isArray(editCrea.Salvacion)) editCrea.Salvacion = [];
+
+  editCrea.Salvacion.forEach(textoSeleccionado => {
+    const contenedor = document.createElement('span');
+    contenedor.className = 'salvacion-badge';
+    contenedor.style.display = 'inline-flex';
+    contenedor.style.alignItems = 'center';
+    contenedor.style.margin = '2px 4px';
+    contenedor.style.background = '#1d342b';
+    contenedor.style.borderRadius = '5px';
+    contenedor.style.padding = '2px 8px';
+
+    // Label
+    const lbl = document.createElement('span');
+    lbl.textContent = textoSeleccionado;
+    lbl.style.color = 'white';
+    lbl.style.marginRight = '8px';
+
+    // Botón eliminar
+    const btnEliminar = document.createElement('button');
+    btnEliminar.textContent = '×';
+    btnEliminar.style.background = 'none';
+    btnEliminar.style.border = 'none';
+    btnEliminar.style.color = '#ffe6e6';
+    btnEliminar.style.fontWeight = 'bold';
+    btnEliminar.style.cursor = 'pointer';
+    btnEliminar.style.fontSize = '16px';
+    btnEliminar.style.padding = '0';
+
+    btnEliminar.onclick = function () {
+      panelSalvaciones.removeChild(contenedor);
+      const idx = editCrea.Salvacion.indexOf(textoSeleccionado);
+      if (idx > -1) editCrea.Salvacion.splice(idx, 1);
+    };
+
+    contenedor.appendChild(lbl);
+    contenedor.appendChild(btnEliminar);
+    panelSalvaciones.appendChild(contenedor);
+  });
+
+
+
+
+
+
+
+
+
+  // NOTAS
   document.getElementById('editor-notas').value = creatura.Notas || '';
 
   // CR
-  document.getElementById('editor-cr-tab2').value = creatura.CR || '';
+  const selCR = document.getElementById('editor-cr-tab2');
+  if (selCR) selCR.value = creatura.CR || '';
 
-  // Imagen (preview)
+  // IMAGEN
   const previewImg = document.getElementById('preview-imagen-criatura');
-  if (creatura.Imagen) {
-    previewImg.src = "data:image/png;base64," + creatura.Imagen;
-    previewImg.style.display = 'block';
-  } else {
-    previewImg.src = '';
-    previewImg.style.display = 'none';
+  if (previewImg) {
+    if (creatura.Imagen) {
+      previewImg.src = "data:image/png;base64," + creatura.Imagen;
+      previewImg.style.display = 'block';
+    } else {
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+    }
   }
 
-  // Otros campos (salvaciones, habilidades, resistencias...) deberás adaptar el llenado similar a este patrón.
+  // Para selects de habilidades, salvaciones, resistencias, etc, debes llenar los paneles si quieres mostrar la lista (como lo hacías antes)
+  // Ejemplo para paneles:
+  // document.getElementById('panel-salvaciones').innerHTML = ...
+  // document.getElementById('panel-habilidades').innerHTML = ...
+  // etc.
 }
+
+function actualizarBonificador(event) {
+  const input = event.target;
+  // El id del input será 'input-fuerza', 'input-destreza', etc.
+  // El id del bonus será 'bonus-fuerza', 'bonus-destreza', etc.
+  const stat = input.id.replace('input-', ''); // fuerza, destreza, ...
+  const bonusSpan = document.getElementById('bonus-' + stat);
+  const valor = parseInt(input.value, 10);
+
+  let bonus = '';
+  if (!isNaN(valor)) {
+    bonus = Math.floor((valor - 10) / 2);
+    bonus = (bonus >= 0 ? '+' : '') + bonus;
+  }
+  bonusSpan.textContent = bonus;
+}
+
 function inicializarBotonToggleLayer(mapCanvas) {
   const btn = document.getElementById('btn_toggle_layer');
   const icon = document.getElementById('icon_toggle_layer');
@@ -932,10 +1207,12 @@ function inicializarOpcionesEspeciales() {
       "Elemental",
       "Feerico",
       "Engendro",
+      "Constructo",
       "Gigante",
       "Humanoide",
       "Monstruosidad",
       "Limo",
+      "Sombra",
       "Planta",
       "No muerto",
       "Otro"

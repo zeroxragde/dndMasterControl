@@ -166,7 +166,7 @@ body {
   display: none;             /* 1. Lo hacemos un contenedor flex */
   flex-direction: column;    /* 2. Apilamos sus hijos (header y content) */
   padding: 0;                /* 3. Quitamos el padding para que el header ocupe todo el ancho */
-  width: 60%;
+/*  width: 60%;*/
   height: 85vh;
 }
 

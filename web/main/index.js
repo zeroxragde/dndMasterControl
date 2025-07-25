@@ -75,7 +75,7 @@ ipcMain.on('configuracion-inicial', (event, datos) => {
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false }
   });
  
-  if (!app.isPackaged) mapaWindow.webContents.openDevTools();
+ // if (!app.isPackaged) mapaWindow.webContents.openDevTools();
   mapaWindow.loadFile(path.join(__dirname, '../views/mapa.html'));
 
   dashboardWindow = new BrowserWindow({

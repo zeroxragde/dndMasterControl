@@ -7,6 +7,7 @@
   "Tipo": "Constructo",
   "Tamanio": "Mediano",
   "Alineamiento": "Neutral",
+  "DescripcionArmadura": "Ninguna",
   "ClaseArmadura": 16,
   "PuntosGolpe": 33,
   "DadosGolpe": "6d8+6",

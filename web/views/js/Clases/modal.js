@@ -35,10 +35,13 @@ class Modal {
   
     open() {
       const container = this.modalNode.querySelector('.editor-container') || this.modalNode;
+      const modal_div = this.modalNode.querySelector('.modal-panel') || this.modalNode;
       if (this.width) {
-        container.style.width = this.width;
+        container.style.width = '95%';
+        modal_div.style.width = this.width;
       } else {
-        container.style.width = '';
+        container.style.width = '95%';
+        modal_div.style.width = '60%';
       }
       if (this.height) {
         container.style.height = this.height;
