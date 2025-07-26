@@ -1,0 +1,75 @@
+{
+  "Nombre": "Sorthax, Canal Psíquico del Velo",
+  "Campania": "El Umbral del Abismo",
+  "Imagen": "",
+  "Tamanio": "Mediano",
+  "Tipo": "Aberracion",
+  "Alineamiento": "Caótico maligno",
+  "ClaseArmadura": 15,
+  "DescripcionArmadura": "Túnica del velo con protección mental",
+  "PuntosGolpe": 68,
+  "DadosGolpe": "8d8 + 24",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 8,
+  "Destreza": 12,
+  "Constitucion": 16,
+  "Inteligencia": 18,
+  "Sabiduria": 14,
+  "Carisma": 16,
+  "BonificadorFuerza": -1,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 3,
+  "BonificadorInteligencia": 4,
+  "BonificadorSabiduria": 2,
+  "BonificadorCarisma": 3,
+  "Salvacion": ["inteligencia", "carisma"],
+  "Habilidades": {
+    "arcana": "experto",
+    "engano": "competente",
+    "percepcion": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": ["psiquico", "relampago"],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": ["encantado"],
+  "Sentidos": ["visión en la oscuridad 60 ft.", "percepción pasiva 12"],
+  "Idiomas": { "comun": "habla", "abisal": "habla" },
+  "CR": "3",
+  "XP": 700,
+  "Acciones": [
+    {
+      "Nombre": "Rayo mental",
+      "Descripcion": "Ataque a distancia mágico. +5 al ataque, alcance 60 pies. Daño: 3d8 psíquico. Si el objetivo falla una salvación de Sabiduría CD 13, queda desorientado 1 turno."
+    },
+    {
+      "Nombre": "Latido del Velo",
+      "Descripcion": "Todos los enemigos a 20 pies hacen una salvación de Constitución CD 14 o reciben 2d8 psíquico y tienen desventaja en su próxima tirada de ataque."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Canalizar el Portal",
+      "Descripcion": "Sorthax comienza un ritual que invoca una criatura planar en 3 turnos. Puede ser interrumpido con daño o un contrahechizo."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Su conexión al Velo reduce la mitad del daño psíquico recibido mientras el portal esté activo."
+}

@@ -159,7 +159,8 @@ function inicializarComponentes() {
     // Le decimos qué columnas crear y de dónde sacar los datos
     columns: [
       { header: 'Nombre', key: 'nombre' },
-      { header: 'CR',     key: 'cr' }
+      { header: 'CR',     key: 'cr' },
+      { header: 'Campaña', key: 'campania' }
     ],
       // Pásale a la función los datos completos del elemento de esa fila".
     onRowClick: (criaturaItem) => {

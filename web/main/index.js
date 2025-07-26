@@ -512,7 +512,8 @@ ipcMain.handle('load-creatures-from-app-folder', async () => {
           nombre: creature.Nombre, 
           cr: creature.CR, 
           filepath: filePath,
-          fullData: creature 
+          fullData: creature,
+          campania: creature.Campania || "",
         });
     } catch (e) {
       console.error(`Error al leer o parsear el archivo de criatura ${file}:`, e);
