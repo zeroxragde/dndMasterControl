@@ -428,6 +428,18 @@ ipcMain.handle('save-doc-file', async (event, username, file) => {
 
 
 ////////////////CREATURAS
+ipcMain.handle('delete-creature-file', async (event, filePath) => {
+  try {
+    // Ajusta esta ruta a donde guardas tus .crea
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      return { success: true };
+    }
+    return { success: false, message: 'Archivo no encontrado.' };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+});
 // --- Lógica para importar una criatura desde un archivo .crea ---
 ipcMain.handle('import-creature', async (event) => {
   const result = await dialog.showOpenDialog(dashboardWindow, {
@@ -485,9 +497,21 @@ ipcMain.handle('load-creatures-from-app-folder', async () => {
       const data = fs.readFileSync(filePath, 'utf-8');
       const creature = JSON.parse(data);
       // Guardamos los datos para la lista y el objeto completo para después.
+     
+      // Siempre clona el JSON en una instancia del modelo
+     /* const crea = new Creatura();
+      Object.assign(crea, raw);
+
+      creaturesData.push({ 
+        nombre: crea.Nombre, 
+        cr: crea.CR, 
+        fullData: crea 
+      });*/
+
       creaturesData.push({ 
           nombre: creature.Nombre, 
           cr: creature.CR, 
+          filepath: filePath,
           fullData: creature 
         });
     } catch (e) {

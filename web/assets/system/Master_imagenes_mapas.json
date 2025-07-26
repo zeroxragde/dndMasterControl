@@ -38,5 +38,53 @@
     "categoria": {
       "categoria": "3"
     }
+  },
+  {
+    "nombre": "mapa_cabaña.png",
+    "uuid": "884e8cec-2820-43e7-b790-0da3adc5313d",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_camino_monta.png",
+    "uuid": "e97f1e8c-e63d-49f6-898e-b06db390646f",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_camino_monta_2.png",
+    "uuid": "8603490b-c2ad-413e-bf79-5d17e3513d36",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_pilar.png",
+    "uuid": "b676f7d0-b9b7-4206-83dd-2754b8184891",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_llegando_ruina.png",
+    "uuid": "353892bb-2a2b-49c2-8137-bf0085525c58",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_interior_ruina.png",
+    "uuid": "aeb0a7ee-c940-4bf2-a7f0-7fd05ef1c0d7",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
   }
 ]

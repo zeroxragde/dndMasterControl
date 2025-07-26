@@ -74,6 +74,8 @@ function inicializarUI() {
  */
 function inicializarComponentes() {
   
+
+  
   new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Configuración para todos los modales.
   const modalConfigs = [
@@ -109,6 +111,26 @@ function inicializarComponentes() {
         }
 
       }
+  });
+  const btnDeleteCrea = document.getElementById('btn_delete_crea');
+
+  btnDeleteCrea.addEventListener('click', async () => {
+    const selectedCreatureFile = litsViewCreaturas.getSelectedItem(); // O el método equivalente que tengas
+    if (!selectedCreatureFile) {
+      alert('Selecciona una criatura para eliminar.');
+      return;
+    }
+    if (!confirm('¿Seguro que quieres eliminar este archivo de criatura?')) return;
+
+    // Envía el nombre o ruta al backend
+    const resultado = await ipcRenderer.invoke('delete-creature-file', selectedCreatureFile.filepath);
+    if (resultado && resultado.success) {
+      alert('Archivo eliminado correctamente.');
+      // Actualiza la lista
+      await actualizarArrayDeCriaturas();
+    } else {
+      alert('No se pudo eliminar el archivo.');
+    }
   });
 
   // --- Inicializamos el botón de edición de criaturas ---
@@ -242,8 +264,8 @@ document.getElementById('editor-ac').addEventListener('input', function(e) {
 
 // Elementos
 const selectSalvacion = document.getElementById('select-salvaciones');
-const btnAddSalvacion = document.querySelector('button[data-target-panel="panel-salvaciones"]');
-const panelSalvaciones = document.getElementById('panel-salvaciones');
+const btnAddSalvacion = document.querySelector('button[data-target-panel="editor-panel-salvaciones"]');
+const panelSalvaciones = document.getElementById('editor-panel-salvaciones');
 
 if (btnAddSalvacion) {
   btnAddSalvacion.addEventListener('click', function () {
@@ -301,9 +323,8 @@ if (btnAddSalvacion) {
 
 
 
-// Sigue igual:
 const selectHabilidades = document.getElementById('select-habilidades');
-const panelHabilidades = document.getElementById('panel-habilidades');
+const panelHabilidades = document.getElementById('editor-panel-habilidades');
 
 // Esta función agrega una habilidad y la muestra en el panel
 function agregarHabilidad(tipo) {
@@ -484,7 +505,7 @@ function llenarModalEditor() {
   const previewImg = document.getElementById('preview-imagen-criatura');
   if (previewImg) {
     if (creatura.Imagen) {
-      previewImg.src = "data:image/png;base64," + creatura.Imagen;
+      previewImg.src = creatura.Imagen;
       previewImg.style.display = 'block';
     } else {
       previewImg.src = '';
@@ -1551,7 +1572,7 @@ function renderInitiative() {
   // Obtener elementos
   const initiativeList = document.getElementById('initiative-list');
   const addCharBtn = document.getElementById('add-char-btn');
-  const newCharInput = document.getElementById('new-char-input');
+  const newCharInput = document.getElementById('new-char-name');
 
   // Variables internas
   let characters = [];

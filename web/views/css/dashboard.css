@@ -691,3 +691,57 @@
   font-size: 1.2rem;
   cursor: pointer;
 }
+#editor-panel-habilidades {
+  display: flex;
+  flex-direction: column; /* Cada tag en una línea */
+  gap: 5px; /* Separación opcional */
+  align-items: flex-start; /* Opcional para alineación a la izquierda */
+}
+
+.skill-tag {
+  background: #222;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.remove-skill-btn {
+  margin-left: 8px;
+  background: #bb2222;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+}
+#panel-salvaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.salvacion-tag {
+  background: #222;
+  color: #11cfcf; /* O el color que prefieras */
+  border-radius: 4px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.remove-salvacion-btn {
+  margin-left: 8px;
+  background: #bb2222;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+}
