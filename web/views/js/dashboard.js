@@ -3,8 +3,11 @@
 // Al principio de tu archivo dashboard.js
 
 // Al principio de tu archivo dashboard.js
+
 import { Creatura } from './Modelos/creatura.js';
 const { ipcRenderer } = require('electron');
+
+
 const audio = document.getElementById('audioPlayer');
 const nombreCancion = document.getElementById('nombreCancion');
  const categorias_assets = [
@@ -13,6 +16,7 @@ const nombreCancion = document.getElementById('nombreCancion');
       "tile",
       "mapa"
 ];
+
 let canciones = [];
 let indiceCancion = 0;
 // --- Variable Global para la Configuración ---
@@ -30,7 +34,7 @@ let criaturasData = [
 let litsViewCreaturas;
 let spriteModal;
 let editCrea=null;
-
+let editorCreaturas;
 
 const initiativeList = document.getElementById('initiative-list');
 const addCharBtn = document.getElementById('add-char-btn');
@@ -75,7 +79,13 @@ function inicializarUI() {
 function inicializarComponentes() {
   
 
-  
+  editorCreaturas = EditorCreaturaModal({
+    containerId: "modaEditorCrea",
+    triggerBtnId: "btn-edit-creatura",
+    onSave: function(criaturaEditada) {
+      console.log("Se guardó:", criaturaEditada);
+    }
+  });
   new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Configuración para todos los modales.
   const modalConfigs = [
@@ -84,7 +94,7 @@ function inicializarComponentes() {
   ];
   // Creamos una instancia de Tabs para la view de criaturas
   stabsCreature = new Tabs({ id: 'creature-detail-view', orientation: 'vertical' });
-  editorModal = new Modal(    {
+  /*editorModal = new Modal(    {
       id: 'modalEditor', 
       triggerId: 'btnOpenEditor', 
       closeClassName: 'editor-close-btn',
@@ -111,7 +121,7 @@ function inicializarComponentes() {
         }
 
       }
-  });
+  });*/
   const btnDeleteCrea = document.getElementById('btn_delete_crea');
 
   btnDeleteCrea.addEventListener('click', async () => {
@@ -144,8 +154,10 @@ function inicializarComponentes() {
     }
 
 
+    //asignamos editCrea a la criatura seleccionada
     editCrea = seleccion.fullData;
-    editorModal.open();
+    editorCreaturas.show(editCrea);
+    //editorModal.open();
 
   });
 

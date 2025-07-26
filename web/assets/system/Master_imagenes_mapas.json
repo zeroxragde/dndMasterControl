@@ -86,5 +86,13 @@
     "categoria": {
       "categoria": "3"
     }
+  },
+  {
+    "nombre": "aralñas.png",
+    "uuid": "e5f9b2b9-12a9-490d-ad2c-3e9d97b7a849",
+    "extension": "png",
+    "categoria": {
+      "categoria": "0"
+    }
   }
 ]
