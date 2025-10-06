@@ -1,11 +1,14 @@
 window.EditorCreaturaModal = function(config) {
   const datosDelJuego = {
-    tamanos: [ "Seleccionar Tamano", "Diminuto", "Pequeno", "Mediano", "Grande", "Enorme", "Gargantuesco" ],
-    tipos: [ "Seleccionar Tipo", "Aberracion", "Bestia", "Celestial", "Constructo", "Dragon", "Elemental", "Feerico", "Engendro", "Constructo", "Gigante", "Humanoide", "Monstruosidad", "Limo", "Sombra", "Planta", "No muerto", "Otro" ],
-    armaduras: [ "Seleccionar Armadura", "Ninguna", "Armadura Natural", "Armadura de Mago", "Acolchada", "Cuero", "Cuero Tachonado", "Oculta", "Camisa de Malla", "Armadura de Escamas", "Coraza", "Media Armadura", "Armadura de Anillos", "Cota de Malla", "Armadura Laminada", "Armadura Completa", "Otra" ],
-    salvaciones: [ "Tirada de Salvacion", "Fuerza", "Destreza", "Constitucion", "Inteligencia", "Sabiduria", "Carisma" ],
-    habilidades: [ "Habilidades", "Acrobacias", "Trato con Animales", "Arcanos", "Atletismo", "Engano", "Historia", "Perspicacia", "Intimidacion", "Investigacion", "Medicina", "Naturaleza", "Percepcion", "Interpretacion", "Persuasion", "Religion", "Juego de Manos", "Sigilo", "Supervivencia" ],
-    alineamientos:[ "Seleccionar Alineamiento", "Legal Bueno", "Neutral Bueno", "Caotico Bueno", "Legal Neutral", "Neutral", "Caotico Neutral", "Legal Malvado", "Neutral Malvado", "Caotico Malvado" ]
+    tamanos: [ "Seleccionar", "Diminuto", "Pequeño", "Mediano", "Grande", "Enorme", "Gargantuesco" ],
+    tipos: [ "Seleccionar", "Aberración", "Bestia", "Celestial", "Constructo", "Dragón", "Elemental", "Feérico", "Engendro", "Gigante", "Humanoide", "Monstruosidad", "Limo", "Sombra", "Planta", "No muerto", "Otro" ],
+    armaduras: [ "Seleccionar", "Ninguna", "Armadura Natural", "Armadura de Mago", "Acolchada", "Cuero", "Cuero Tachonado", "Oculta", "Camisa de Malla", "Armadura de Escamas", "Coraza", "Media Armadura", "Armadura de Anillos", "Cota de Malla", "Armadura Laminada", "Armadura Completa", "Otra" ],
+    alineamientos: [ "Seleccionar", "Legal Bueno", "Neutral Bueno", "Caótico Bueno", "Legal Neutral", "Neutral", "Caótico Neutral", "Legal Malvado", "Neutral Malvado", "Caótico Malvado" ],
+    salvaciones: [ "Seleccionar", "Fuerza", "Destreza", "Constitución", "Inteligencia", "Sabiduría", "Carisma" ],
+    habilidades: [ "Seleccionar", "Acrobacias", "Trato con Animales", "Arcanos", "Atletismo", "Engaño", "Historia", "Perspicacia", "Intimidación", "Investigación", "Medicina", "Naturaleza", "Percepción", "Interpretación", "Persuasión", "Religión", "Juego de Manos", "Sigilo", "Supervivencia" ],
+    idiomas: [ "Común", "Enano", "Élfico", "Orco", "Dracónico", "Celestial", "Abisal", "Infernal", "Silvano", "Primordial" ],
+    velocidades: [ "Caminar", "Volar", "Nadar", "Trepar", "Excavar" ],
+    resistencias: [ "Daño Contundente", "Daño Cortante", "Daño Perforante", "Fuego", "Frío", "Relámpago", "Ácido", "Veneno", "Psíquico", "Radiante", "Necrótico", "Trueno" ]
   };
 
   const divContainer = document.getElementById(config.containerId);
@@ -13,203 +16,152 @@ window.EditorCreaturaModal = function(config) {
   const onSave = typeof config.onSave === "function" ? config.onSave : function(){};
 
   let criatura = null;
-  const modalId = "modal-creatura-" + Math.floor(Math.random()*100000);
+  const modalId = "creatura-" + Math.floor(Math.random()*100000);
 
   function crearModal() {
     divContainer.innerHTML = `
-      <div id="${modalId}" style="display:none;position:fixed;top:6vh;left:50%;transform:translateX(-50%);background:#181D2F;padding:22px 30px;border-radius:18px;box-shadow:0 0 22px #000a;min-width:650px;z-index:2000;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div id="${modalId}" style="display:none;position:fixed;top:5vh;left:50%;transform:translateX(-50%);background:#181D2F;border-radius:12px;box-shadow:0 0 22px #000a;min-width:950px;z-index:2000;color:white;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#11162A;border-radius:12px 12px 0 0;cursor:move;">
           <h2 style="margin:0;">Editor de Criatura</h2>
           <button id="${modalId}-close" style="font-size:1.3em;background:none;border:none;color:#fff;">✕</button>
         </div>
-        <div style="margin-top:10px;display:flex;gap:30px;">
-          <div style="flex:2">
-            <label>Nombre <input id="${modalId}-nombre" style="width:99%" /></label>
-            <div style="display:flex; gap:7px; margin:12px 0;">
-              <select id="${modalId}-tamanio"></select>
-              <select id="${modalId}-tipo"></select>
-              <select id="${modalId}-alineamiento"></select>
-            </div>
+
+        <!-- Tabs -->
+        <div style="display:flex;border-bottom:1px solid #333;">
+          ${["Generales","Bonificadores","Acciones","Adicionales","Reacciones","Legendarias","Míticas","Hechizos","Otros"].map((tab, i)=>`
+            <button class="tab-btn" data-tab="${i}" style="flex:1;padding:10px;border:none;background:${i===0?"#222844":"#181D2F"};color:white;cursor:pointer;">${tab}</button>
+          `).join('')}
+        </div>
+
+        <!-- Contenido Tabs -->
+        <div id="${modalId}-tabs">
+          <!-- Generales -->
+          <div class="tab-content" data-tab="0" style="padding:18px;display:block;">
+            <label>Nombre <input id="${modalId}-nombre" style="width:95%"/></label><br><br>
+            <select id="${modalId}-tamanio"></select>
+            <select id="${modalId}-tipo"></select>
+            <select id="${modalId}-alineamiento"></select><br><br>
             <label>Clase de Armadura <input id="${modalId}-ac" type="number" style="width:80px"/></label>
-            <label>Descripción Armadura <select id="${modalId}-desc-arm"></select></label>
+            <select id="${modalId}-desc-arm"></select><br><br>
             <label>Puntos de Golpe <input id="${modalId}-hp" type="number" style="width:80px"/></label>
-            <label>Dados Golpe <input id="${modalId}-hp-dados" style="width:120px"/></label>
+            <label>Dados de Golpe <input id="${modalId}-hp-dados" style="width:120px"/></label>
           </div>
-          <div style="flex:1">
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:3px;">
-              ${['Fuerza','Destreza','Constitucion','Inteligencia','Sabiduria','Carisma'].map(stat=>`
-                <label>${stat}
-                  <input id="${modalId}-${stat.toLowerCase()}" type="number" min="1" max="30" style="width:48px;"/>
-                  <span id="${modalId}-bonus-${stat.toLowerCase()}" style="margin-left:3px;"></span>
+
+          <!-- Bonificadores -->
+          <div class="tab-content" data-tab="1" style="padding:18px;display:none;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+              ${['Fuerza','Destreza','Constitución','Inteligencia','Sabiduría','Carisma'].map(stat=>`
+                <label>${stat}<br>
+                  <input id="${modalId}-${stat.toLowerCase()}" type="number" min="1" max="30" style="width:60px;"/>
+                  <span id="${modalId}-bonus-${stat.toLowerCase()}"></span>
                 </label>
               `).join('')}
             </div>
-          </div>
-        </div>
-        <div style="margin:16px 0; display:flex; gap:40px">
-          <div>
+            <br>
             <label>Tiradas de Salvación</label>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <select id="${modalId}-salvacion"></select>
-              <button id="${modalId}-add-salvacion">Añadir</button>
-            </div>
-            <ul id="${modalId}-panel-salvacion" style="padding:0;list-style:none;min-height:28px;margin:5px 0 0 0;"></ul>
+            <select id="${modalId}-salvacion"></select>
+            <button id="${modalId}-add-salvacion">Añadir</button>
+            <ul id="${modalId}-panel-salvacion" style="list-style:none;padding:0;"></ul>
+
+            <br><label>Habilidades</label>
+            <select id="${modalId}-habilidad"></select>
+            <button id="${modalId}-add-habilidad-comp">Comp</button>
+            <button id="${modalId}-add-habilidad-exp">Exp</button>
+            <ul id="${modalId}-panel-habilidad" style="list-style:none;padding:0;"></ul>
           </div>
-          <div>
-            <label>Habilidades</label>
-            <div style="display:flex;align-items:center;gap:5px;">
-              <select id="${modalId}-habilidad"></select>
-              <button id="${modalId}-add-habilidad-comp">Comp</button>
-              <button id="${modalId}-add-habilidad-exp">Exp</button>
-            </div>
-            <ul id="${modalId}-panel-habilidad" style="padding:0;list-style:none;min-height:28px;margin:5px 0 0 0;"></ul>
+
+          <!-- Acciones -->
+          <div class="tab-content" data-tab="2" style="padding:18px;display:none;">
+            <textarea id="${modalId}-acciones" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Adicionales -->
+          <div class="tab-content" data-tab="3" style="padding:18px;display:none;">
+            <textarea id="${modalId}-adicionales" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Reacciones -->
+          <div class="tab-content" data-tab="4" style="padding:18px;display:none;">
+            <textarea id="${modalId}-reacciones" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Legendarias -->
+          <div class="tab-content" data-tab="5" style="padding:18px;display:none;">
+            <textarea id="${modalId}-legendarias" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Míticas -->
+          <div class="tab-content" data-tab="6" style="padding:18px;display:none;">
+            <textarea id="${modalId}-miticas" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Hechizos -->
+          <div class="tab-content" data-tab="7" style="padding:18px;display:none;">
+            <textarea id="${modalId}-hechizos" style="width:100%;height:150px;"></textarea>
+          </div>
+
+          <!-- Otros -->
+          <div class="tab-content" data-tab="8" style="padding:18px;display:none;">
+            <label>Idiomas</label>
+            <select id="${modalId}-idiomas" multiple style="width:100%;"></select><br><br>
+            <label>Velocidades</label>
+            <select id="${modalId}-velocidades" multiple style="width:100%;"></select><br><br>
+            <label>Resistencias</label>
+            <select id="${modalId}-resistencias" multiple style="width:100%;"></select><br><br>
+            <label>Efectos Regionales</label>
+            <textarea id="${modalId}-efectos" style="width:100%;height:80px;"></textarea>
           </div>
         </div>
-        <div style="margin-top:18px;display:flex;gap:12px;justify-content:flex-end;">
-          <button id="${modalId}-save" style="background:#31ba4f;color:white;font-weight:bold;padding:6px 22px;border:none;border-radius:7px;">Guardar</button>
+
+        <div style="margin:14px;padding:10px;display:flex;justify-content:flex-end;">
+          <button id="${modalId}-save" style="background:#31ba4f;color:white;font-weight:bold;padding:8px 20px;border:none;border-radius:7px;">Guardar</button>
         </div>
       </div>
     `;
 
+    // rellenar selects
     llenarSelect(`${modalId}-tamanio`, datosDelJuego.tamanos);
     llenarSelect(`${modalId}-tipo`, datosDelJuego.tipos);
     llenarSelect(`${modalId}-alineamiento`, datosDelJuego.alineamientos);
     llenarSelect(`${modalId}-desc-arm`, datosDelJuego.armaduras);
     llenarSelect(`${modalId}-salvacion`, datosDelJuego.salvaciones);
     llenarSelect(`${modalId}-habilidad`, datosDelJuego.habilidades);
+    llenarSelect(`${modalId}-idiomas`, datosDelJuego.idiomas);
+    llenarSelect(`${modalId}-velocidades`, datosDelJuego.velocidades);
+    llenarSelect(`${modalId}-resistencias`, datosDelJuego.resistencias);
 
-    // Cerrar modal
+    // tabs switching
+    divContainer.querySelectorAll(".tab-btn").forEach(btn=>{
+      btn.addEventListener("click", function(){
+        const tabIndex = this.dataset.tab;
+        divContainer.querySelectorAll(".tab-btn").forEach(b=>b.style.background="#181D2F");
+        this.style.background = "#222844";
+        divContainer.querySelectorAll(".tab-content").forEach(c=>c.style.display="none");
+        divContainer.querySelector(`.tab-content[data-tab='${tabIndex}']`).style.display="block";
+      });
+    });
+
     document.getElementById(`${modalId}-close`).onclick = hide;
     document.getElementById(`${modalId}-save`).onclick = save;
-
-    attachInputs();
-    document.getElementById(`${modalId}-add-salvacion`).onclick = addSalvacion;
-    document.getElementById(`${modalId}-add-habilidad-comp`).onclick = function(){ addHabilidad("competente"); };
-    document.getElementById(`${modalId}-add-habilidad-exp`).onclick = function(){ addHabilidad("experto"); };
   }
 
   function llenarSelect(id, arr) {
-    var sel = document.getElementById(id);
-    if (!sel || !arr) return;
+    const sel = document.getElementById(id);
+    if (!sel) return;
     sel.innerHTML = '';
     arr.forEach(opt => sel.add(new Option(opt, opt)));
-  }
-
-  function syncToForm() {
-    if (!criatura) return;
-    document.getElementById(`${modalId}-nombre`).value = criatura.Nombre || '';
-    document.getElementById(`${modalId}-tamanio`).value = criatura.Tamanio || '';
-    document.getElementById(`${modalId}-tipo`).value = criatura.Tipo || '';
-    document.getElementById(`${modalId}-alineamiento`).value = criatura.Alineamiento || '';
-    document.getElementById(`${modalId}-ac`).value = criatura.ClaseArmadura || '';
-    document.getElementById(`${modalId}-desc-arm`).value = criatura.DescripcionArmadura || '';
-    document.getElementById(`${modalId}-hp`).value = criatura.PuntosGolpe || '';
-    document.getElementById(`${modalId}-hp-dados`).value = criatura.DadosGolpe || '';
-    ['fuerza','destreza','constitucion','inteligencia','sabiduria','carisma'].forEach(stat=>{
-      document.getElementById(`${modalId}-${stat}`).value = criatura[stat.charAt(0).toUpperCase() + stat.slice(1)] || '';
-      updateBonus(stat);
-    });
-    renderPanelSalvacion();
-    renderPanelHabilidad();
-  }
-
-  function attachInputs() {
-    document.getElementById(`${modalId}-nombre`).oninput = e => criatura && (criatura.Nombre = e.target.value);
-    document.getElementById(`${modalId}-tamanio`).onchange = e => criatura && (criatura.Tamanio = e.target.value);
-    document.getElementById(`${modalId}-tipo`).onchange = e => criatura && (criatura.Tipo = e.target.value);
-    document.getElementById(`${modalId}-alineamiento`).onchange = e => criatura && (criatura.Alineamiento = e.target.value);
-    document.getElementById(`${modalId}-ac`).oninput = e => criatura && (criatura.ClaseArmadura = parseInt(e.target.value,10)||0);
-    document.getElementById(`${modalId}-desc-arm`).onchange = e => criatura && (criatura.DescripcionArmadura = e.target.value);
-    document.getElementById(`${modalId}-hp`).oninput = e => criatura && (criatura.PuntosGolpe = parseInt(e.target.value,10)||0);
-    document.getElementById(`${modalId}-hp-dados`).oninput = e => criatura && (criatura.DadosGolpe = e.target.value);
-    ['fuerza','destreza','constitucion','inteligencia','sabiduria','carisma'].forEach(stat=>{
-      document.getElementById(`${modalId}-${stat}`).oninput = e => {
-        if (!criatura) return;
-        criatura[stat.charAt(0).toUpperCase() + stat.slice(1)] = parseInt(e.target.value,10)||0;
-        updateBonus(stat);
-      };
-    });
-  }
-
-  function updateBonus(stat) {
-    var val = parseInt(document.getElementById(`${modalId}-${stat}`).value,10)||0;
-    var bonus = (val>0)?((val-10)/2)|0:0;
-    document.getElementById(`${modalId}-bonus-${stat}`).textContent = (bonus>=0?"+":"")+bonus;
-    if (criatura) criatura["Bonificador"+stat.charAt(0).toUpperCase()+stat.slice(1)] = bonus;
-  }
-
-  function addSalvacion() {
-    var sel = document.getElementById(`${modalId}-salvacion`);
-    var val = sel.value;
-    if (!val || val === datosDelJuego.salvaciones[0] || !criatura) return;
-    if (!criatura.Salvacion.includes(val)) {
-      criatura.Salvacion.push(val);
-      renderPanelSalvacion();
-    }
-  }
-
-  function renderPanelSalvacion() {
-    var panel = document.getElementById(`${modalId}-panel-salvacion`);
-    panel.innerHTML = '';
-    if (!criatura || !Array.isArray(criatura.Salvacion)) return;
-    criatura.Salvacion.forEach(function(s, idx) {
-      var li = document.createElement('li');
-      li.textContent = s + " ";
-      var btn = document.createElement('button');
-      btn.textContent = '×';
-      btn.style.marginLeft = '5px';
-      btn.onclick = function() {
-        criatura.Salvacion.splice(idx,1);
-        renderPanelSalvacion();
-      };
-      li.appendChild(btn);
-      panel.appendChild(li);
-    });
-  }
-
-  function addHabilidad(tipo) {
-    var sel = document.getElementById(`${modalId}-habilidad`);
-    var val = sel.value;
-    if (!val || val === datosDelJuego.habilidades[0] || !criatura) return;
-    if (!criatura.Habilidades[val] || criatura.Habilidades[val] !== tipo) {
-      criatura.Habilidades[val] = tipo;
-      renderPanelHabilidad();
-    }
-  }
-
-  function renderPanelHabilidad() {
-    var panel = document.getElementById(`${modalId}-panel-habilidad`);
-    panel.innerHTML = '';
-    if (!criatura || typeof criatura.Habilidades !== "object") return;
-    Object.keys(criatura.Habilidades).forEach(function(hab){
-      var tipo = criatura.Habilidades[hab];
-      var li = document.createElement('li');
-      li.textContent = hab + " (" + (tipo === "competente" ? "Comp" : "Exp") + ")";
-      var btn = document.createElement('button');
-      btn.textContent = '×';
-      btn.style.marginLeft = '5px';
-      btn.onclick = function() {
-        delete criatura.Habilidades[hab];
-        renderPanelHabilidad();
-      };
-      li.appendChild(btn);
-      panel.appendChild(li);
-    });
   }
 
   function save() {
     if (criatura) onSave(criatura);
     hide();
   }
-
-  function show(objetoCreatura) {
-    if (!objetoCreatura) return;
-    criatura = objetoCreatura;
-    syncToForm();
-    document.getElementById(modalId).style.display = "";
+  function show(obj) {
+    criatura = obj;
+    document.getElementById(modalId).style.display="";
   }
   function hide() {
-    document.getElementById(modalId).style.display = "none";
+    document.getElementById(modalId).style.display="none";
   }
 
   if(btnOpen) btnOpen.addEventListener("click", function() {
@@ -222,10 +174,5 @@ window.EditorCreaturaModal = function(config) {
 
   crearModal();
 
-  // API pública
-  return {
-    show: show,
-    hide: hide,
-    refresh: syncToForm
-  };
+  return { show, hide };
 };
