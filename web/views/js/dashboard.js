@@ -79,7 +79,7 @@ function inicializarUI() {
 function inicializarComponentes() {
   
 
-  editorCreaturas = EditorCreaturaModal({
+  editorCreaturas = new EditorCreaturaModal({
     containerId: "modaEditorCrea",
     triggerBtnId: "btn-edit-creatura",
     onSave: function(criaturaEditada) {
