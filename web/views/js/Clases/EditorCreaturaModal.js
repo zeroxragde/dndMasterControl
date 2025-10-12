@@ -37,6 +37,17 @@ class EditorCreaturaModal extends Modal  {
     { "value": "Otro", "label": "Otro" }
   ];
 
+  this.armaduras = [
+    { value: '0', label: '0 (Ninguna)' }, 
+    { value: '10', label: '10 (Armadura Natural)' },
+    { value: '11', label: '11 (Armadura de Piel)' },
+    { value: '12', label: '12 (Armadura de Cuero)' },
+    { value: '13', label: '13 (Armadura de Cuero Tachonado)' },
+    { value: '14', label: '14 (Armadura de Escamas)' },
+    { value: '15', label: '15 (Armadura de Cota de Mallas)' },
+    { value: '16', label: '16 (Armadura de Cota de Mallas Completa)' },
+    { value: '17', label: '17 (Armadura de Placas)' }
+  ];
     super.onEndLoad();
   }
 
@@ -53,6 +64,7 @@ class EditorCreaturaModal extends Modal  {
   loadSelects() { 
 
     this.populateSelect("cbSizes", this.sizes, "Selecciona un tamaño...");
+    this.populateSelect("cbArmaduras", this.armaduras, "Selecciona una armadura...");
     this.populateSelect("cbTipoM", this.tipoMonster, "Selecciona un tipo de monstruo...",() => {
       const tipoSelect = document.getElementById("cbTipoM");
       const otroTipoInput = document.getElementById("otroTipo");
