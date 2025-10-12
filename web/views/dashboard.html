@@ -320,30 +320,65 @@
                       <button class="web-tab-button" role="tab" aria-controls="web-tab-players" aria-selected="false">🧑 Jugadores</button>
                     </nav>
                       <div id="web-tab-general" class="web-tab-content active" role="tabpanel">
-                        <input type="text" id="creatura-nombre" placeholder="Nombre de la criatura...">
-                      
-                        <div class="creatura-grid">
-                          <input type="text" placeholder="Nombre de la criatura">
-                          <select id="cbSizes" placeholder="Selecciona un tamaño..."></select>
+                        <div class="creatura-form">
+                            <input type="text" id="creatura-nombre" placeholder="Nombre de la criatura...">
 
-                          <input type="number" placeholder="Nivel">
-                          <input type="text" placeholder="Tamaño">
+                            <div class="creatura-row">
+                              <select id="cbSizes" placeholder="Selecciona un tamaño..."></select>
+                              <select id="cbTipoM" placeholder="Selecciona tipo de monstruo..."></select>
+                              <input type="text" id="otroTipo" style="display:none" placeholder="Otro Tipo">
+                            </div>
 
-                          <input type="text" placeholder="Clase de Armadura">
-                          <input type="text" placeholder="Puntos de golpe">
-                          <input type="text" placeholder="Velocidad">
-                          <input type="text" placeholder="Alineamiento">
+                            <div class="creatura-row">
+                              <input type="number" class="creatura-spacing" placeholder="Nivel">
+                              <input type="text" class="creatura-spacing"  placeholder="Tamaño">
+                              <input type="text" class="creatura-spacing"  placeholder="Clase de Armadura">
+                            <div class="creatura-hp-field">
+                              <input type="text" id="creatura-hp" class="creatura-spacing" placeholder="Puntos de Golpe (ej: 2d8 + 6)">
+                              <button class="creatura-dice-btn" id="creatura-roll-hp" title="Lanzar dados">🎲</button>
+                              <span id="creatura-hp-result" class="creatura-hp-result">= 0</span>
+                            </div>
+                            </div>
 
-                          <input type="text" placeholder="Fuerza">
-                          <input type="text" placeholder="Destreza">
-                          <input type="text" placeholder="Constitución">
-                          <input type="text" placeholder="Inteligencia">
+                            <div class="creatura-row two-cols">
+                              <input type="text" class="creatura-spacing" placeholder="Velocidad">
+                              <input type="text" class="creatura-spacing" placeholder="Alineamiento">
+                            </div>
 
-                          <input type="text" placeholder="Sabiduría">
-                          <input type="text" placeholder="Carisma">
-                          <input type="text" placeholder="Desafío (CR)">
-                          <input type="text" placeholder="XP">
+                          <div class="creatura-row creatura-stats">
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Fuerza">
+                              <span class="creatura-stat-mod">+2</span>
+                            </div>
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Destreza">
+                              <span class="creatura-stat-mod">+3</span>
+                            </div>
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Constitución">
+                              <span class="creatura-stat-mod">+1</span>
+                            </div>
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Inteligencia">
+                              <span class="creatura-stat-mod">0</span>
+                            </div>
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Sabiduría">
+                              <span class="creatura-stat-mod">-1</span>
+                            </div>
+                            <div class="creatura-stat-field">
+                              <input type="text" class="creatura-form-input" placeholder="Carisma">
+                              <span class="creatura-stat-mod">+4</span>
+                            </div>
+                          </div>
+
+
+                            <div class="creatura-row two-cols">
+                              <input type="text" placeholder="Desafío (CR)">
+                              <input type="text" placeholder="XP">
+                            </div>
                         </div>
+
 
 
 

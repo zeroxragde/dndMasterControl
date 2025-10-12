@@ -745,19 +745,113 @@
   cursor: pointer;
   font-size: 16px;
 }
-/* 🌙 Grid base de 4 columnas */
-.creatura-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+/* ======================================================= */
+/* ====== CAMBIOS EN EL EDITOR DE CRIATURAS ====== */
+/* ======================================================= */
+/* 🎨 Contenedor general */
+/* 🧩 Contenedor principal con 4 columnas */
+/* 🌙 Contenedor general de 4 columnas */
+/* 🧱 Fila especial para los stats de criatura */
+@media (max-width: 900px) {
+  .creatura-row.creatura-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* 🧱 Estilo uniforme para inputs y selects */
-.creatura-grid input,
-.creatura-grid select {
+@media (max-width: 600px) {
+  .creatura-row.creatura-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.creatura-row.creatura-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 🔹 6 columnas iguales */
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.creatura-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  overflow-x: hidden; /* evita que se desborde */
+}
+.creatura-form-input {
+    width: 50px !important;
+}
+.creatura-spacing {
+  margin: 6px 0!important; /* 🔹 espacio vertical entre inputs */
+}
+.creatura-hp-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.creatura-dice-btn {
+  background: #2b2b2b;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.creatura-dice-btn:hover {
+  background: #444;
+}
+
+.creatura-hp-result {
+  min-width: 50px;
+  text-align: left;
+  font-weight: bold;
+  color: #4cc9f0;
+}
+/* Fila general de 4 columnas fijas */
+.creatura-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 👈 evita que crezca de más */
+  gap: 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.creatura-stat-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.creatura-stat-mod {
+  min-width: 36px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #00aaff;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-family: "Consolas", monospace;
+  transition: all 0.2s ease;
+}
+
+.creatura-stat-mod.positive {
+  color: #3cff91;
+}
+
+.creatura-stat-mod.negative {
+  color: #ff6b6b;
+}
+/* Inputs y selects uniformes */
+.creatura-form input,
+.creatura-form select {
+  width: 100%;
   background-color: #1e1e1e;
   color: #f5f5f5;
   border: 1px solid #333;
@@ -769,35 +863,48 @@
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-/* Hover */
-.creatura-grid input:hover,
-.creatura-grid select:hover {
+/* Hover y focus */
+.creatura-form input:hover,
+.creatura-form select:hover {
   border-color: #00aaff;
 }
-
-/* Focus */
-.creatura-grid input:focus,
-.creatura-grid select:focus {
+.creatura-form input:focus,
+.creatura-form select:focus {
   outline: none;
   border-color: #00aaff;
   box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.25);
 }
 
-/* Placeholder */
-.creatura-grid input::placeholder {
-  color: #888;
+/* 📏 Fila completa para “Nombre” */
+#creatura-nombre {
+  grid-column: span 4;
 }
 
-/* 📱 Adaptable: en pantallas pequeñas pasa a 2 columnas */
+/* Para filas con solo 2 campos */
+.creatura-row.two-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Para filas con 6 stats */
+.creatura-row.stats {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Responsive */
 @media (max-width: 900px) {
-  .creatura-grid {
+  .creatura-row,
+  .creatura-row.two-cols,
+  .creatura-row.stats {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-/* 📱 Muy pequeña (modo móvil): 1 columna */
-@media (max-width: 500px) {
-  .creatura-grid {
+@media (max-width: 600px) {
+  .creatura-row,
+  .creatura-row.two-cols,
+  .creatura-row.stats {
     grid-template-columns: 1fr;
   }
 }
+
+
+

@@ -178,7 +178,8 @@ function inicializarComponentes() {
   editorCreaturas = new EditorCreaturaModal({
     id: 'creatura-modal',
     triggerId: '',
-    movable: true
+    movable: true,
+    width: '60%',
   });
 
   inicializarMapaEditor();
