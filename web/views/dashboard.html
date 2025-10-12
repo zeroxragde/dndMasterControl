@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+
+ 
     <script src="js/base.js"></script>
     <script src="js/Clases/modal.js"></script>
     <script src="js/Clases/tab.js"></script>
@@ -141,7 +143,7 @@
 
         <div id="web-tab-creaturas" class="web-tab-content" role="tabpanel">
 
-            <div class="creature-view-wrapper">
+          <div class="creature-view-wrapper">
               <div>
                   <div id="creature-list-container" class="list-manager-container">
                       <div class="list-view">
@@ -302,7 +304,55 @@
               </div>
           
           </div>
-          <div id="modaEditorCrea"></div>
+        
+          <div id="creatura-modal" class="modal-panel" style="display: none;">
+              <div class="modal-header">
+                  <h3>Creatura</h3>
+                  <button class="modal-close-btn">✖</button>
+              </div>
+              <div class="modal-content">
+                  <div id="editor-creature-container" class="editor-creature-container">
+                  
+                    <nav class="web-nav" role="tablist">
+                     <button class="web-tab-button" role="tab" aria-controls="web-tab-general" aria-selected="false">🧙 Informacion General </button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-editor-map" aria-selected="false">🗺️ Mapa Editor</button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-libro" aria-selected="false">📚 Libros de Historias</button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-players" aria-selected="false">🧑 Jugadores</button>
+                    </nav>
+                      <div id="web-tab-general" class="web-tab-content active" role="tabpanel">
+                        <input type="text" id="creatura-nombre" placeholder="Nombre de la criatura...">
+                      
+                        <div class="creatura-grid">
+                          <input type="text" placeholder="Nombre de la criatura">
+                          <select id="cbSizes" placeholder="Selecciona un tamaño..."></select>
+
+                          <input type="number" placeholder="Nivel">
+                          <input type="text" placeholder="Tamaño">
+
+                          <input type="text" placeholder="Clase de Armadura">
+                          <input type="text" placeholder="Puntos de golpe">
+                          <input type="text" placeholder="Velocidad">
+                          <input type="text" placeholder="Alineamiento">
+
+                          <input type="text" placeholder="Fuerza">
+                          <input type="text" placeholder="Destreza">
+                          <input type="text" placeholder="Constitución">
+                          <input type="text" placeholder="Inteligencia">
+
+                          <input type="text" placeholder="Sabiduría">
+                          <input type="text" placeholder="Carisma">
+                          <input type="text" placeholder="Desafío (CR)">
+                          <input type="text" placeholder="XP">
+                        </div>
+
+
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        
 
           <!-- Modales 
 <div id="modalEditor" class="modal-panel" style="display: none;">
@@ -710,49 +760,49 @@
         <div id="web-tab-libro" class="web-tab-content" role="tabpanel">
 
         
-<!-- Contenedor padre con flex -->
-<div style="display: flex; height: 84vh;">
+          <!-- Contenedor padre con flex -->
+          <div style="display: flex; height: 84vh;">
 
-  <!-- Panel izquierdo: Lista fija -->
-  <div id="doc-list" style="width: 320px; background: #0a084c; padding: 10px; overflow-y: auto; border-right: 1px solid #ccc;">
-    <!-- Lista generada dinámicamente -->
-  </div>
+            <!-- Panel izquierdo: Lista fija -->
+            <div id="doc-list" style="width: 320px; background: #0a084c; padding: 10px; overflow-y: auto; border-right: 1px solid #ccc;">
+              <!-- Lista generada dinámicamente -->
+            </div>
 
-  <!-- Panel derecho: Visor documento -->
-  <div id="doc-viewer" style="flex: 1; background: #f3f3f3; padding: 30px; overflow-y: auto; box-sizing: border-box;">
-    
-    <!-- Controles de documentos -->
-    <div style="display: flex; gap: 12px; margin-bottom: 15px;">
-      <button id="btn-upload-doc" style="background: #007bff; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
-        <i class="fa-solid fa-upload"></i> Subir Documento
-      </button>
-      <button id="btn-refresh-list" style="background: #28a745; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
-        <i class="fa-solid fa-arrows-rotate"></i> Refrescar
-      </button>
-      <button id="btn-delete-doc" style="background: #dc3545; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
-        <i class="fa-solid fa-trash"></i> Eliminar
-      </button>
-    </div>
+            <!-- Panel derecho: Visor documento -->
+            <div id="doc-viewer" style="flex: 1; background: #f3f3f3; padding: 30px; overflow-y: auto; box-sizing: border-box;">
+              
+              <!-- Controles de documentos -->
+              <div style="display: flex; gap: 12px; margin-bottom: 15px;">
+                <button id="btn-upload-doc" style="background: #007bff; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
+                  <i class="fa-solid fa-upload"></i> Subir Documento
+                </button>
+                <button id="btn-refresh-list" style="background: #28a745; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
+                  <i class="fa-solid fa-arrows-rotate"></i> Refrescar
+                </button>
+                <button id="btn-delete-doc" style="background: #dc3545; border: none; color: white; border-radius: 4px; padding: 8px 12px; font-size: 16px;">
+                  <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+              </div>
 
-    <h2 style="margin-top: 0; color: #222;">
-      <i class="fa-solid fa-file-lines"></i> Documento seleccionado
-    </h2>
+              <h2 style="margin-top: 0; color: #222;">
+                <i class="fa-solid fa-file-lines"></i> Documento seleccionado
+              </h2>
 
-    <div id="doc-content" 
-         style="
-            margin: 20px auto;
-            max-width: 820px;
-            font-family: 'Calibri', sans-serif;
-            font-size: 14px;
-            overflow: auto;
-            max-height: 400px;
-            line-height: 1.5;
-         ">
-      <!-- Contenido del doc se divide en páginas con JS -->
-    </div>
-  </div>
+              <div id="doc-content" 
+                  style="
+                      margin: 20px auto;
+                      max-width: 820px;
+                      font-family: 'Calibri', sans-serif;
+                      font-size: 14px;
+                      overflow: auto;
+                      max-height: 400px;
+                      line-height: 1.5;
+                  ">
+                <!-- Contenido del doc se divide en páginas con JS -->
+              </div>
+            </div>
 
-</div>
+          </div>
 
 
         </div>

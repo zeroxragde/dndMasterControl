@@ -1,0 +1,26 @@
+          <div id="creatura-modal" class="modal-panel" style="display: none;">
+              <div class="modal-header">
+                  <h3>Editor de Spritesheet</h3>
+                  <button class="modal-close-btn">✖</button>
+              </div>
+              <div class="modal-content">
+                  <div class="form-group">
+                    <label>Imagen de Spritesheet:</label>
+                    <input type="file" id="creatura-file-input" accept="image/*">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="sprite-width">Ancho de Celda (px):</label>
+                      <input type="number" id="sprite-width" value="32">
+                    </div>
+                    <div class="form-group">
+                      <label for="sprite-height">Alto de Celda (px):</label>
+                      <input type="number" id="sprite-height" value="32">
+                    </div>
+                  </div>
+                  <div id="creatura-preview" class="creatura-preview"></div>
+                  <button id="btn-process-sprite" class="btn">Procesar</button>
+                  <div id="sprite-capture-viewer" style="margin-top:10px; min-width: 50px; min-height: 50px; border: 1px dashed #999;"></div>
+              </div>
+          </div>
+

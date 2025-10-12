@@ -45,7 +45,13 @@ function createLoginWindow() {
   });
 
   win.loadFile(path.join(__dirname, '../views/index.html'));
-
+  // 🔄 Atajos de teclado F5 y Ctrl+R para recargar
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F5' || (input.key === 'r' && input.control)) {
+      win.reload();
+      event.preventDefault();
+    }
+  });
   win.webContents.once('did-finish-load', () => {
     const displays = screen.getAllDisplays();
     win.webContents.send('monitores-disponibles', displays);
@@ -82,6 +88,13 @@ ipcMain.on('configuracion-inicial', (event, datos) => {
     width: 800,
     height: 600,
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false }
+  });
+    // 🔄 Atajos de teclado F5 y Ctrl+R para recargar
+  dashboardWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F5' || (input.key === 'r' && input.control)) {
+      dashboardWindow.reload();
+      event.preventDefault();
+    }
   });
   dashboardWindow.maximize();
   if (!app.isPackaged) dashboardWindow.webContents.openDevTools();
@@ -521,6 +534,29 @@ ipcMain.handle('load-creatures-from-app-folder', async () => {
   }
   return creaturesData;
 });
+// --- Lógica para leer una plantilla HTML ---
+  // --- IPC: Cargar contenido HTML de una plantilla ---
+  ipcMain.handle('get-html-template', async (event, relativePath) => {
+    try {
+      // Ruta base donde están tus vistas
+      const templatePath = path.join(app.getAppPath(), 'views', relativePath);
+
+      if (!fs.existsSync(templatePath)) {
+        throw new Error(`No se encontró el archivo: ${templatePath}`);
+      }
+
+      // Leer el contenido del archivo HTML
+      const htmlContent = fs.readFileSync(templatePath, 'utf-8');
+
+      // Devolver solo el texto HTML
+      return htmlContent;
+
+    } catch (error) {
+      console.error('Error al leer la plantilla HTML:', error);
+      return null;
+    }
+  });
+
 // IMPORTAR: Busca un archivo .crea en el disco y lo copia a la carpeta de la app.
 ipcMain.handle('import-creature-file', async () => {
   // Función auxiliar interna para obtener la ruta y mantener el código limpio.

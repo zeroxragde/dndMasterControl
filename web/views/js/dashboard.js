@@ -33,6 +33,7 @@ let criaturasData = [
 ];
 let litsViewCreaturas;
 let spriteModal;
+let editorCreaturaModal;
 let editCrea=null;
 let editorCreaturas;
 
@@ -41,9 +42,11 @@ const addCharBtn = document.getElementById('add-char-btn');
 const newCharInput = document.getElementById('new-char-name');
 let characters = [];
 
+
 // --- Evento Principal ---
 // Espera a que todo el HTML esté cargado para empezar
 document.addEventListener("DOMContentLoaded", async () => {
+
    // Usamos async/await para esperar la configuración antes de continuar
    try {
       userConfig = await ipcRenderer.invoke('get-user-config');
@@ -79,13 +82,7 @@ function inicializarUI() {
 function inicializarComponentes() {
   
 
-  editorCreaturas = new EditorCreaturaModal({
-    containerId: "modaEditorCrea",
-    triggerBtnId: "btn-edit-creatura",
-    onSave: function(criaturaEditada) {
-      console.log("Se guardó:", criaturaEditada);
-    }
-  });
+
   new Tabs({ id: 'web-container', orientation: 'horizontal' });
   // Configuración para todos los modales.
   const modalConfigs = [
@@ -94,34 +91,8 @@ function inicializarComponentes() {
   ];
   // Creamos una instancia de Tabs para la view de criaturas
   stabsCreature = new Tabs({ id: 'creature-detail-view', orientation: 'vertical' });
-  /*editorModal = new Modal(    {
-      id: 'modalEditor', 
-      triggerId: 'btnOpenEditor', 
-      closeClassName: 'editor-close-btn',
-      movable: true, 
-      width: '85%',
-      height: '76vh',
-      onOpen: () => {
 
-        iniciarModalEditor();
-
-        var title = 'NUEVA CRIATURA';
-        
-        if (editCrea) {
-          title = 'EDITOR DE CRIATURA';
-        }else{
-          editCrea = new Creatura();
-        }
-        new Tabs({ id: 'creature-editor-container', orientation: 'vertical', title: title });
-        if (editCrea) {
-          // Llama a llenarModalEditor con un pequeño retardo para asegurar que el DOM está listo
-          setTimeout(() => {
-            llenarModalEditor();
-          }, 100);
-        }
-
-      }
-  });*/
+                            
   const btnDeleteCrea = document.getElementById('btn_delete_crea');
 
   btnDeleteCrea.addEventListener('click', async () => {
@@ -156,9 +127,12 @@ function inicializarComponentes() {
 
     //asignamos editCrea a la criatura seleccionada
     editCrea = seleccion.fullData;
-    editorCreaturas.show(editCrea);
-    //editorModal.open();
+    editorCreaturas.showEdit(editCrea);
 
+  });
+  // --- Inicializamos el botón de edición de criaturas ---
+  document.getElementById('btnOpenEditor').addEventListener('click', () => {
+    editorCreaturas.show();
   });
 
 
@@ -201,7 +175,11 @@ function inicializarComponentes() {
     }
   });
 
-  
+  editorCreaturas = new EditorCreaturaModal({
+    id: 'creatura-modal',
+    triggerId: '',
+    movable: true
+  });
 
   inicializarMapaEditor();
   actualizarArrayDeCriaturas();
@@ -215,6 +193,7 @@ function inicializarComponentes() {
     document.getElementById('input-' + stat).addEventListener('input', actualizarBonificador);
   });
 }
+
 
 // Helper para quitar tildes y pasar a minúsculas (normalización)
 function normaliza(str) {

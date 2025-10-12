@@ -84,6 +84,16 @@ function registrarToggle(botonId, modalId, mostrar = null) {
     });
   }
   
+  async function obtenerPlantilla(nombreArchivo) {
+    const html = await ipcRenderer.invoke('get-html-template', nombreArchivo);
+    if (html) {
+      console.log('Plantilla cargada correctamente');
+      return html;
+    } else {
+      console.error('No se pudo cargar la plantilla');
+      return '';
+    }
+  }
 
   
   // 🎵 Reproductor
