@@ -1,8 +1,11 @@
 {
   "iniciativa": [
-    "Gruss",
     "Therio",
-    "Enemigo 1"
+    "Gruss",
+    "Enemigo 1",
+    "Bardo",
+    "Artificie",
+    "Humano"
   ],
   "runas": []
 }
