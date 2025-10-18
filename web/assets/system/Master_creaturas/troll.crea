@@ -1,0 +1,83 @@
+{
+  "Nombre": "Troll del Undermountain",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Grande",
+  "Tipo": "Gigante",
+  "Alineamiento": "Caótico Malvado",
+  "ClaseArmadura": 15,
+  "DescripcionArmadura": "piel gruesa",
+  "PuntosGolpe": 84,
+  "DadosGolpe": "8d10+40",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 30,
+  "Fuerza": 18,
+  "Destreza": 13,
+  "Constitucion": 20,
+  "Inteligencia": 7,
+  "Sabiduria": 9,
+  "Carisma": 7,
+  "BonificadorFuerza": 4,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 5,
+  "BonificadorInteligencia": -2,
+  "BonificadorSabiduria": -1,
+  "BonificadorCarisma": -2,
+  "Salvacion": [],
+  "Habilidades": {
+    "Percepcion": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 13"],
+  "Idiomas": {
+    "gigante": "habla"
+  },
+  "CR": "5",
+  "XP": 1800,
+  "Acciones": [
+    {
+      "Nombre": "Ataque múltiple",
+      "Descripcion": "El troll realiza tres ataques: uno con su mordida y dos con sus garras."
+    },
+    {
+      "Nombre": "Mordida",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +7 al ataque, alcance 5 pies, un objetivo. Impacto: 7 (1d8+4) puntos de daño perforante."
+    },
+    {
+      "Nombre": "Garra",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +7 al ataque, alcance 5 pies, un objetivo. Impacto: 11 (2d6+4) puntos de daño cortante."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Regeneración",
+      "Descripcion": "El troll recupera 10 puntos de golpe al inicio de su turno si tiene al menos 1 punto de golpe. No se regenera si ha recibido daño de fuego o ácido desde su último turno."
+    },
+    {
+      "Nombre": "Olor de la profundidad",
+      "Descripcion": "El troll puede detectar a cualquier criatura herida a 30 pies, guiado por el olor a sangre."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Este troll emergió del Pozo del Portal Botezante, atraído por el ruido y los olores de la taberna. Las llamas son su mayor debilidad: cualquier ataque de fuego o ácido detiene su regeneración. Davil Starsong y los aventureros locales suelen advertir a los héroes que quemen al troll si quieren que no vuelva a levantarse."
+}
