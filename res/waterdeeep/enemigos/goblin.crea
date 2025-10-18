@@ -1,0 +1,81 @@
+{
+  "Nombre": "Goblin de las Alcantarillas",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Pequeño",
+  "Tipo": "Humanoide (goblin)",
+  "Alineamiento": "Neutral Malvado",
+  "ClaseArmadura": 15,
+  "DescripcionArmadura": "Armadura de cuero y escudo oxidado",
+  "PuntosGolpe": 7,
+  "DadosGolpe": "2d6",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 15,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 8,
+  "Destreza": 14,
+  "Constitucion": 10,
+  "Inteligencia": 10,
+  "Sabiduria": 8,
+  "Carisma": 8,
+  "BonificadorFuerza": -1,
+  "BonificadorDestreza": 2,
+  "BonificadorConstitucion": 0,
+  "BonificadorInteligencia": 0,
+  "BonificadorSabiduria": -1,
+  "BonificadorCarisma": -1,
+  "Salvacion": [],
+  "Habilidades": {
+    "Sigilo": "competente",
+    "Percepcion": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 9"],
+  "Idiomas": {
+    "comun": "habla",
+    "goblin": "habla"
+  },
+  "CR": "1/4",
+  "XP": 50,
+  "Acciones": [
+    {
+      "Nombre": "Cimitarra",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +4 al ataque, alcance 5 pies, un objetivo. Impacto: 5 (1d6+2) puntos de daño cortante."
+    },
+    {
+      "Nombre": "Arco corto",
+      "Descripcion": "Ataque a distancia con arma: +4 al ataque, alcance 80/320 pies, un objetivo. Impacto: 5 (1d6+2) puntos de daño perforante."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Nimble Escape (Escapista Ágil)",
+      "Descripcion": "El goblin puede usar una acción adicional en cada uno de sus turnos para realizar la acción de Esquivar o Retirarse."
+    },
+    {
+      "Nombre": "Emboscada Sucia",
+      "Descripcion": "Cuando el goblin ataca desde cobertura o sorpresa, causa 3 (1d6) puntos de daño adicionales."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Estos goblins viven bajo las calles de Waterdeep, sirviendo como exploradores y mensajeros del Gremio del Xanathar. Se ocultan tras rejillas oxidadas o en túneles estrechos, atacando a los intrusos con arcos y retirándose rápidamente. Sus guaridas están llenas de ratas y agua estancada."
+}
