@@ -1,0 +1,73 @@
+{
+  "Nombre": "Stirge",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Diminuto",
+  "Tipo": "Bestia",
+  "Alineamiento": "Sin alineamiento",
+  "ClaseArmadura": 14,
+  "DescripcionArmadura": "piel y alas coriáceas",
+  "PuntosGolpe": 2,
+  "DadosGolpe": "1d4",
+  "VelocidadCaminar": 10,
+  "VelocidadVolar": 40,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 4,
+  "Destreza": 16,
+  "Constitucion": 11,
+  "Inteligencia": 2,
+  "Sabiduria": 8,
+  "Carisma": 6,
+  "BonificadorFuerza": -3,
+  "BonificadorDestreza": 3,
+  "BonificadorConstitucion": 0,
+  "BonificadorInteligencia": -4,
+  "BonificadorSabiduria": -1,
+  "BonificadorCarisma": -2,
+  "Salvacion": [],
+  "Habilidades": {
+    "Percepcion": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 9"],
+  "Idiomas": {},
+  "CR": "1/8",
+  "XP": 25,
+  "Acciones": [
+    {
+      "Nombre": "Mordida",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +5 al ataque, alcance 5 pies, un objetivo. Impacto: 5 (1d4+3) puntos de daño perforante y el stirge se adhiere al objetivo."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Drenar sangre",
+      "Descripcion": "Mientras está adherido, el stirge no ataca. Al inicio de cada uno de sus turnos, el objetivo pierde 5 (1d4+3) puntos de golpe debido a la pérdida de sangre."
+    },
+    {
+      "Nombre": "Separarse",
+      "Descripcion": "El stirge se desprende si su objetivo muere o si una criatura realiza una acción para quitárselo. Si el stirge recibe daño, también se separa."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Estas criaturas chupasangre emergen junto al troll del Undermountain. Suelen atacar primero a los clientes heridos o distraídos antes de centrarse en los aventureros. Aunque débiles, en grupo pueden drenar rápidamente a un enemigo sin apoyo."
+}

@@ -11,6 +11,9 @@
 
  
     <script src="js/base.js"></script>
+    <script src="js/Modelos/accion.js"></script>
+    <script src="js/Modelos/accionlegendaria.js"></script>
+    <script src="js/Modelos/creatura.js"></script>
     <script src="js/Clases/modal.js"></script>
     <script src="js/Clases/tab.js"></script>
     <script src="js/Clases/listview.js"></script>
@@ -315,9 +318,9 @@
                   
                     <nav class="web-nav" role="tablist">
                      <button class="web-tab-button" role="tab" aria-controls="web-tab-general" aria-selected="false">🧙 Informacion General </button>
-                      <button class="web-tab-button" role="tab" aria-controls="web-tab-editor-map" aria-selected="false">🗺️ Mapa Editor</button>
-                      <button class="web-tab-button" role="tab" aria-controls="web-tab-libro" aria-selected="false">📚 Libros de Historias</button>
-                      <button class="web-tab-button" role="tab" aria-controls="web-tab-players" aria-selected="false">🧑 Jugadores</button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-estadisticas" aria-selected="false">🗺️ Estadisticas Tiradas</button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-otros" aria-selected="false">📚 Otros</button>
+                      <button class="web-tab-button" role="tab" aria-controls="web-tab-acciones" aria-selected="false">🧑 Acciones</button>
                     </nav>
                       <div id="web-tab-general" class="web-tab-content active" role="tabpanel">
                         <div class="creatura-form">
@@ -335,6 +338,8 @@
                         
                             <div class="creatura-hp-field">
                                <select id="cbArmaduras" placeholder="Selecciona una Armadura..."></select>
+                                <input type="text" id="otroArmadura" style="display:none" placeholder="Nombre Otra Armadura">
+                                <input type="number" id="otroArmaduraValor" style="display:none" placeholder="Valor Otra Armadura">
                             </div>
                             <div class="creatura-hp-field">
                               <input type="text" id="creatura-hp" class="creatura-spacing" placeholder="Puntos de Golpe (ej: 2d8 + 6)">
@@ -374,20 +379,165 @@
                               <span class="creatura-stat-mod">+4</span>
                             </div>
                           </div>
-
-
-                            <div class="creatura-row two-cols">
+                          <div class="creatura-row two-cols">
                               <input type="text" placeholder="Desafío (CR)">
                               <input type="text" placeholder="XP">
-                            </div>
+                          </div>
                         </div>
-
-
-
-
                       </div>
+                      <div id="web-tab-estadisticas" class="web-tab-content active" role="tabpanel">
+                            <div class="creatura-tab2-container">
+                                <!-- Bloque 1 -->
+                                <div class="creatura-tab2-group">
+                                  <div class="creatura-tab2-header">
+                                    <select id="cbSalvacion"></select>
+                                    <div id="editor-c-panel-salvaciones" class="display-panel"></div>
+                                  </div>
+                                  <div class="creatura-tab2-buttons">
+                                    <button select="cbSalvacion" tipo="COMPETENTE" panelid="editor-c-panel-salvaciones" class="creatura-btn">COMPETENTE</button>
+                                  </div>
+                                </div>
+
+                                <!-- Bloque 2 -->
+                                <div class="creatura-tab2-group">
+                                  <div class="creatura-tab2-header">
+                                    <select id="cbHabilidad"></select>
+                                    <div id="editor-c-panel-habilidades" class="display-panel"></div>
+                                  </div>
+                                  <div class="creatura-tab2-buttons">
+                                    <button tipo="COMPETENTE" select="cbHabilidad" panelid="editor-c-panel-habilidades" class="creatura-btn">COMPETENTE</button>
+                                    <button tipo="EXPERTO" select="cbHabilidad" panelid="editor-c-panel-habilidades" class="creatura-btn">EXPERTO</button>
+                                    <button tipo="INMUNE" select="cbHabilidad" panelid="editor-c-panel-habilidades" class="creatura-btn">INMUNE</button>
+                                  </div>
+                                </div>
+
+                                <!-- Bloque 3 -->
+                                <div class="creatura-tab2-group">
+                                  <div class="creatura-tab2-header">
+                                    <select id="cbCondiciones"></select>
+                                    <div id="editor-c-panel-condiciones" class="display-panel"></div>
+                                  </div>
+                                  <div class="creatura-tab2-buttons">
+                                    <button tipo="VULNERABLE" select="cbCondiciones" panelid="editor-c-panel-condiciones" class="creatura-btn">VULNERABLE</button>
+                                  </div>
+                                </div>
+
+                                <!-- Bloque 4 -->
+                                <div class="creatura-tab2-group">
+                                  <div class="creatura-tab2-header">
+                                    <select id="cbEstado"></select>
+                                    <div id="editor-c-panel-estado" class="display-panel"></div>
+                                  </div>
+                                  <div class="creatura-tab2-buttons">
+                                    <button tipo="VULNERABLE" select="cbEstado" panelid="editor-c-panel-estado" class="creatura-btn">VULNERABLE</button>
+                                    <button tipo="RESISTENTE" select="cbEstado" panelid="editor-c-panel-estado" class="creatura-btn">RESISTENTE</button>
+                                    <button tipo="INMUNE" select="cbEstado" panelid="editor-c-panel-estado" class="creatura-btn">INMUNE</button>
+                                  </div>
+                                </div>
+                                <!-- Bloque 5 -->
+                                <div class="creatura-tab2-group">
+                                  <div class="creatura-tab2-header">
+                                    <select id="cbIdiomas"></select>
+                                    <div id="editor-c-panel-idiomas" class="display-panel"></div>
+                                  </div>
+                                  <div class="creatura-tab2-buttons">
+                                    <button tipo="HABLA" select="cbIdiomas" panelid="editor-c-panel-idiomas" class="creatura-btn">HABLA</button>
+                                    <button tipo="ENTIENDE" select="cbIdiomas" panelid="editor-c-panel-idiomas" class="creatura-btn">ENTIENDE</button>
+                                  </div>
+                                </div>
+                              </div>
+                      </div>
+                      <div id="web-tab-otros" class="web-tab-content active" role="tabpanel">
+                            <div class="creatura-tab3">
+                              <div class="creatura-vision-group">
+                                <div class="vision-item">
+                                  <input type="text" id="vistaCiega" placeholder="Vista Ciega" />
+                                  <label>Pies</label>
+                                </div>
+                                <div class="vision-item">
+                                  <input type="text" id="visionNocturna" placeholder="Visión Nocturna" />
+                                  <label>Pies</label>
+                                </div>
+                                <div class="vision-item">
+                                  <input type="text" id="sentidoSismico" placeholder="Sentido Sísmico" />
+                                  <label>Pies</label>
+                                </div>
+                                <div class="vision-item">
+                                  <input type="text" id="visionVerdadera" placeholder="Visión Verdadera" />
+                                  <label>Pies</label>
+                                </div>
+                              </div>
+
+                              <div class="creatura-vision-options">
+                                <label>
+                                  <input type="checkbox" id="cbCiego" />
+                                  Ciego más allá de este radio
+                                </label>
+                              </div>
+
+                              <div class="creatura-notas-foto">
+                                <div class="notas">
+                                  <label for="txtNotas">Notas:</label>
+                                  <textarea id="txtNotas"></textarea>
+                                </div>
+
+                                <div class="foto-uploader">
+                                  <div class="preview-container">
+                                    <img id="imgPreview" src="" alt="Vista previa" style="display:none;" />
+                                  </div>
+                                  <input type="file" id="fileFoto" accept="image/*" />
+                                  <button id="btnSubirFoto">SUBIR FOTO</button>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                       <div id="web-tab-acciones" class="web-tab-content active" role="tabpanel">
+                          <div id="tab-acciones" class="creatura-tab-content">
+                            <div class="creatura-actions-container">
+                              
+                              <!-- 🔹 Nombre de acción -->
+                              <input type="text" id="txtNombreAccion" class="creatura-input" placeholder="Nombre de Acción">
+
+                              <div class="creatura-actions-grid">
+                                <!-- 🔸 Descripción -->
+                                <textarea id="txtDescripcionAccion" class="creatura-textarea" placeholder="Descripción detallada..."></textarea>
+
+                                <!-- 🔸 Botones de tipo de acción -->
+                                <div class="creatura-action-buttons">
+                                  <button data-type="Habilidad" class="creatura-btn">HABILIDAD</button>
+                                  <button data-type="Accion" class="creatura-btn">ACCIÓN</button>
+                                  <button data-type="Reaccion" class="creatura-btn">REACCIÓN</button>
+                                  <button data-type="AccionBonus" class="creatura-btn">ACCIÓN BONUS</button>
+                                  <button data-type="Hechizo" class="creatura-btn">HECHIZO</button>
+                                  <button data-type="AccionLegendaria" class="creatura-btn">ACCIÓN LEGENDARIA</button>
+                                  <button data-type="AccionMistica" class="creatura-btn">ACCIÓN MÍSTICA</button>
+                                  <button data-type="AccionGuarida" class="creatura-btn">ACCIÓN GUARIDA</button>
+                                  <button data-type="EfectoRegional" class="creatura-btn">EFECTO REGIONAL</button>
+                                </div>
+                              </div>
+
+                              <!-- 🔹 Selector de plantillas -->
+                              <div class="creatura-template-row">
+                                <select id="cbPlantillas"></select>
+                                <button id="btnUsarPlantilla" class="creatura-btn">USAR PRED</button>
+                              </div>
+
+                              <!-- 🔹 Cuadro de salida (vista previa o script final) -->
+                              <div class="creatura-output">
+                                <div id="txtVistaPrevia" class="creatura-preview"></div>
+                                <div class="creatura-help">
+                                  <p><strong>[MON]</strong>: Muestra el nombre del monstruo.</p>
+                                  <p><strong>[MODIFICADOR]</strong>: Muestra el modificador de carisma del monstruo.</p>
+                                  <p><strong>[NDN]</strong>: Calcula los dados indicados.</p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                       </div>
                   </div>
               </div>
+              <div class="modal-footer"></div>
           </div>
 
         

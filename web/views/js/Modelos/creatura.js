@@ -104,3 +104,5 @@ export class Creatura {
 }
 // Al final de creatura.js
 module.exports = { Creatura };
+// ✅ (Opcional, para compatibilidad con código viejo)
+window.Creatura = Creatura;

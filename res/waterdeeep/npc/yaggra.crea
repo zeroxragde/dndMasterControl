@@ -1,0 +1,81 @@
+{
+  "Nombre": "Yagra Stonefist",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Mediano",
+  "Tipo": "Semi-orco",
+  "Alineamiento": "Neutral",
+  "ClaseArmadura": 15,
+  "DescripcionArmadura": "Armadura de cuero reforzada",
+  "PuntosGolpe": 45,
+  "DadosGolpe": "6d8+18",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 16,
+  "Destreza": 12,
+  "Constitucion": 16,
+  "Inteligencia": 10,
+  "Sabiduria": 11,
+  "Carisma": 10,
+  "BonificadorFuerza": 3,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 3,
+  "BonificadorInteligencia": 0,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 0,
+  "Salvacion": ["fuerza", "constitucion"],
+  "Habilidades": {
+    "Atletismo": "competente",
+    "Intimidacion": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 10"],
+  "Idiomas": {
+    "comun": "habla",
+    "orco": "habla"
+  },
+  "CR": "2",
+  "XP": 450,
+  "Acciones": [
+    {
+      "Nombre": "Ataque múltiple",
+      "Descripcion": "Yagra realiza dos ataques con sus puños o su maza."
+    },
+    {
+      "Nombre": "Puño",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +5 al ataque, alcance 5 pies, un objetivo. Impacto: 6 (1d8+3) puntos de daño contundente."
+    },
+    {
+      "Nombre": "Maza",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +5 al ataque, alcance 5 pies, un objetivo. Impacto: 7 (1d10+3) puntos de daño contundente."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Resistencia incansable",
+      "Descripcion": "Cuando los puntos de golpe de Yagra se reducen a 0, en lugar de esto pasa a tener 1 punto de golpe (una vez por descanso largo)."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Yagra Stonefist es una matona semi-orca mercenaria de la Red Negra. Es contratada para proteger a Davil Starsong, pero le aburre su trabajo y disfruta desafiando a los aventureros a pulsos de fuerza. Podría aliarse con los Zhentarim para oponerse al Gremio del Xanathar."
+}

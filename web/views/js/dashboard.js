@@ -179,7 +179,7 @@ function inicializarComponentes() {
     id: 'creatura-modal',
     triggerId: '',
     movable: true,
-    width: '60%',
+    width: '85%',
   });
 
   inicializarMapaEditor();
@@ -191,7 +191,10 @@ function inicializarComponentes() {
   renderInitiative();
   renderizarHechizos();
   ['fuerza', 'destreza', 'con', 'int', 'sab', 'car'].forEach(stat => {
-    document.getElementById('input-' + stat).addEventListener('input', actualizarBonificador);
+    var inputElem = document.getElementById('input-' + stat);
+    if (inputElem) {
+      inputElem.addEventListener('input', actualizarBonificador);
+    }
   });
 }
 
@@ -211,6 +214,8 @@ function calcularBonificador(valor) {
   return (bonus >= 0 ? '+' : '') + bonus;
 }
 
+
+/*
 function iniciarModalEditor() {
   poblarDropdownsEditorCrea();
   inicializarClickEnImagenDetalleCreatura();
@@ -511,7 +516,7 @@ function llenarModalEditor() {
   // document.getElementById('panel-salvaciones').innerHTML = ...
   // document.getElementById('panel-habilidades').innerHTML = ...
   // etc.
-}
+}*/
 
 function actualizarBonificador(event) {
   const input = event.target;
