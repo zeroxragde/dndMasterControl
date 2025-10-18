@@ -1,0 +1,98 @@
+{
+  "Nombre": "Observador",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "observador_token.png",
+  "Tamanio": "Grande",
+  "Tipo": "Aberración",
+  "Alineamiento": "Legal maligno",
+  "ClaseArmadura": 18,
+  "DescripcionArmadura": "piel gruesa y resistente",
+  "PuntosGolpe": 180,
+  "DadosGolpe": "19d10+76",
+  "VelocidadCaminar": 0,
+  "VelocidadVolar": 20,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 10,
+  "Destreza": 14,
+  "Constitucion": 18,
+  "Inteligencia": 17,
+  "Sabiduria": 15,
+  "Carisma": 17,
+  "Bonificadores": {
+    "Fuerza": 0,
+    "Destreza": 2,
+    "Constitucion": 4,
+    "Inteligencia": 3,
+    "Sabiduria": 2,
+    "Carisma": 3
+  },
+  "TiradasSalvacion": [
+    { "Nombre": "Inteligencia", "Bonificador": 8 },
+    { "Nombre": "Sabiduría", "Bonificador": 6 },
+    { "Nombre": "Carisma", "Bonificador": 7 }
+  ],
+  "Habilidades": [
+    { "Nombre": "Percepción", "Bonificador": 10 }
+  ],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "VulnerabilidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [
+    "visión verdadera 120 ft",
+    "percepción pasiva 20"
+  ],
+  "Idiomas": [
+    { "Idioma": "Infracomún", "Tipo": "hablado" },
+    { "Idioma": "Común", "Tipo": "hablado" }
+  ],
+  "Desafio": "13",
+  "Experiencia": 10000,
+  "AtributosEspeciales": [
+    {
+      "Nombre": "Campo antimagia",
+      "Descripcion": "El ojo central del observador emite un cono de antimagia de 150 pies, igual al hechizo. Mientras el cono esté activo, ningún conjuro o efecto mágico funciona dentro del área."
+    }
+  ],
+  "Acciones": [
+    {
+      "Nombre": "Mordisco",
+      "Descripcion": "Ataque cuerpo a cuerpo con arma: +5 al ataque, alcance 5 ft, un objetivo. Impacto: 14 (4d6) de daño perforante."
+    },
+    {
+      "Nombre": "Rayo ocular",
+      "Descripcion": "El observador dispara tres de los siguientes rayos oculares al azar (tirar 1d10). Cada rayo tiene un alcance de 120 pies y afecta a un objetivo visible."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    { "Nombre": "Rayo de encantamiento", "Descripcion": "Salvación de Sabiduría CD 16 o el objetivo queda encantado 1 hora." },
+    { "Nombre": "Rayo de parálisis", "Descripcion": "Salvación de Constitución CD 16 o el objetivo queda paralizado 1 minuto." },
+    { "Nombre": "Rayo de miedo", "Descripcion": "Salvación de Sabiduría CD 16 o el objetivo huye durante 1 minuto." },
+    { "Nombre": "Rayo desintegrador", "Descripcion": "Salvación de Destreza CD 16 o recibe 45 (10d8) daño de fuerza; si cae a 0 PG, queda reducido a polvo." },
+    { "Nombre": "Rayo de muerte", "Descripcion": "Salvación de Constitución CD 16 o recibe 55 (10d10) de daño necrótico." },
+    { "Nombre": "Rayo telequinético", "Descripcion": "Salvación de Fuerza CD 16 o es empujado/arrastrado hasta 30 ft." },
+    { "Nombre": "Rayo ralentizador", "Descripcion": "Salvación de Destreza CD 16 o su velocidad se reduce a la mitad y no puede usar reacciones." },
+    { "Nombre": "Rayo petrificador", "Descripcion": "Salvación de Constitución CD 16 o el objetivo comienza a petrificarse." },
+    { "Nombre": "Rayo adormecedor", "Descripcion": "Salvación de Sabiduría CD 16 o el objetivo queda dormido 1 minuto." },
+    { "Nombre": "Rayo de agotamiento", "Descripcion": "Salvación de Constitución CD 16 o el objetivo gana un nivel de agotamiento." }
+  ],
+  "AccionesLegendarias": [
+    {
+      "Nombre": "Rayo adicional",
+      "Descripcion": "El observador usa un rayo ocular adicional a su elección."
+    }
+  ],
+  "AccionesMiticas": [],
+  "EfectosRegionales": [
+    {
+      "Nombre": "Influencia del observador",
+      "Descripcion": "Las cavernas cercanas se llenan de ecos distorsionados y luces flotantes. Las criaturas que duermen aquí tienen pesadillas vigiladas por ojos."
+    }
+  ],
+  "Notas": "Los observadores son aberraciones inteligentes y paranoicas que ven a todas las demás criaturas como amenazas o herramientas. Este ejemplar guarda los túneles inferiores de Waterdeep."
+}

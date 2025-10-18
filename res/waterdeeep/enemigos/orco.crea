@@ -1,0 +1,75 @@
+{
+  "Nombre": "Grum’shar",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "grumshar_token.png",
+  "Tamanio": "Mediano",
+  "Tipo": "Humanoide (humano)",
+  "Alineamiento": "Caótico maligno",
+  "ClaseArmadura": 12,
+  "DescripcionArmadura": "Armadura de cuero",
+  "PuntosGolpe": 27,
+  "DadosGolpe": "6d8",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 10,
+  "Destreza": 14,
+  "Constitucion": 12,
+  "Inteligencia": 11,
+  "Sabiduria": 13,
+  "Carisma": 10,
+  "Bonificadores": {
+    "Fuerza": 0,
+    "Destreza": 2,
+    "Constitucion": 1,
+    "Inteligencia": 0,
+    "Sabiduria": 1,
+    "Carisma": 0
+  },
+  "TiradasSalvacion": [],
+  "Habilidades": [
+    { "Nombre": "Religión", "Bonificador": 2 },
+    { "Nombre": "Engaño", "Bonificador": 2 }
+  ],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "VulnerabilidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [ "visión en la oscuridad 60 ft", "percepción pasiva 11" ],
+  "Idiomas": [
+    { "Idioma": "Común", "Tipo": "hablado" },
+    { "Idioma": "Abisal", "Tipo": "hablado" }
+  ],
+  "Desafio": "1/2",
+  "Experiencia": 100,
+  "AtributosEspeciales": [
+    {
+      "Nombre": "Lanzamiento de conjuros",
+      "Descripcion": "Grum’shar es un lanzador de conjuros de nivel 3. Su habilidad de lanzamiento es Sabiduría (CD de salvación 11, +3 al ataque con hechizos)."
+    }
+  ],
+  "Acciones": [
+    {
+      "Nombre": "Daga",
+      "Descripcion": "Ataque cuerpo a cuerpo o a distancia con arma: +4 al ataque, alcance 5 ft o distancia 20/60 ft, un objetivo. Impacto: 5 (1d4 + 3) de daño perforante."
+    },
+    {
+      "Nombre": "Hechizos preparadas",
+      "Descripcion": "Puede lanzar: Truco (a voluntad): fuego sagrado, taumatugia; 1.º nivel (4 espacios): infligir heridas, bendecir, ordenar."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    { "Nombre": "Infligir heridas", "Descripcion": "Toque de ataque cuerpo a cuerpo. Alcance 5 ft. Daño 3d10 necrótico (nivel 1)." },
+    { "Nombre": "Bendecir", "Descripcion": "Hasta tres criaturas ganan +1d4 en tiradas de ataque y salvación durante 1 minuto (con concentración)." },
+    { "Nombre": "Ordenar", "Descripcion": "Una criatura que pueda oír al lanzador debe superar una salvación de Sabiduría o seguir una orden simple." }
+  ],
+  "AccionesLegendarias": [],
+  "AccionesMiticas": [],
+  "EfectosRegionales": [],
+  "Notas": "Grum’shar es un fanático del Ojo Sombrío. Suele encontrarse con su ojo infernal familiar, protegiendo un portal oculto en las alcantarillas de Waterdeep."
+}
