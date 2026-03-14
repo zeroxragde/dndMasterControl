@@ -94,5 +94,77 @@
     "categoria": {
       "categoria": "0"
     }
+  },
+  {
+    "nombre": "CIUDD_ECATEP.png",
+    "uuid": "64b2b125-1779-4604-af98-f7fd6527395d",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "REF_CIUDAD_CAPITAL_ALDORIAN.png",
+    "uuid": "9818c7df-2898-4651-bcb7-84e68f869e6a",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "MAP_CIUDAD_CAPITAL_ALDORIAN.png",
+    "uuid": "64dbc26f-c675-4cdc-8b4d-bf0c98475765",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "ref_nposque.png",
+    "uuid": "c2a94f54-8b0b-4dba-90cb-f087f576c33c",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "map_bosque_b.png",
+    "uuid": "70a4ac19-8fe3-4458-92b8-54d8fa2d6cd4",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "MAP_SALA_DEL_TRONO.png",
+    "uuid": "ecd6feb8-7e75-4e2c-8e9f-77736d5a2ace",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mapa_taberna.png",
+    "uuid": "c917ee87-55c5-41df-8832-a95f8ad5fa4e",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "ChatGPT Image 14 dic 2025, 06_44_48 p.m..png",
+    "uuid": "abb608c6-b80e-4b4b-bd3d-63ec288bcee0",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
+  },
+  {
+    "nombre": "mausoleo.png",
+    "uuid": "d6b9e86c-c034-4c4b-82db-a2eab42ed389",
+    "extension": "png",
+    "categoria": {
+      "categoria": "3"
+    }
   }
 ]
