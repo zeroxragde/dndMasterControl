@@ -1,0 +1,92 @@
+{
+  "Nombre": "Varkas el 'Ojo de Oro'",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Pequeño",
+  "Tipo": "Humanoide (Goblin)",
+  "Alineamiento": "Legal Malvado",
+  "ClaseArmadura": 17,
+  "DescripcionArmadura": "Armadura de cuero tachonado y capa de la ciudad",
+  "PuntosGolpe": 65,
+  "DadosGolpe": "10d6 + 30",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 10,
+  "Destreza": 18,
+  "Constitucion": 16,
+  "Inteligencia": 14,
+  "Sabiduria": 12,
+  "Carisma": 14,
+  "BonificadorFuerza": 0,
+  "BonificadorDestreza": 4,
+  "BonificadorConstitucion": 3,
+  "BonificadorInteligencia": 2,
+  "BonificadorSabiduria": 1,
+  "BonificadorCarisma": 2,
+  "Salvacion": ["Destreza", "Carisma"],
+  "Habilidades": {
+    "sigilo": "experto",
+    "engaño": "competente",
+    "perspicacia": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 11"],
+  "Idiomas": {
+    "comun": "habla",
+    "goblin": "habla",
+    "bajo comun": "entiende"
+  },
+  "CR": "4",
+  "XP": 1100,
+  "Acciones": [
+    {
+      "Nombre": "Multiataque",
+      "Descripcion": "Varkas realiza dos ataques con su Daga Envenenada o dos con su Ballesta de Mano."
+    },
+    {
+      "Nombre": "Daga de Xanathar",
+      "Descripcion": "Ataque cuerpo a cuerpo: +6 al ataque, 1d4+4 perforante. Si el objetivo es una criatura, debe superar una salvación de Constitución CD 13 o quedar Envenenado hasta el final de su siguiente turno."
+    },
+    {
+      "Nombre": "Ballesta de Mano",
+      "Descripcion": "Ataque a distancia: +6 al ataque, alcance 30/120 pies. 1d6+4 perforante."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [
+    {
+      "Nombre": "Acción Astuta",
+      "Descripcion": "Varkas puede usar la acción de Correr, Destrabarse o Esconderse como acción adicional."
+    },
+    {
+      "Nombre": "¡Maten a ese!",
+      "Descripcion": "Varkas señala a un enemigo que puede ver. Hasta el inicio de su próximo turno, todos los aliados de Varkas tienen ventaja en las tiradas de ataque contra ese objetivo."
+    }
+  ],
+  "Reacciones": [
+    {
+      "Nombre": "Escudo Humano",
+      "Descripcion": "Cuando Varkas recibe daño de un ataque, puede obligar a un aliado a menos de 5 pies a recibir el daño en su lugar."
+    }
+  ],
+  "HechizosOEspeciales": [],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "AccionesGuarida": [],
+  "DescripcionGuarida": "",
+  "TieneEfectosRegionales": false,
+  "EfectosRegionales": [],
+  "DescripcionRegional": "",
+  "Notas": "Líder de una célula de Xanathar en los muelles de Waterdeep. Especialista en tácticas de guerrilla urbana."
+}

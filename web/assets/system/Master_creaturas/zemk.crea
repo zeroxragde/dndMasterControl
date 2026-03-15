@@ -1,0 +1,79 @@
+{
+  "Nombre": "Zemk",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Medium",
+  "Tipo": "Humanoide (Enano)",
+  "Alineamiento": "Caótico Malvado",
+  "ClaseArmadura": 12,
+  "DescripcionArmadura": "Armadura de Cuero",
+  "PuntosGolpe": 13,
+  "DadosGolpe": "2d8 + 4",
+  "VelocidadCaminar": 25,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 12,
+  "Destreza": 12,
+  "Constitucion": 14,
+  "Inteligencia": 10,
+  "Sabiduria": 10,
+  "Carisma": 10,
+  "BonificadorFuerza": 1,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 2,
+  "BonificadorInteligencia": 0,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 0,
+  "Salvacion": [],
+  "Habilidades": {
+    "Atletismo": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": ["Veneno"],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [
+    "Visión en la oscuridad 60 pies",
+    "Percepción pasiva 10"
+  ],
+  "Idiomas": {
+    "Común": "habla",
+    "Enano": "habla"
+  },
+  "CR": "1/8",
+  "XP": 25,
+  "Acciones": [
+    {
+      "Nombre": "Hacha de mano",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo o a distancia: +3 a impactar, alcance 5 pies o distancia 20/60 pies. Daño: 4 (1d6 + 1) cortante."
+    },
+    {
+      "Nombre": "Ballesta Ligera",
+      "Descripcion": "Ataque de arma a distancia: +3 a impactar, distancia 80/320 pies. Daño: 5 (1d8 + 1) perforante."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Resiliencia Enana",
+      "Descripcion": "Zemk tiene ventaja en las tiradas de salvación contra veneno."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Compañero de Krentz en el Gremio de Xanathar. Es más robusto que un bandido normal y no retrocede tan fácilmente."
+}

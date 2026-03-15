@@ -1,0 +1,85 @@
+{
+  "Nombre": "Gazer",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Tiny",
+  "Tipo": "Aberración",
+  "Alineamiento": "Neutral Malvado",
+  "ClaseArmadura": 13,
+  "DescripcionArmadura": "Armadura Natural",
+  "PuntosGolpe": 13,
+  "DadosGolpe": "3d4 + 6",
+  "VelocidadCaminar": 0,
+  "VelocidadVolar": 30,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 3,
+  "Destreza": 17,
+  "Constitucion": 14,
+  "Inteligencia": 3,
+  "Sabiduria": 10,
+  "Carisma": 7,
+  "BonificadorFuerza": -4,
+  "BonificadorDestreza": 3,
+  "BonificadorConstitucion": 2,
+  "BonificadorInteligencia": -4,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": -2,
+  "Salvacion": [],
+  "Habilidades": {
+    "Percepción": "competente",
+    "Sigilo": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [
+    "Derribado"
+  ],
+  "Sentidos": [
+    "Visión en la oscuridad 60 pies",
+    "Percepción pasiva 12"
+  ],
+  "Idiomas": {
+    "Entiende a su maestro": "entiende"
+  },
+  "CR": "1/2",
+  "XP": 100,
+  "Acciones": [
+    {
+      "Nombre": "Mordisco",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +5 a impactar, alcance 5 pies. Daño: 1 cortante."
+    },
+    {
+      "Nombre": "Rayos Oculares",
+      "Descripcion": "El gazer dispara dos de los siguientes rayos al azar, eligiendo uno o dos objetivos que pueda ver a 60 pies:\n1. Rayo de Escarcha: DC 12 DES o 10 (3d6) daño de frío.\n2. Rayo de Miedo: DC 12 SAB o asustado por 1 minuto.\n3. Rayo de Fuego: DC 12 DES o 10 (3d6) daño de fuego.\n4. Rayo Telequinético: DC 12 FUE o es movido 30 pies."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Vuelo Estático",
+      "Descripcion": "El gazer puede mantenerse suspendido en el aire. No cae al suelo si queda inconsciente o incapacitado."
+    },
+    {
+      "Nombre": "Naturaleza Agresiva",
+      "Descripcion": "Como acción adicional, el gazer puede moverse hasta su velocidad hacia una criatura hostil que pueda ver."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Mini-beholders creados por Xanathar para vigilar las alcantarillas. Son territoriales, agresivos y suelen esconderse en los techos de las letrinas para emboscar a los intrusos."
+}

@@ -1,0 +1,86 @@
+{
+  "Nombre": "Grum'shar",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Medium",
+  "Tipo": "Humanoide (Semi-orco)",
+  "Alineamiento": "Caótico Malvado",
+  "ClaseArmadura": 10,
+  "DescripcionArmadura": "Sin armadura",
+  "PuntosGolpe": 11,
+  "DadosGolpe": "2d8 + 2",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 15,
+  "Destreza": 10,
+  "Constitucion": 12,
+  "Inteligencia": 14,
+  "Sabiduria": 10,
+  "Carisma": 11,
+  "BonificadorFuerza": 2,
+  "BonificadorDestreza": 0,
+  "BonificadorConstitucion": 1,
+  "BonificadorInteligencia": 2,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 0,
+  "Salvacion": ["Inteligencia"],
+  "Habilidades": {
+    "Arcanos": "competente",
+    "Intimidación": "competente",
+    "Historia": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [
+    "Visión en la oscuridad 60 pies",
+    "Percepción pasiva 10"
+  ],
+  "Idiomas": {
+    "Común": "habla",
+    "Orco": "habla"
+  },
+  "CR": "1/4",
+  "XP": 50,
+  "Acciones": [
+    {
+      "Nombre": "Daga",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +4 a impactar, alcance 5 pies. Daño: 4 (1d4 + 2) perforante."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Resistencia Incansable",
+      "Descripcion": "Cuando Grum'shar se ve reducido a 0 HP pero no muere, puede quedarse con 1 HP en su lugar. No puede usarlo de nuevo hasta un descanso largo."
+    },
+    {
+      "Nombre": "Ataques Salvajes",
+      "Descripcion": "Al impactar con un ataque crítico de arma cuerpo a cuerpo, puede añadir un dado adicional de daño del arma."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Lanzamiento de Hechizos",
+      "Descripcion": "Grum'shar es un lanzador de nivel 1. Su característica para lanzar hechizos es Inteligencia (salvación DC 12, +4 a impactar).\nTrucos: Descarga de Fuego, Mano de Mago, Prestidigitación.\nNivel 1 (2 espacios): Manos Ardientes, Disfrazarse, Escudo."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Líder de la célula del Gremio de Xanathar en las alcantarillas. Es un fanático que sirve a Nihiloor. Está obsesionado con interrogar a Floon para encontrar el tesoro."
+}

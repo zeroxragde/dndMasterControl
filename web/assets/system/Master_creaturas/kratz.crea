@@ -1,0 +1,72 @@
+{
+  "Nombre": "Krentz",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Medium",
+  "Tipo": "Humanoide (Humano)",
+  "Alineamiento": "Caótico Malvado",
+  "ClaseArmadura": 12,
+  "DescripcionArmadura": "Armadura de Cuero",
+  "PuntosGolpe": 11,
+  "DadosGolpe": "2d8 + 2",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 11,
+  "Destreza": 12,
+  "Constitucion": 12,
+  "Inteligencia": 10,
+  "Sabiduria": 10,
+  "Carisma": 10,
+  "BonificadorFuerza": 0,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 1,
+  "BonificadorInteligencia": 0,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 0,
+  "Salvacion": [],
+  "Habilidades": {
+    "Atletismo": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [
+    "Percepción pasiva 10"
+  ],
+  "Idiomas": {
+    "Común": "habla"
+  },
+  "CR": "1/8",
+  "XP": 25,
+  "Acciones": [
+    {
+      "Nombre": "Cimitarra",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +3 a impactar, alcance 5 pies. Daño: 4 (1d6 + 1) cortante."
+    },
+    {
+      "Nombre": "Ballesta Ligera",
+      "Descripcion": "Ataque de arma a distancia: +3 a impactar, distancia 80/320 pies. Daño: 5 (1d8 + 1) perforante."
+    }
+  ],
+  "AccionesHabilidad": [],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Miembro del Gremio de Xanathar. Krentz tiene un tatuaje del ojo de Xanathar en su palma. Es un cobarde que huye hacia el escondite si se ve superado."
+}

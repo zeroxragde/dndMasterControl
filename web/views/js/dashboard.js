@@ -4,7 +4,7 @@
 
 // Al principio de tu archivo dashboard.js
 
-import { Creatura } from './Modelos/creatura.js';
+//import { Creatura } from './Modelos/creatura.js';
 const { ipcRenderer } = require('electron');
 
 

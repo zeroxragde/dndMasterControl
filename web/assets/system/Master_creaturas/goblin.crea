@@ -1,17 +1,17 @@
 {
-  "Nombre": "Goblin de las Alcantarillas",
+  "Nombre": "Goblin (Vigía)",
   "Campania": "Waterdeep: Dragon Heist",
   "Imagen": "",
-  "Tamanio": "Pequeño",
-  "Tipo": "Humanoide (goblin)",
+  "Tamanio": "Small",
+  "Tipo": "Humanoide (Goblin)",
   "Alineamiento": "Neutral Malvado",
   "ClaseArmadura": 15,
-  "DescripcionArmadura": "Armadura de cuero y escudo oxidado",
+  "DescripcionArmadura": "Armadura de Cuero, Escudo",
   "PuntosGolpe": 7,
   "DadosGolpe": "2d6",
   "VelocidadCaminar": 30,
   "VelocidadVolar": 0,
-  "VelocidadNadar": 15,
+  "VelocidadNadar": 0,
   "VelocidadCavar": 0,
   "VelocidadEscalado": 0,
   "Fuerza": 8,
@@ -28,43 +28,41 @@
   "BonificadorCarisma": -1,
   "Salvacion": [],
   "Habilidades": {
-    "Sigilo": "competente",
-    "Percepcion": "competente"
+    "Sigilo": "experto"
   },
   "VulnerabilidadesDano": [],
   "ResistenciasDano": [],
   "InmunidadesDano": [],
   "InmunidadesCondicion": [],
-  "Sentidos": ["Visión en la oscuridad 60 pies", "Percepción pasiva 9"],
+  "Sentidos": [
+    "Visión en la oscuridad 60 pies",
+    "Percepción pasiva 9"
+  ],
   "Idiomas": {
-    "comun": "habla",
-    "goblin": "habla"
+    "Común": "entiende",
+    "Goblin": "habla"
   },
   "CR": "1/4",
   "XP": 50,
   "Acciones": [
     {
       "Nombre": "Cimitarra",
-      "Descripcion": "Ataque cuerpo a cuerpo con arma: +4 al ataque, alcance 5 pies, un objetivo. Impacto: 5 (1d6+2) puntos de daño cortante."
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +4 a impactar, alcance 5 pies. Daño: 5 (1d6 + 2) cortante."
     },
     {
       "Nombre": "Arco corto",
-      "Descripcion": "Ataque a distancia con arma: +4 al ataque, alcance 80/320 pies, un objetivo. Impacto: 5 (1d6+2) puntos de daño perforante."
+      "Descripcion": "Ataque de arma a distancia: +4 a impactar, alcance 80/320 pies. Daño: 5 (1d6 + 2) perforante."
     }
   ],
   "AccionesHabilidad": [],
-  "AccionesAdicionales": [],
-  "Reacciones": [],
-  "HechizosOEspeciales": [
+  "AccionesAdicionales": [
     {
-      "Nombre": "Nimble Escape (Escapista Ágil)",
-      "Descripcion": "El goblin puede usar una acción adicional en cada uno de sus turnos para realizar la acción de Esquivar o Retirarse."
-    },
-    {
-      "Nombre": "Emboscada Sucia",
-      "Descripcion": "Cuando el goblin ataca desde cobertura o sorpresa, causa 3 (1d6) puntos de daño adicionales."
+      "Nombre": "Escurridizo (Nimble Escape)",
+      "Descripcion": "El goblin puede realizar la acción de Destrabarse o Esconderse como acción adicional en cada uno de sus turnos."
     }
   ],
+  "Reacciones": [],
+  "HechizosOEspeciales": [],
   "EsLegendaria": false,
   "CantidadResistenciasLegendarias": 0,
   "AccionesLegendarias": [],
@@ -72,10 +70,10 @@
   "DescripcionMitica": "",
   "AccionesMiticas": [],
   "TieneGuarida": false,
-  "AccionesGuarida": [],
   "DescripcionGuarida": "",
+  "AccionesGuarida": [],
   "TieneEfectosRegionales": false,
-  "EfectosRegionales": [],
   "DescripcionRegional": "",
-  "Notas": "Estos goblins viven bajo las calles de Waterdeep, sirviendo como exploradores y mensajeros del Gremio del Xanathar. Se ocultan tras rejillas oxidadas o en túneles estrechos, atacando a los intrusos con arcos y retirándose rápidamente. Sus guaridas están llenas de ratas y agua estancada."
+  "EfectosRegionales": [],
+  "Notas": "Vigías del Gremio de Xanathar en el alcantarillado. Son propensos a disparar desde las sombras y huir si el primer ataque falla."
 }

@@ -1,0 +1,89 @@
+{
+  "Nombre": "Devorador de Intelecto",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Tiny",
+  "Tipo": "Aberración",
+  "Alineamiento": "Neutral Malvado",
+  "ClaseArmadura": 12,
+  "DescripcionArmadura": "Armadura Natural",
+  "PuntosGolpe": 21,
+  "DadosGolpe": "6d4 + 6",
+  "VelocidadCaminar": 40,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 6,
+  "Destreza": 14,
+  "Constitucion": 13,
+  "Inteligencia": 12,
+  "Sabiduria": 11,
+  "Carisma": 10,
+  "BonificadorFuerza": -2,
+  "BonificadorDestreza": 2,
+  "BonificadorConstitucion": 1,
+  "BonificadorInteligencia": 1,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 0,
+  "Salvacion": [],
+  "Habilidades": {
+    "Percepción": "competente",
+    "Sigilo": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [
+    "Contundente, Perforante y Cortante de ataques no mágicos"
+  ],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [
+    "Cegado"
+  ],
+  "Sentidos": [
+    "Sentido Ciego 60 pies (ciego más allá de este radio)",
+    "Percepción pasiva 12"
+  ],
+  "Idiomas": {
+    "Comprende los idiomas de su creador": "entiende",
+    "Telepatía": "60 pies"
+  },
+  "CR": "2",
+  "XP": 450,
+  "Acciones": [
+    {
+      "Nombre": "Garras",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +4 a impactar, alcance 5 pies. Daño: 7 (2d4 + 2) cortante."
+    },
+    {
+      "Nombre": "Pulso Psíquico",
+      "Descripcion": "El devorador apunta a una criatura que pueda ver a 10 pies. El objetivo debe superar una salvación de Inteligencia DC 12 o recibir 11 (2d10) daño psíquico."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Detección de Pensamientos",
+      "Descripcion": "El devorador conoce la ubicación de cualquier criatura a 300 pies que tenga una puntuación de Inteligencia de 3 o más, a menos que esté protegida por un hechizo de 'Mente en Blanco'."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Consumir Intelecto",
+      "Descripcion": "El devorador inicia un concurso de Inteligencia contra una criatura incapacitada a 5 pies. Si el devorador gana, consume el cerebro de la criatura, la teletransporta a su cavidad craneal y toma el control total del cuerpo."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Mascota de Nihiloor en las alcantarillas de Waterdeep. Es el asesino silencioso de Xanathar. Si un jugador cae ante él, su cerebro podría ser reemplazado literalmente por este monstruo."
+}

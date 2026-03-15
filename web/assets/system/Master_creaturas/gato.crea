@@ -1,0 +1,121 @@
+{
+  "Nombre": "Varkas el Ojo de Oro",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "asset://system/master_creaturas/varkas_full.png",
+  "Tamanio": "Medium",
+  "Tipo": "Humanoide (Goblin)",
+  "Alineamiento": "Neutral Malvado",
+  "ClaseArmadura": 17,
+  "DescripcionArmadura": "Armadura Laminada +1",
+  "PuntosGolpe": 65,
+  "DadosGolpe": "10d8 + 20",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 10,
+  "VelocidadNadar": 20,
+  "VelocidadCavar": 5,
+  "VelocidadEscalado": 25,
+  "Fuerza": 14,
+  "Destreza": 16,
+  "Constitucion": 14,
+  "Inteligencia": 12,
+  "Sabiduria": 10,
+  "Carisma": 18,
+  "BonificadorFuerza": 2,
+  "BonificadorDestreza": 3,
+  "BonificadorConstitucion": 2,
+  "BonificadorInteligencia": 1,
+  "BonificadorSabiduria": 0,
+  "BonificadorCarisma": 4,
+  "Salvacion": ["Fuerza", "Destreza", "Constitución", "Inteligencia", "Sabiduría", "Carisma"],
+  "Habilidades": {
+    "Acrobacias": "competente",
+    "Engaño": "experto",
+    "Sigilo": "experto",
+    "Perspicacia": "competente",
+    "Percepción": "competente"
+  },
+  "VulnerabilidadesDano": ["Fuego", "Radiante"],
+  "ResistenciasDano": ["Frío", "Veneno", "Relámpago"],
+  "InmunidadesDano": ["Psíquico", "Cortante de ataques no mágicos"],
+  "InmunidadesCondicion": ["Hechizado", "Asustado", "Paralizado", "Envenenado"],
+  "Sentidos": ["Visión en la oscuridad 120 pies", "Sentido sísmico 30 pies", "Percepción pasiva 18"],
+  "Idiomas": {
+    "Común": "habla",
+    "Goblin": "habla",
+    "Subcomún": "entiende",
+    "Telepatía": "60 pies"
+  },
+  "CR": "5",
+  "XP": 1800,
+  "Acciones": [
+    {
+      "Nombre": "Daga de Oro Traicionera",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +6 a impactar, alcance 5 pies. Daño: 6 (1d4 + 4) perforante más 10 (3d6) daño de veneno."
+    },
+    {
+      "Nombre": "Ballesta Pesada de Repetición",
+      "Descripcion": "Ataque de arma a distancia: +6 a impactar, distancia 100/400 pies. Daño: 9 (1d10 + 4) perforante."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Tácticas de Guerrilla",
+      "Descripcion": "Varkas tiene ventaja en tiradas de ataque si se encuentra en luz tenue o oscuridad."
+    }
+  ],
+  "AccionesAdicionales": [
+    {
+      "Nombre": "Esquiva del Ojo de Oro",
+      "Descripcion": "Puede realizar la acción de Destrabarse o Esconderse como acción adicional."
+    }
+  ],
+  "Reacciones": [
+    {
+      "Nombre": "Contragolpe Sombrío",
+      "Descripcion": "Cuando una criatura falla un ataque contra Varkas, este puede realizar un ataque de daga inmediatamente."
+    }
+  ],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Lanzamiento de Hechizos (Innato)",
+      "Descripcion": "Varkas puede lanzar 'Invisibilidad' 3 veces al día sin componentes materiales."
+    }
+  ],
+  "EsLegendaria": true,
+  "CantidadResistenciasLegendarias": 3,
+  "AccionesLegendarias": [
+    {
+      "Nombre": "Movimiento Veloz (Cuesta 1 acción)",
+      "Descripcion": "Varkas se mueve hasta su velocidad sin provocar ataques de oportunidad."
+    },
+    {
+      "Nombre": "Ataque de Oportunista (Cuesta 2 acciones)",
+      "Descripcion": "Realiza un ataque de Daga de Oro."
+    }
+  ],
+  "EsMitica": true,
+  "DescripcionMitica": "Cuando Varkas llega a 0 HP, recupera 60 HP y sus ojos brillan con oro puro por 1 hora.",
+  "AccionesMiticas": [
+    {
+      "Nombre": "Explosión Áurea",
+      "Descripcion": "Cada criatura a 20 pies debe superar una salvación de CON DC 15 o quedar cegada."
+    }
+  ],
+  "TieneGuarida": true,
+  "DescripcionGuarida": "La guarida es una red de alcantarillas bañadas en oro fundido.",
+  "AccionesGuarida": [
+    {
+      "Nombre": "Vapores Tóxicos",
+      "Descripcion": "Gas venenoso llena un área de 20 pies. 2d6 de daño de veneno."
+    }
+  ],
+  "TieneEfectosRegionales": true,
+  "DescripcionRegional": "A 1 milla de la guarida, las monedas de oro parecen susurrar el nombre de Varkas.",
+  "EfectosRegionales": [
+    {
+      "Nombre": "Paranoia de Oro",
+      "Descripcion": "Los aventureros tienen desventaja en tiradas de Sabiduría (Perspicacia)."
+    }
+  ],
+  "Notas": "Líder supremo de la célula de Xanathar en el Distrito del Puerto. No confía ni en su propia sombra."
+}

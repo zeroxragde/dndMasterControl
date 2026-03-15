@@ -2,16 +2,25 @@
  * Representa una acción legendaria, que hereda de Accion y añade un costo.
  */
 // 1. "Importamos" la clase Accion usando require
-import { Accion } from './accion.js';
+//import { Accion } from './accion.js';
 
-export class AccionLegendaria extends Accion {
+class AccionLegendaria extends Accion {
   /**
    * @param {string} nombre - El nombre de la acción.
    * @param {string} descripcion - La descripción de la acción.
    * @param {number} costoAccion - El costo para usar esta acción legendaria.
    */
-  constructor(Nombre = "", Descripcion = "", CostoAccion = 1) {
+ /* constructor(Nombre = "", Descripcion = "", CostoAccion = 1) {
     super(Nombre, Descripcion); // Llama al constructor de la clase padre (Accion)
+    this.CostoAccion = CostoAccion;
+  }*/
+ /**
+   * @param {string} Nombre - El nombre de la acción.
+   * @param {string} Descripcion - La descripción de la acción.
+   * @param {number} CostoAccion - El costo para usar esta acción.
+   */
+  constructor(Nombre = "", Descripcion = "", CostoAccion = 1) {
+    super(Nombre, Descripcion);
     this.CostoAccion = CostoAccion;
   }
 }

@@ -1,0 +1,92 @@
+{
+  "Nombre": "Nihiloor",
+  "Campania": "Waterdeep: Dragon Heist",
+  "Imagen": "",
+  "Tamanio": "Medium",
+  "Tipo": "Aberración",
+  "Alineamiento": "Legal Malvado",
+  "ClaseArmadura": 15,
+  "DescripcionArmadura": "Armadura de Placas Corrupta",
+  "PuntosGolpe": 71,
+  "DadosGolpe": "13d8 + 13",
+  "VelocidadCaminar": 30,
+  "VelocidadVolar": 0,
+  "VelocidadNadar": 0,
+  "VelocidadCavar": 0,
+  "VelocidadEscalado": 0,
+  "Fuerza": 11,
+  "Destreza": 12,
+  "Constitucion": 12,
+  "Inteligencia": 19,
+  "Sabiduria": 17,
+  "Carisma": 17,
+  "BonificadorFuerza": 0,
+  "BonificadorDestreza": 1,
+  "BonificadorConstitucion": 1,
+  "BonificadorInteligencia": 4,
+  "BonificadorSabiduria": 3,
+  "BonificadorCarisma": 3,
+  "Salvacion": ["Inteligencia", "Sabiduría", "Carisma"],
+  "Habilidades": {
+    "Arcanos": "competente",
+    "Perspicacia": "competente",
+    "Percepción": "competente",
+    "Sigilo": "competente"
+  },
+  "VulnerabilidadesDano": [],
+  "ResistenciasDano": [],
+  "InmunidadesDano": [],
+  "InmunidadesCondicion": [],
+  "Sentidos": [
+    "Visión en la oscuridad 120 pies",
+    "Percepción pasiva 16"
+  ],
+  "Idiomas": {
+    "Abisal": "habla",
+    "Infracomún": "habla",
+    "Telepatía": "120 pies"
+  },
+  "CR": "7",
+  "XP": 2900,
+  "Acciones": [
+    {
+      "Nombre": "Tentáculos",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +7 a impactar, alcance 5 pies. Daño: 15 (2d10 + 4) daño psíquico. Si el objetivo es Mediano o más pequeño, queda agarrado (DC 15 para escapar) y debe superar una salvación de Inteligencia DC 15 o quedar aturdido hasta que el agarre termine."
+    },
+    {
+      "Nombre": "Extraer Cerebro",
+      "Descripcion": "Ataque de arma cuerpo a cuerpo: +7 a impactar, alcance 5 pies contra una criatura incapacitada y agarrada por Nihiloor. Daño: 55 (10d10) daño perforante. Si este daño reduce a la criatura a 0 HP, Nihiloor mata a la criatura extrayendo y devorando su cerebro."
+    },
+    {
+      "Nombre": "Explosión Mental (Recarga 5-6)",
+      "Descripcion": "Nihiloor emite energía psíquica en un cono de 60 pies. Cada criatura en el área debe superar una salvación de Inteligencia DC 15 o recibir 22 (4d8 + 4) daño psíquico y quedar aturdida por 1 minuto."
+    }
+  ],
+  "AccionesHabilidad": [
+    {
+      "Nombre": "Resistencia Mágica",
+      "Descripcion": "Nihiloor tiene ventaja en las tiradas de salvación contra hechizos y otros efectos mágicos."
+    }
+  ],
+  "AccionesAdicionales": [],
+  "Reacciones": [],
+  "HechizosOEspeciales": [
+    {
+      "Nombre": "Lanzamiento de Conjuros Innato (Psiónicos)",
+      "Descripcion": "La característica para lanzar hechizos de Nihiloor es Inteligencia (salvación de hechizo DC 15). Puede lanzar los siguientes hechizos sin componentes: \nA voluntad: Detectar Pensamientos, Levitar. \n1/día cada uno: Dominar Monstruo, Sugestión, Desplazamiento de Plano (solo a sí mismo)."
+    }
+  ],
+  "EsLegendaria": false,
+  "CantidadResistenciasLegendarias": 0,
+  "AccionesLegendarias": [],
+  "EsMitica": false,
+  "DescripcionMitica": "",
+  "AccionesMiticas": [],
+  "TieneGuarida": false,
+  "DescripcionGuarida": "",
+  "AccionesGuarida": [],
+  "TieneEfectosRegionales": false,
+  "DescripcionRegional": "",
+  "EfectosRegionales": [],
+  "Notas": "Un azotamentes que trabaja para Xanathar. Nihiloor prefiere dejar que Grum'shar y el Devorador de Intelecto peleen. Si los aventureros lo interrumpen, usará Dominar Monstruo o Explosión Mental antes de retirarse usando Desplazamiento de Plano."
+}

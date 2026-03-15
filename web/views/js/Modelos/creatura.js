@@ -1,9 +1,10 @@
 // web/views/js/Modelos/creatura.js
 
-import { Accion } from './accion.js';
-import { AccionLegendaria } from './accionlegendaria.js';
+//import { Accion } from './accion.js';
+//import { AccionLegendaria } from './accionlegendaria.js';
 
-export class Creatura {
+class Creatura {
+ 
   constructor() {
     // --- Identificación básica ---
     this.Nombre = "";
@@ -33,7 +34,7 @@ export class Creatura {
     this.Sabiduria = 10;
     this.Carisma = 10;
 
-    // Los bonificadores normalmente se calculan, pero se pueden almacenar si es necesario
+    // Los bonificadores almacenados para reflejar lo que ves en UI
     this.BonificadorFuerza = 0;
     this.BonificadorDestreza = 0;
     this.BonificadorConstitucion = 0;
@@ -42,10 +43,10 @@ export class Creatura {
     this.BonificadorCarisma = 0;
     
     // Tiradas de salvación con competencia
-    this.Salvacion = []; // Ej: ["fuerza", "constitucion"]
+    this.Salvacion = []; 
 
     // Habilidades con competencia o pericia
-    this.Habilidades = {}; // Ej: { "sigilo": "competente", "percepcion": "experto" }
+    this.Habilidades = {}; 
 
     // --- Vulnerabilidades, resistencias, inmunidades ---
     this.VulnerabilidadesDano = [];
@@ -54,21 +55,22 @@ export class Creatura {
     this.InmunidadesCondicion = [];
 
     // --- Sentidos ---
-    this.Sentidos = []; // Ej: "Visión en la Oscuridad 60 ft.", "Percepción pasiva 14"
+    this.Sentidos = []; 
 
     // --- Idiomas ---
-    this.Idiomas = {}; // Ej: { "comun": "habla", "draconico": "entiende" }
+    this.Idiomas = {}; 
 
     // --- Challenge Rating (CR) y experiencia ---
     this.CR = "0";
-    this.XP = 10;
+    this.XP = 0;
 
+    // --- Listas de Acciones ---
     /** @type {Accion[]} */
     this.Acciones = [];
     /** @type {Accion[]} */
     this.AccionesHabilidad = [];
     /** @type {Accion[]} */
-    this.AccionesAdicionales = []; // Bonus Actions
+    this.AccionesAdicionales = []; 
     /** @type {Accion[]} */
     this.Reacciones = [];
     /** @type {Accion[]} */
@@ -88,21 +90,27 @@ export class Creatura {
 
     // --- Guarida ---
     this.TieneGuarida = false;
+    this.DescripcionGuarida = "";
     /** @type {Accion[]} */
     this.AccionesGuarida = [];
-    this.DescripcionGuarida = "";
 
     // --- Efectos Regionales ---
     this.TieneEfectosRegionales = false;
+    this.DescripcionRegional = "";
     /** @type {Accion[]} */
     this.EfectosRegionales = [];
-    this.DescripcionRegional = "";
 
     // --- Notas adicionales ---
     this.Notas = "";
   }
 }
 // Al final de creatura.js
-module.exports = { Creatura };
+//module.exports = { Creatura };
 // ✅ (Opcional, para compatibilidad con código viejo)
+//window.Creatura = Creatura;
+// MANTÉN ESTO PARA ELECTRON/NODE:
+if (typeof module !== 'undefined') {
+    module.exports = { Creatura };
+}
+// MANTÉN ESTO PARA EL NAVEGADOR/HTML:
 window.Creatura = Creatura;
